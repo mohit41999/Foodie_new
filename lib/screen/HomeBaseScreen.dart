@@ -15,7 +15,8 @@ import 'package:food_app/utils/Utils.dart';
 import 'LoginSignUpScreen.dart';
 
 class HomeBaseScreen extends StatefulWidget {
-  const HomeBaseScreen({Key? key}) : super(key: key);
+  final bool skip;
+  const HomeBaseScreen({Key? key, this.skip = false}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => HomeBaseScreenState();
@@ -23,12 +24,28 @@ class HomeBaseScreen extends StatefulWidget {
 
 class HomeBaseScreenState extends State<HomeBaseScreen> {
   int _selectedIndex = 0;
-
-  final List<Widget> _children = [
-    DashboardScreen(0, 0, 0, "", 0, 0),
-    OrderScreen(),
-    Profile(),
-  ];
+  late bool isSkip;
+  late List<Widget> _children;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isSkip = widget.skip;
+    print(isSkip.toString());
+    _children = [
+      DashboardScreen(
+        0,
+        0,
+        0,
+        "",
+        0,
+        0,
+        skip: isSkip,
+      ),
+      OrderScreen(),
+      Profile(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -39,7 +56,9 @@ class HomeBaseScreenState extends State<HomeBaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const MyDrawers(),
+        drawer: MyDrawers(
+          isSkip: widget.skip,
+        ),
         body: Center(
           child: _children.elementAt(_selectedIndex),
         ),
@@ -87,7 +106,8 @@ class HomeBaseScreenState extends State<HomeBaseScreen> {
 }
 
 class MyDrawers extends StatefulWidget {
-  const MyDrawers({Key? key}) : super(key: key);
+  final bool isSkip;
+  const MyDrawers({Key? key, this.isSkip = false}) : super(key: key);
 
   @override
   MyDrawersState createState() => MyDrawersState();
@@ -361,41 +381,81 @@ class MyDrawersState extends State<MyDrawers> {
                       ),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      _ackAlert(context);
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 130,
-                      decoration: BoxDecoration(
-                          color: const Color(0xffFFA451),
-                          borderRadius: BorderRadius.circular(60)),
-                      margin: const EdgeInsets.only(left: 16, top: 30),
-                      child: Row(
-                        children: [
-                          Padding(
-                            child: Image.asset(
-                              Res.ic_logout,
-                              color: Colors.white,
-                              width: 25,
-                              height: 25,
+                  (widget.isSkip)
+                      ? InkWell(
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginSignUpScreen()),
+                                (route) => false);
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 130,
+                            decoration: BoxDecoration(
+                                color: Color(0xffFFA451),
+                                borderRadius: BorderRadius.circular(60)),
+                            margin: EdgeInsets.only(left: 16, top: 30),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  child: Image.asset(
+                                    Res.ic_logout,
+                                    color: Colors.white,
+                                    width: 25,
+                                    height: 25,
+                                  ),
+                                  padding: EdgeInsets.only(left: 10),
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(left: 16),
+                                    child: Text(
+                                      'REGISTER',
+                                      style: TextStyle(
+                                          fontFamily: AppConstant.fontBold,
+                                          fontSize: 12,
+                                          color: Colors.white),
+                                    )),
+                              ],
                             ),
-                            padding: const EdgeInsets.only(left: 10),
                           ),
-                          const Padding(
-                              padding: EdgeInsets.only(left: 16),
-                              child: Text(
-                                'LOGOUT',
-                                style: TextStyle(
-                                    fontFamily: AppConstant.fontBold,
-                                    fontSize: 12,
-                                    color: Colors.white),
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            _ackAlert(context);
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 130,
+                            decoration: BoxDecoration(
+                                color: const Color(0xffFFA451),
+                                borderRadius: BorderRadius.circular(60)),
+                            margin: const EdgeInsets.only(left: 16, top: 30),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  child: Image.asset(
+                                    Res.ic_logout,
+                                    color: Colors.white,
+                                    width: 25,
+                                    height: 25,
+                                  ),
+                                  padding: const EdgeInsets.only(left: 10),
+                                ),
+                                const Padding(
+                                    padding: EdgeInsets.only(left: 16),
+                                    child: Text(
+                                      'LOGOUT',
+                                      style: TextStyle(
+                                          fontFamily: AppConstant.fontBold,
+                                          fontSize: 12,
+                                          color: Colors.white),
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ),
                 ],
               ),
               physics: const BouncingScrollPhysics(),

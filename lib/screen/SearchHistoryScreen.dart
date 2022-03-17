@@ -26,7 +26,7 @@ class SearchHistoryScreen extends StatefulWidget {
 class SearchHistoryScreenState extends State<SearchHistoryScreen> {
   late ProgressDialog progressDialog;
   bool searchlistVisible = true;
-  Future? future;
+  Future<BeanSearchData?>? future;
   TextEditingController searchcontroller = new TextEditingController();
   String search = "";
 
@@ -61,7 +61,7 @@ class SearchHistoryScreenState extends State<SearchHistoryScreen> {
                         width: 16,
                       ),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.pop(context);
                         },
                         child: Image.asset(
@@ -170,8 +170,7 @@ class SearchHistoryScreenState extends State<SearchHistoryScreen> {
                 Container(
                     height: 70,
                     child: FutureBuilder<BeanSearchData?>(
-                        future:
-                            future?.then((value) => value as BeanSearchData?),
+                        future: future,
                         builder: (context, projectSnap) {
                           print(projectSnap);
                           if (projectSnap.connectionState ==
@@ -208,8 +207,7 @@ class SearchHistoryScreenState extends State<SearchHistoryScreen> {
                 Container(
                     height: 250,
                     child: FutureBuilder<BeanSearchData?>(
-                        future:
-                            future?.then((value) => value),
+                        future: future?.then((value) => value),
                         builder: (context, projectSnap) {
                           print(projectSnap);
                           if (projectSnap.connectionState ==

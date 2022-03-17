@@ -35,9 +35,11 @@ class DashboardScreen extends StatefulWidget {
   var min;
   var max;
   var mealPlan;
+  final bool skip;
 
   DashboardScreen(
-      this.mealfor, this.cuisine, this.mealPlan, this.type, this.min, this.max);
+      this.mealfor, this.cuisine, this.mealPlan, this.type, this.min, this.max,
+      {this.skip = false});
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -87,8 +89,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     // FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     // FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
-    double h =  MediaQuery.of(context).size.height;
-    double w =  MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Colors.white,
         drawer: const MyDrawers(),
@@ -128,8 +130,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             var data = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => ShippingScreen(
-                                        address, kitchenID)));
+                                    builder: (_) =>
+                                        ShippingScreen(address, kitchenID)));
                             if (data != null) {
                               getCartCount(context);
                             }
@@ -155,7 +157,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 16, right: 6),
+                                  padding:
+                                      const EdgeInsets.only(left: 16, right: 6),
                                   child: Text(
                                     cartCount,
                                     style: const TextStyle(color: Colors.white),
@@ -179,7 +182,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           const SizedBox(
                             width: 6,
                           ),
-                          Flexible(child: Text(address??'',))
+                          Flexible(
+                              child: Text(
+                            address ?? '',
+                          ))
                         ],
                       ),
                     ),
@@ -195,14 +201,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           },
                           child: Container(
                             height: 50,
-                            margin:
-                              const  EdgeInsets.only(left: 16, right: 16, top: 16),
+                            margin: const EdgeInsets.only(
+                                left: 16, right: 16, top: 16),
                             decoration: BoxDecoration(
                                 color: const Color(0xffF6F6F6),
                                 borderRadius: BorderRadius.circular(13)),
                             child: Row(
                               children: [
-                            const    SizedBox(
+                                const SizedBox(
                                   width: 16,
                                 ),
                                 Image.asset(
@@ -210,10 +216,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   width: 16,
                                   height: 16,
                                 ),
-                              const  SizedBox(
+                                const SizedBox(
                                   width: 16,
                                 ),
-                                 const SizedBox(
+                                const SizedBox(
                                   width: 250,
                                   child: Text(
                                     "search for your location",
@@ -232,18 +238,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             },
                             child: Center(
                               child: Padding(
-                              padding: const EdgeInsets.only(right: 5, top: 16),
-                              child: Image.asset(
-                                Res.ic_filter,
-                                width: 50,
-                                height: 50,
-                              )),
+                                  padding:
+                                      const EdgeInsets.only(right: 5, top: 16),
+                                  child: Image.asset(
+                                    Res.ic_filter,
+                                    width: 50,
+                                    height: 50,
+                                  )),
                             ),
                           ),
                         )
                       ],
                     ),
-                   const SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     Stack(
@@ -256,18 +263,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                         const   SizedBox(
+                            const SizedBox(
                               height: 65,
                             ),
                             Padding(
-                                padding: const EdgeInsets.only(left: 16, top: 16),
+                                padding:
+                                    const EdgeInsets.only(left: 16, top: 16),
                                 child: Text(
                                   itemName!.isNotEmpty ? itemName! : "",
                                   style: const TextStyle(
                                       color: Colors.red, fontSize: 16),
                                 )),
                             Padding(
-                                padding: const EdgeInsets.only(left: 16, top: 6),
+                                padding:
+                                    const EdgeInsets.only(left: 16, top: 6),
                                 child: Text(
                                   kitchenName!.isNotEmpty
                                       ? "Kitchen Name: " + kitchenName!
@@ -279,7 +288,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 16, top: 6),
+                                  padding:
+                                      const EdgeInsets.only(left: 16, top: 6),
                                   child: RichText(
                                     text: TextSpan(
                                       text: delivery_fromtime!.isNotEmpty
@@ -296,7 +306,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                                   ),
                                 ),
-                              const  SizedBox(
+                                const SizedBox(
                                   width: 16,
                                 ),
                                 Padding(
@@ -314,7 +324,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         )
                       ],
                     ),
-                  const  Padding(
+                    const Padding(
                       padding: EdgeInsets.only(left: 16, top: 16),
                       child: Text(
                         "What would you like\nto order",
@@ -328,7 +338,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       margin: const EdgeInsets.only(right: 16),
                       child: Row(
                         children: [
-                         const SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           Expanded(
@@ -353,7 +363,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   width: 70,
                                   child: Column(
                                     children: [
-                                     const SizedBox(
+                                      const SizedBox(
                                         height: 6,
                                       ),
                                       Container(
@@ -409,7 +419,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   width: 70,
                                   child: Column(
                                     children: [
-                                    const  SizedBox(
+                                      const SizedBox(
                                         height: 6,
                                       ),
                                       Container(
@@ -421,7 +431,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         width: 60,
                                         child: Center(
                                           child: Image.asset(
-                                           "assets/images/lunch.png",
+                                            "assets/images/lunch.png",
                                             width: 40,
                                             height: 40,
                                           ),
@@ -461,12 +471,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100),
                                 ),
-                                child:   SizedBox(
+                                child: SizedBox(
                                   height: 110,
                                   width: 70,
                                   child: Column(
                                     children: [
-                                    const  SizedBox(
+                                      const SizedBox(
                                         height: 16,
                                       ),
                                       Container(
@@ -529,7 +539,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     width: 100,
                                     child: Row(
                                       children: [
-                                       const SizedBox(
+                                        const SizedBox(
                                           width: 16,
                                         ),
                                         Image.asset(
@@ -538,7 +548,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           height: 16,
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 16),
+                                          padding:
+                                              const EdgeInsets.only(left: 16),
                                           child: Text(
                                             "Veg",
                                             style: TextStyle(
@@ -711,8 +722,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget getFoods(home.Data result, int index) {
-    double h  =  MediaQuery.of(context).size.height;
-    double w  =  MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     return Padding(
       padding: EdgeInsets.only(bottom: 16),
       child: InkWell(
@@ -737,11 +748,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Stack(
               children: [
-
                 Container(
                   margin: EdgeInsets.only(top: 15),
-                  height: h*0.5,
-                  width:w,
+                  height: h * 0.5,
+                  width: w,
                   child: Image.network(result.image!, fit: BoxFit.cover),
                 ),
                 Row(
@@ -886,10 +896,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     progressDialog = ProgressDialog(context);
     progressDialog.show();
     try {
-      BeanVerifyOtp user = await Utils.getUser();
+      late BeanVerifyOtp user;
+      if (widget.skip) {
+      } else {
+        user = await Utils.getUser();
+      }
+
       FormData from = FormData.fromMap({
         "token": "123456789",
-        "customer_id": "193",
+        "customer_id": (widget.skip) ? '' : user.data!.id,
         "search_location_or_kitchen": "",
         "mealfor": widget.mealfor == 1
             ? "0"
@@ -920,8 +935,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
       print("param" + from.toString());
       print("id>>" + user.data!.id!);
-      home.BeanHomeData? bean = await ApiProvider().getHomeData(from)
-          ;
+      home.BeanHomeData? bean = await ApiProvider().getHomeData(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -942,7 +956,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       progressDialog.dismiss(context);
       print(exception);
     } catch (exception) {
-      progressDialog.dismiss( context);
+      progressDialog.dismiss(context);
       print(exception);
     }
   }
@@ -1077,39 +1091,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-String? address;
+  String? address;
   Future<void> GetAddressFromLatLong(Position position) async {
-    address="";
+    address = "";
     List<Placemark> placemarks =
-    await placemarkFromCoordinates(position.latitude, position.longitude);
+        await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
     address =
-    '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
   }
 
-getCurrentLocation()async{
-  LocationPermission permission;
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
+  getCurrentLocation() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
-
-      return Future.error('Location permissions are denied');
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
     }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    Position position = await Geolocator.getCurrentPosition();
+    GetAddressFromLatLong(position);
   }
 
-  if (permission == LocationPermission.deniedForever) {
-    // Permissions are denied forever, handle appropriately.
-
-    return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
-  }
-  Position position = await Geolocator.getCurrentPosition();
-  GetAddressFromLatLong(position);
-
-}
   getUserAddress() async {
     print("get USer address api call");
     //call this async method from whereever you need
@@ -1119,8 +1131,7 @@ getCurrentLocation()async{
 
     try {
       await getCurrentLocation();
-      setState(() {
-      });
+      setState(() {});
       //myLocation = await location.getLocation();
     } on PlatformException catch (e) {
       print(e);
@@ -1137,8 +1148,6 @@ getCurrentLocation()async{
     var currentLocation = myLocation;
     // final coordinates =
     //     new Coordinates(myLocation?.latitude, myLocation?.longitude);
-
-
   }
 
   Future<BeanBanner?> getBannerData() async {
@@ -1162,8 +1171,6 @@ getCurrentLocation()async{
       } else {
         Utils.showToast(bean.message!);
       }
-
-
     } on HttpException catch (exception) {
       print(exception);
     } catch (exception) {

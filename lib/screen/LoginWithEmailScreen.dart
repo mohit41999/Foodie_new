@@ -37,11 +37,11 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
   var email = TextEditingController();
   var password = TextEditingController();
   late ProgressDialog progressDialog;
- late Future <GetAddressList?> future;
+  late Future<GetAddressList?> future;
   String? userId = "";
   bool isLoggedIn = false;
-  bool isApiCalling=false;
-   PickResult? selectedPlace;
+  bool isApiCalling = false;
+  PickResult? selectedPlace;
   LatLng? currentPostion;
   final Geolocator geolocator = Geolocator();
   void onLoginStatusChanged(bool isLoggedIn, {profileData}) {
@@ -127,6 +127,20 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                       ),
                     ),
                   )),
+              SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/forgotpassword');
+                },
+                child: const Center(
+                  child: Text(
+                    "Forgot password",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                ),
+              ),
               Expanded(
                 child: SizedBox(
                   height: 1,
@@ -187,7 +201,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
         PrefManager.putString(AppConstant.user, jsonEncode(bean));
         Utils.showToast(bean.message!);
         userId = bean.data!.id;
-        future =  getAddress(context, userId);
+        future = getAddress(context, userId);
         setState(() {});
         return bean;
       } else {
@@ -333,7 +347,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
 
   void bottomsheetLocation() {
     showModalBottomSheet(
-        shape:const RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           // <-- for border radius
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(15.0),
@@ -345,163 +359,160 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
         builder: (context) {
           return StatefulBuilder(builder: (context, setModelState) {
             return Wrap(
-                children: <Widget>[
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Row(
+              children: <Widget>[
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 20, left: 10),
+                          child: Text(
+                            "Search Location",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: AppConstant.fontBold,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 16, right: 16, top: 16),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppConstant.appColor)),
+                      height: 50,
+                      child: Row(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 20, left: 10),
-                            child: Text(
-                              "Search Location",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: AppConstant.fontBold,
-                                  fontSize: 16),
+                          Expanded(
+                            child: TextField(
+                              decoration: InputDecoration.collapsed(
+                                  hintText: '   Search for your location'),
                             ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(right: 16),
+                              child: Image.asset(
+                                Res.ic_search,
+                                width: 16,
+                                height: 16,
+                              ))
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Image.asset(
+                            Res.ic_loca,
+                            width: 16,
+                            height: 16,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            "Turn on Device Location",
+                            style: TextStyle(
+                                color: Color(0xffA2A2A2),
+                                fontSize: 13,
+                                decoration: TextDecoration.none,
+                                fontFamily: AppConstant.fontRegular),
                           ),
                         ],
                       ),
-                      Container(
-                        margin: EdgeInsets.only(left: 16, right: 16, top: 16),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: AppConstant.appColor)),
-                        height: 50,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                decoration: InputDecoration.collapsed(
-                                    hintText: '   Search for your location'),
-                              ),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.only(right: 16),
-                                child: Image.asset(
-                                  Res.ic_search,
-                                  width: 16,
-                                  height: 16,
-                                ))
-                          ],
-                        ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 10),
+                      child: Text(
+                        "Near By Location",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: AppConstant.fontBold,
+                            fontSize: 16),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 16),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Image.asset(
-                              Res.ic_loca,
-                              width: 16,
-                              height: 16,
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Text(
-                              "Turn on Device Location",
-                              style: TextStyle(
-                                  color: Color(0xffA2A2A2),
-                                  fontSize: 13,
-                                  decoration: TextDecoration.none,
-                                  fontFamily: AppConstant.fontRegular),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 20, left: 10),
-                        child: Text(
-                          "Near By Location",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: AppConstant.fontBold,
-                              fontSize: 16),
-                        ),
-                      ),
+                    ),
                     FutureBuilder<GetAddressList?>(
-                        future:
-                            future,
+                        future: future,
                         builder: (context, projectSnap) {
-                          print(projectSnap.data?.data![0].nearbyKitchen![0].kitchenname);
+                          print(projectSnap
+                              .data?.data![0].nearbyKitchen![0].kitchenname);
 
-                            if (projectSnap.data != null) {
-
-                                return ListView.builder(
+                          if (projectSnap.data != null) {
+                            return ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.vertical,
-                                  physics: BouncingScrollPhysics(),
+                              physics: BouncingScrollPhysics(),
                               itemBuilder: (context, index) {
-                                return getAddressList(projectSnap.data!.data![0].nearbyKitchen![index]);
+                                return getAddressList(projectSnap
+                                    .data!.data![0].nearbyKitchen![index]);
                                 //     return Container();
-                                  },
-                                  itemCount:  projectSnap.data!.data![0].nearbyKitchen?.length,
-                                );
-                              }
-
+                              },
+                              itemCount: projectSnap
+                                  .data!.data![0].nearbyKitchen?.length,
+                            );
+                          }
 
                           return Container(
                               child:
                                   Center(child: CircularProgressIndicator()));
                         }),
-                          selectedPlace == null
-                              ? Container()
-                              : Padding(
-                                  child: Text(selectedPlace!.formattedAddress ?? ""),
-                                  padding: EdgeInsets.only(left: 16),
-                                ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 20, left: 10),
-                            child: Text(
-                              "Recent Location",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: AppConstant.fontBold,
-                                  fontSize: 16),
-                            ),
+                    selectedPlace == null
+                        ? Container()
+                        : Padding(
+                            child: Text(selectedPlace!.formattedAddress ?? ""),
+                            padding: EdgeInsets.only(left: 16),
                           ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20, left: 10),
+                      child: Text(
+                        "Recent Location",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: AppConstant.fontBold,
+                            fontSize: 16),
+                      ),
+                    ),
                     FutureBuilder<GetAddressList?>(
-                        future:
-                            future,
+                        future: future,
                         builder: (context, projectSnap) {
                           print(projectSnap.data);
 
-                            if (projectSnap.data != null) {
-
-                                return ListView.builder(
+                          if (projectSnap.data != null) {
+                            return ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.vertical,
-                                  physics: BouncingScrollPhysics(),
+                              physics: BouncingScrollPhysics(),
                               itemBuilder: (context, index) {
-                                return getRecent( projectSnap.data!.data![0].recent![index]);
-
-                                  },
-                                  itemCount:  projectSnap.data!.data![0].recent?.length,
-                                );
-
-
+                                return getRecent(
+                                    projectSnap.data!.data![0].recent![index]);
+                              },
+                              itemCount:
+                                  projectSnap.data!.data![0].recent?.length,
+                            );
                           }
                           return Container(
                               child:
                                   Center(child: CircularProgressIndicator()));
                         }),
-                      selectedPlace == null
-                          ? Container()
-                          : Padding(
-                              child: Text(selectedPlace!.formattedAddress ?? ""),
-                              padding: EdgeInsets.only(left: 16),
-                            ),
-                    ],
-                  )
-                ],
+                    selectedPlace == null
+                        ? Container()
+                        : Padding(
+                            child: Text(selectedPlace!.formattedAddress ?? ""),
+                            padding: EdgeInsets.only(left: 16),
+                          ),
+                  ],
+                )
+              ],
             );
           });
         });
@@ -516,8 +527,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
       FormData from =
           FormData.fromMap({"userid": userId, "token": "123456789"});
 
-      GetAddressList? bean =
-          await ApiProvider().getAddress(from) ;
+      GetAddressList? bean = await ApiProvider().getAddress(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -565,24 +575,29 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                     autocompleteLanguage: "ko",
                     region: 'au',
 
-                    selectedPlaceWidgetBuilder: (_, selectedPlace, state, isSearchBarFocused) {
-                      print("state: $state, isSearchBarFocused: $isSearchBarFocused");
+                    selectedPlaceWidgetBuilder:
+                        (_, selectedPlace, state, isSearchBarFocused) {
+                      print(
+                          "state: $state, isSearchBarFocused: $isSearchBarFocused");
                       return isSearchBarFocused
                           ? Container()
                           : FloatingCard(
-                              bottomPosition: 0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+                              bottomPosition:
+                                  0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
                               leftPosition: 0.0,
                               rightPosition: 0.0,
                               width: 500,
                               borderRadius: BorderRadius.circular(12.0),
                               child: state == SearchingState.Searching
-                                  ? const Center(child: CircularProgressIndicator())
+                                  ? const Center(
+                                      child: CircularProgressIndicator())
                                   : RaisedButton(
                                       child: const Text("Pick Here"),
                                       onPressed: () {
                                         // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
                                         //            this will override default 'Select here' Button.
-                                        print("do something with [selectedPlace] data");
+                                        print(
+                                            "do something with [selectedPlace] data");
                                         Navigator.of(context).pop();
                                       },
                                     ),

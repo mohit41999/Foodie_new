@@ -69,7 +69,7 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
     'https://www.googleapis.com/auth/plus.profile.emails.read'
   ]);
   // var facebookLogin = FacebookLogin();
-   PickResult? selectedPlace;
+  PickResult? selectedPlace;
   LatLng? currentPostion;
   // final Geolocator geolocator = Geolocator();
   void onLoginStatusChanged(bool isLoggedIn, {profileData}) {
@@ -114,13 +114,15 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(
-                    padding: EdgeInsets.only(top: 26, right: 16),
+                    padding: EdgeInsets.only(top: 46, right: 26),
                     child: InkWell(
                       onTap: () {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomeBaseScreen()),
+                                builder: (context) => HomeBaseScreen(
+                                      skip: true,
+                                    )),
                             (route) => false);
                       },
                       child: Text(
@@ -204,21 +206,6 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                           child: Text(
                             "OR",
                             style: TextStyle(color: Colors.black, fontSize: 14),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/forgotpassword');
-                          },
-                          child: const Center(
-                            child: Text(
-                              "Forgot password",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 16),
-                            ),
                           ),
                         ),
                         SizedBox(
@@ -450,8 +437,7 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
         "token": "123456789",
       });
       print(data);
-      BeanLogin? bean =
-          await ApiProvider().loginUser(data);
+      BeanLogin? bean = await ApiProvider().loginUser(data);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -740,8 +726,7 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
         "email": profile['email'].toString(),
         "name": profile['name'].toString()
       });
-      BeanVerifyOtp? bean =
-          await ApiProvider().socailLogin(data) ;
+      BeanVerifyOtp? bean = await ApiProvider().socailLogin(data);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -827,12 +812,11 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                     initialPosition: currentPostion!,
                     useCurrentLocation: true,
                     selectInitialPosition: true,
-
                     usePlaceDetailSearch: true,
                     onPlacePicked: (result) {
                       selectedPlace = result;
 
-                       confirmLocation(selectedPlace!);
+                      confirmLocation(selectedPlace!);
 
                       setState(() {});
                     },
@@ -840,13 +824,15 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                     automaticallyImplyAppBarLeading: false,
                     autocompleteLanguage: "ko",
                     region: 'au',
-
-                    selectedPlaceWidgetBuilder: (_, selectedPlace, state, isSearchBarFocused) {
-                      print("state: $state, isSearchBarFocused: $isSearchBarFocused");
+                    selectedPlaceWidgetBuilder:
+                        (_, selectedPlace, state, isSearchBarFocused) {
+                      print(
+                          "state: $state, isSearchBarFocused: $isSearchBarFocused");
                       return isSearchBarFocused
                           ? Container()
                           : FloatingCard(
-                              bottomPosition: 0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+                              bottomPosition:
+                                  0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
                               leftPosition: 0.0,
                               rightPosition: 0.0,
                               width: 500,
@@ -858,7 +844,8 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                                       onPressed: () {
                                         // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
                                         //            this will override default 'Select here' Button.
-                                        print("do something with [selectedPlace] data");
+                                        print(
+                                            "do something with [selectedPlace] data");
                                         Navigator.of(context).pop();
                                       },
                                     ),
@@ -901,8 +888,7 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
       FormData from =
           FormData.fromMap({"userid": randomNumber, "token": "123456789"});
       print("dsd" + randomNumber.toString());
-      GetAddressList? bean =
-          await ApiProvider().getAddress(from) ;
+      GetAddressList? bean = await ApiProvider().getAddress(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
