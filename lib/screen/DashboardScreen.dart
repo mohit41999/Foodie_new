@@ -31,15 +31,20 @@ import 'ShippingScreen.dart';
 class DashboardScreen extends StatefulWidget {
   var mealfor;
   var cuisine;
-  var type;
+  var mealtype;
   var min;
   var max;
   var mealPlan;
   final bool skip;
 
   DashboardScreen(
-      this.mealfor, this.cuisine, this.mealPlan, this.type, this.min, this.max,
-      {this.skip = false});
+      {required this.mealfor,
+      this.cuisine = -1,
+      this.mealPlan = -1,
+      required this.mealtype,
+      this.min = 0,
+      this.max = 0,
+      this.skip = false});
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -65,23 +70,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String? kitchenName = "";
   String? kitchenID = "";
   var isFav = false;
-  void getUser() async {
+  Future getUser() async {
     userBean = await Utils.getUser();
     name = userBean.data!.kitchenname;
     menu = userBean.data!.kitchenname;
     setState(() {});
   }
 
+  Future initialize() async {
+    await getUser();
+    await getUserAddress();
+    await getHomeData();
+    await getBannerData();
+    await getCartCount(context);
+  }
+
   @override
   void initState() {
     progressDialog = ProgressDialog(context);
-    getUser();
-    getUserAddress();
+
     super.initState();
     Future.delayed(Duration.zero, () {
-      getHomeData();
-      getBannerData();
-      getCartCount(context);
+      initialize();
     });
   }
 
@@ -345,6 +355,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
+                                  widget.mealfor = 1;
                                   isSelect = 1;
                                   getHomeData();
                                 });
@@ -401,6 +412,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
+                                  widget.mealfor = 2;
                                   isSelect = 2;
                                   getHomeData();
                                 });
@@ -457,6 +469,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
+                                  widget.mealfor = 3;
                                   isSelect = 3;
                                   getHomeData();
                                 });
@@ -523,6 +536,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               onTap: () {
                                 setState(() {
                                   isSelectFood = 1;
+                                  widget.mealtype = 1;
+
                                   getHomeData();
                                 });
                               },
@@ -569,6 +584,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               onTap: () {
                                 setState(() {
                                   isSelectFood = 2;
+                                  widget.mealtype = 2;
                                   getHomeData();
                                 });
                               },
@@ -614,6 +630,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               onTap: () {
                                 setState(() {
                                   isSelectFood = 3;
+                                  widget.mealtype = 3;
                                   getHomeData();
                                 });
                               },
@@ -920,7 +937,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 : widget.cuisine == 3
                     ? "2"
                     : "",
-        "mealtype": "1",
+        "mealtype": widget.mealtype == 1
+            ? "0"
+            : widget.mealtype == 2
+                ? "1"
+                : widget.mealtype == 3
+                    ? "2"
+                    : "0",
         "mealplan": widget.mealPlan == 1
             ? "0"
             : widget.mealPlan == 2
@@ -930,11 +953,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     : "",
         "min_price": "",
         "max_price": "",
-        "rating": "0",
+        "rating": "",
         "customer_address": address
       });
       print("param" + from.toString());
-      print("id>>" + user.data!.id!);
+
       home.BeanHomeData? bean = await ApiProvider().getHomeData(from);
       print(bean!.data);
       progressDialog.dismiss(context);

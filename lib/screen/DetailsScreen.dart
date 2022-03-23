@@ -72,148 +72,149 @@ class _DetailsScreenState extends State<DetailsScreen>
 
   @override
   Widget build(BuildContext context) {
+    print(widget.result.kitchenId);
     progressDialog = ProgressDialog(context);
     // FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     // FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              pinned: false,
-              automaticallyImplyLeading: false,
-              expandedHeight: 200.0,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Stack(
-                  children: [
-                    Image.network(widget.result.image!,
-                        width: double.infinity, fit: BoxFit.cover),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          child: Padding(
-                              padding: EdgeInsets.only(left: 16, top: 26),
-                              child: Image.asset(
-                                Res.ic_back,
-                                color: Colors.white,
-                                width: 16,
-                                height: 16,
-                              )),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            var data = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => ShippingScreen(
-                                        address, widget.result.kitchenId)));
-                            if (data != null) {
-                              getCartCount(context);
-                            }
-                          },
-                          child: Container(
-                            height: 30,
-                            margin: EdgeInsets.only(top: 36),
-                            decoration: BoxDecoration(
-                                color: AppConstant.appColor,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(40),
-                                  bottomLeft: Radius.circular(40),
-                                )),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 16, right: 6),
-                                  child: Image.asset(
-                                    Res.ic_bascket,
-                                    width: 16,
-                                    height: 16,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 6),
-                                  child: Text(
-                                    cartCount.isNotEmpty ? cartCount : "",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          alignment: Alignment.bottomCenter,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                  padding: EdgeInsets.only(bottom: 6),
-                                  child: Image.asset(
-                                    Res.ic_chef,
-                                    width: 80,
-                                    height: 80,
-                                  )),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 10,
-                                ),
-                              ),
-                              Stack(
-                                children: [
-                                  widget.result.isFavourite == "0"
-                                      ? InkWell(
-                                          onTap: () {
-                                            addFavKitchen();
-                                          },
-                                          child: Padding(
-                                              padding: EdgeInsets.only(top: 1),
-                                              child: Image.asset(
-                                                Res.ic_like,
-                                                width: 70,
-                                                height: 70,
-                                              )),
-                                        )
-                                      : InkWell(
-                                          onTap: () {
-                                            removeFav();
-                                          },
-                                          child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 1, right: 16),
-                                              child: Image.asset(
-                                                Res.ic_hearfille,
-                                                width: 20,
-                                                height: 20,
-                                              )),
-                                        ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              //collapsedHeight: 100,
-            ),
-          ];
-        },
-        body: Column(
+      // body: NestedScrollView(
+      //   headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+      //     return <Widget>[
+      //       SliverAppBar(
+      //         pinned: false,
+      //         automaticallyImplyLeading: false,
+      //         expandedHeight: 200.0,
+      //         flexibleSpace: FlexibleSpaceBar(
+      //           background:
+      //         ),
+      //         //collapsedHeight: 100,
+      //       ),
+      //     ];
+      //   },
+      body: SingleChildScrollView(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Stack(
+              children: [
+                Image.network(widget.result.image!,
+                    width: double.infinity, fit: BoxFit.cover),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 16, top: 26),
+                          child: Image.asset(
+                            Res.ic_back,
+                            color: Colors.white,
+                            width: 16,
+                            height: 16,
+                          )),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        var data = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => ShippingScreen(
+                                    address, widget.result.kitchenId)));
+                        if (data != null) {
+                          getCartCount(context);
+                        }
+                      },
+                      child: Container(
+                        height: 30,
+                        margin: EdgeInsets.only(top: 36),
+                        decoration: BoxDecoration(
+                            color: AppConstant.appColor,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40),
+                              bottomLeft: Radius.circular(40),
+                            )),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 16, right: 6),
+                              child: Image.asset(
+                                Res.ic_bascket,
+                                width: 16,
+                                height: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 6),
+                              child: Text(
+                                cartCount.isNotEmpty ? cartCount : "",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(bottom: 6),
+                              child: Image.asset(
+                                Res.ic_chef,
+                                width: 80,
+                                height: 80,
+                              )),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Stack(
+                            children: [
+                              widget.result.isFavourite == "0"
+                                  ? InkWell(
+                                      onTap: () {
+                                        addFavKitchen();
+                                      },
+                                      child: Padding(
+                                          padding: EdgeInsets.only(top: 1),
+                                          child: Image.asset(
+                                            Res.ic_like,
+                                            width: 70,
+                                            height: 70,
+                                          )),
+                                    )
+                                  : InkWell(
+                                      onTap: () {
+                                        removeFav();
+                                      },
+                                      child: Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 1, right: 16),
+                                          child: Image.asset(
+                                            Res.ic_hearfille,
+                                            width: 20,
+                                            height: 20,
+                                          )),
+                                    ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
             Padding(
               padding: EdgeInsets.only(left: 16, top: 16),
               child: Text(
@@ -328,7 +329,7 @@ class _DetailsScreenState extends State<DetailsScreen>
                 child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return getOffer(offer![index]);
                     },
@@ -594,141 +595,121 @@ class _DetailsScreenState extends State<DetailsScreen>
                     fontFamily: AppConstant.fontBold),
               ),
             ),
-            Expanded(
-              child: Container(
-                height: 150,
-                child: DefaultTabController(
-                    length: 3,
-                    child: Scaffold(
-                      appBar: AppBar(
-                        backgroundColor: Colors.white,
-                        elevation: 0.0,
-                        bottom: PreferredSize(
-                          preferredSize: const Size.fromHeight(0.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: GestureDetector(
-                              child: Container(
-                                child: TabBar(
-                                  unselectedLabelColor: Colors.black,
-                                  labelColor: Colors.black,
-                                  indicatorColor: AppConstant.appColor,
-                                  isScrollable: false,
-                                  controller: _controller,
-                                  tabs: [
-                                    Tab(text: 'BreakFast'),
-                                    Tab(text: 'Lunch'),
-                                    Tab(text: 'Dinner'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )),
-              ),
+            TabBar(
+              unselectedLabelColor: Colors.black,
+              labelColor: Colors.black,
+              indicatorColor: AppConstant.appColor,
+              isScrollable: false,
+              controller: _controller,
+              tabs: [
+                Tab(text: 'BreakFast'),
+                Tab(text: 'Lunch'),
+                Tab(text: 'Dinner'),
+              ],
             ),
-            Center(
-                child: Text(
-              "Select your weekly or monthly meal from below",
-              style: TextStyle(fontSize: 11),
-            )),
-            Center(
-                child: Text(
-              "OR",
-              style: TextStyle(fontSize: 11),
-            )),
-            InkWell(
-                onTap: () {},
-                child: Center(
-                    child: Text(
-                  "CUSTOMIZED YOUR MENU",
-                  style:
-                      TextStyle(fontSize: 11, fontFamily: AppConstant.fontBold),
-                ))),
-            Expanded(
-              child: Container(
-                child: TabBarView(
-                  controller: _controller,
-                  children: <Widget>[
-                    menu!.isEmpty
-                        ? Container()
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return getBreakfast(menu![index]);
-                            },
-                            itemCount: menu!.length,
-                          ),
-                    menu!.isEmpty
-                        ? Container()
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return GetLunch((menu![index]));
-                            },
-                            itemCount: menu!.length,
-                          ),
-                    menu!.isEmpty
-                        ? Container()
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return getDinner(menu![index]);
-                            },
-                            itemCount: menu!.length,
-                          ),
-                  ],
-                ),
+            // Container(
+            //   color: Colors.red,
+            //   height: 150,
+            //   child: DefaultTabController(
+            //       length: 3,
+            //       child: Scaffold(
+            //         appBar: AppBar(
+            //           backgroundColor: Colors.white,
+            //           elevation: 0.0,
+            //           bottom: PreferredSize(
+            //             preferredSize: const Size.fromHeight(0.0),
+            //             child: Align(
+            //               alignment: Alignment.centerLeft,
+            //               child: GestureDetector(
+            //                 child: Container(
+            //                   child:
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       )),
+            // ),
+            Container(
+              height: 300,
+              child: TabBarView(
+                controller: _controller,
+                children: <Widget>[
+                  menu!.isEmpty
+                      ? Container()
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return getBreakfast(menu![index]);
+                          },
+                          itemCount: menu!.length,
+                        ),
+                  menu!.isEmpty
+                      ? Container()
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return GetLunch((menu![index]));
+                          },
+                          itemCount: menu!.length,
+                        ),
+                  menu!.isEmpty
+                      ? Container()
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return getDinner(menu![index]);
+                          },
+                          itemCount: menu!.length,
+                        ),
+                ],
               ),
             ),
 
             /*   Flexible(
-              child: Container(
-                child: TabBarView(
-                  controller: _controller,
-                  children: <Widget>[
+                child: Container(
+                  child: TabBarView(
+                    controller: _controller,
+                    children: <Widget>[
 
-                    Column(
-                      children: [
-                        Flexible(
-                          child: InkWell(
-                            onTap:(){
+                      Column(
+                        children: [
+                          Flexible(
+                            child: InkWell(
+                              onTap:(){
 
-                              Navigator.pushNamed(context, '/addpackage');
-                              },
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                return getLunch();
-                              },
-                              itemCount: 10,
+                                Navigator.pushNamed(context, '/addpackage');
+                                },
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemBuilder: (context, index) {
+                                  return getLunch();
+                                },
+                                itemCount: 10,
+                              ),
                             ),
-                          ),
-                        ),],
-                    ),
+                          ),],
+                      ),
 
-                    ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return getBreakfast();
-                      },
-                      itemCount: 10,
-                    ),
-                  ],
+                      ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return getBreakfast();
+                        },
+                        itemCount: 10,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),*/
+              ),*/
           ],
         ),
       ),
@@ -772,38 +753,39 @@ class _DetailsScreenState extends State<DetailsScreen>
                   )),
 
               Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                      padding: EdgeInsets.only(left: 2),
-                      child: Text(
-                        menu.itemname!,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: AppConstant.fontBold,
-                            fontSize: 16),
-                      )),
-                  Text(
-                    menu.cuisinetype!,
-                    style: TextStyle(color: Color(0xffA7A8BC)),
-                  ),
-                  Text(
-                    "₹" + menu.itemprice!,
-                    style: TextStyle(color: Color(0xff7EDABF)),
-                  ),
-                  RatingBarIndicator(
-                    rating: 4,
-                    itemCount: 5,
-                    itemSize: 16.0,
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.amber,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(left: 2),
+                        child: Text(
+                          menu.itemname!,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: AppConstant.fontBold,
+                              fontSize: 16),
+                        )),
+                    Text(
+                      menu.cuisinetype!,
+                      style: TextStyle(color: Color(0xffA7A8BC)),
                     ),
-                  ),
-                ],
-              )),
+                    Text(
+                      "₹" + menu.itemprice!,
+                      style: TextStyle(color: Color(0xff7EDABF)),
+                    ),
+                    RatingBarIndicator(
+                      rating: 4,
+                      itemCount: 5,
+                      itemSize: 16.0,
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               InkWell(
                 onTap: () {
                   addToCart(menu.itemid!, menu.bookType);
@@ -988,8 +970,7 @@ class _DetailsScreenState extends State<DetailsScreen>
       print("kkk" + widget.result.kitchenId!);
       print("kitchenid>>" + isSelectFood.toString());
       print("isSelect>" + isSelect.toString());
-      KitchenDetail? bean =
-          await ApiProvider().kitchenDetail(from) ;
+      KitchenDetail? bean = await ApiProvider().kitchenDetail(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -1032,8 +1013,7 @@ class _DetailsScreenState extends State<DetailsScreen>
         "token": "123456789",
         "kitchenid": widget.result.kitchenId
       });
-      BeanFavKitchen? bean =
-          await ApiProvider().favKitchen(from) ;
+      BeanFavKitchen? bean = await ApiProvider().favKitchen(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -1063,8 +1043,7 @@ class _DetailsScreenState extends State<DetailsScreen>
         "token": "123456789",
         "kitchenid": widget.result.kitchenId
       });
-      BeanRemoveKitchen? bean = await ApiProvider().removeKitchen(from)
-          ;
+      BeanRemoveKitchen? bean = await ApiProvider().removeKitchen(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -1095,8 +1074,7 @@ class _DetailsScreenState extends State<DetailsScreen>
         "token": "123456789",
       });
       print(from);
-      GetCartCount? bean =
-          await ApiProvider().getCartCount(from) ;
+      GetCartCount? bean = await ApiProvider().getCartCount(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -1135,8 +1113,7 @@ class _DetailsScreenState extends State<DetailsScreen>
       });
 
       print("itemId>>" + itemid);
-      BeanAddCart? bean =
-          await ApiProvider().addCart(from);
+      BeanAddCart? bean = await ApiProvider().addCart(from);
       progressDialog.dismiss(context);
       print(bean!.data);
       if (bean.status == true) {
@@ -1182,11 +1159,6 @@ class _DetailsScreenState extends State<DetailsScreen>
                     color: Colors.black,
                     fontFamily: AppConstant.fontBold,
                     fontSize: 16),
-              ),
-            ),
-            Expanded(
-              child: SizedBox(
-                width: 0,
               ),
             ),
             Padding(
@@ -1274,11 +1246,6 @@ class _DetailsScreenState extends State<DetailsScreen>
                     color: Colors.black,
                     fontFamily: AppConstant.fontBold,
                     fontSize: 16),
-              ),
-            ),
-            Expanded(
-              child: SizedBox(
-                width: 0,
               ),
             ),
             Padding(

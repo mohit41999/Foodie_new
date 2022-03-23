@@ -8,7 +8,7 @@ class BeanBanner {
   BeanBanner.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != [] ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -38,17 +38,17 @@ class Data {
 
   Data(
       {this.orderitemsid,
-        this.ordertype,
-        this.packagetype,
-        this.kitchenName,
-        this.kitchenMobileno,
-        this.riderName,
-        this.riderMobileno,
-        this.riderRating,
-        this.riderReview,
-        this.trackRiderLatitude,
-        this.trackRiderLongitude,
-        this.meal});
+      this.ordertype,
+      this.packagetype,
+      this.kitchenName,
+      this.kitchenMobileno,
+      this.riderName,
+      this.riderMobileno,
+      this.riderRating,
+      this.riderReview,
+      this.trackRiderLatitude,
+      this.trackRiderLongitude,
+      this.meal});
 
   Data.fromJson(Map<String, dynamic> json) {
     orderitemsid = json['orderitemsid'];
@@ -96,12 +96,12 @@ class Meal {
 
   Meal(
       {this.id,
-        this.mealplan,
-        this.referenceId,
-        this.deliveryDate,
-        this.deliveryFromtime,
-        this.plan,
-        this.itemName});
+      this.mealplan,
+      this.referenceId,
+      this.deliveryDate,
+      this.deliveryFromtime,
+      this.plan,
+      this.itemName});
 
   Meal.fromJson(Map<String, dynamic> json) {
     id = json['id'];

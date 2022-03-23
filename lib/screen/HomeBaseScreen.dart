@@ -34,12 +34,8 @@ class HomeBaseScreenState extends State<HomeBaseScreen> {
     print(isSkip.toString());
     _children = [
       DashboardScreen(
-        0,
-        0,
-        0,
-        "",
-        0,
-        0,
+        mealfor: 1,
+        mealtype: 1,
         skip: isSkip,
       ),
       OrderScreen(),
