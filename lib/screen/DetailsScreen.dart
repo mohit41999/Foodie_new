@@ -595,6 +595,24 @@ class _DetailsScreenState extends State<DetailsScreen>
                     fontFamily: AppConstant.fontBold),
               ),
             ),
+            Center(
+                child: Text(
+              "Select your weekly or monthly meal from below",
+              style: TextStyle(fontSize: 11),
+            )),
+            Center(
+                child: Text(
+              "OR",
+              style: TextStyle(fontSize: 11),
+            )),
+            InkWell(
+                onTap: () {},
+                child: Center(
+                    child: Text(
+                  "CUSTOMIZED YOUR MENU",
+                  style:
+                      TextStyle(fontSize: 11, fontFamily: AppConstant.fontBold),
+                ))),
             TabBar(
               unselectedLabelColor: Colors.black,
               labelColor: Colors.black,
@@ -1098,6 +1116,8 @@ class _DetailsScreenState extends State<DetailsScreen>
   }
 
   addToCart(String itemid, String? bookType) async {
+    print(itemid + 'papa');
+    print(bookType! + 'lala');
     progressDialog = ProgressDialog(context);
     progressDialog.show();
     try {
