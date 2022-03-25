@@ -42,6 +42,7 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
   @override
   void initState() {
     super.initState();
+    packageId = widget.itemId;
     Future.delayed(Duration.zero, () {
       packageDetailApi();
     });
@@ -138,8 +139,8 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            SelectDateTime(packageId, kitchenId)));
+                        builder: (context) => SelectDateTime(
+                            packageId, kitchenId, widget.bookType)));
               },
               child: Container(
                 height: 50,
@@ -165,7 +166,11 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
   Future<BeanPackageDetail?> packageDetailApi() async {
     try {
       progressDialog.show();
+      print(widget.bookType.toString() + 'klsdklsak');
       BeanVerifyOtp user = await Utils.getUser();
+
+      print(user.data!.id.toString() + 'klsdklsak');
+      print(packageId.toString() + 'asdsds');
       FormData from = FormData.fromMap({
         "token": "123456789",
         "user_id": user.data!.id,
@@ -373,11 +378,11 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
         "token": "123456789",
         "user_id": user.data!.id,
         // "user_id": "15",
-        "weekly_package_id": "1",
+        "weekly_package_id": weeklyPackageId,
         "package_id": packageId,
       });
-      custom.BeanCustomizedPackage? bean = await ApiProvider()
-          .customPackage(from) ;
+      custom.BeanCustomizedPackage? bean =
+          await ApiProvider().customPackage(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {

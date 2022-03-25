@@ -537,8 +537,7 @@ class OrderDispatchedScreenState extends State<OrderDispatchedScreen> {
       var user = await Utils.getUser();
       FormData from =
           FormData.fromMap({"user_id": user.data!.id, "token": "123456789"});
-      GetProfile? bean =
-          await ApiProvider().getProfile(from) ;
+      GetProfile? bean = await ApiProvider().getProfile(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -573,23 +572,22 @@ class OrderDispatchedScreenState extends State<OrderDispatchedScreen> {
         "meal_type": user.data!.mealtype,
         "meal_for": "1"
       });
-      KitchenDetail? bean =
-          await ApiProvider().kitchenDetail(from) ;
+      KitchenDetail? bean = await ApiProvider().kitchenDetail(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
         setState(() {
-          kitchenName = bean.data![0].kitchenname;
-          foodtype = bean.data![0].foodtype;
-          address = bean.data![0].address;
-          timing = bean.data![0].timing;
-          open_status = bean.data![0].openStatus;
-          total_review = bean.data![0].totalReview;
-          avg_review = bean.data![0].avgReview.toString();
+          kitchenName = bean.data[0].kitchenname;
+          foodtype = bean.data[0].foodtype;
+          address = bean.data[0].address;
+          timing = bean.data[0].timing;
+          open_status = bean.data[0].openStatus;
+          total_review = bean.data[0].totalReview;
+          avg_review = bean.data[0].avgReview.toString();
         });
         return bean;
       } else {
-        Utils.showToast(bean.message!);
+        Utils.showToast(bean.message);
       }
 
       return null;
@@ -611,8 +609,7 @@ class OrderDispatchedScreenState extends State<OrderDispatchedScreen> {
         "userid": user.data!.id,
         "token": "123456789",
       });
-      GetDashBoard? bean =
-          await ApiProvider().getDashboard(from) ;
+      GetDashBoard? bean = await ApiProvider().getDashboard(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {

@@ -34,13 +34,13 @@ class Data {
 
   Data(
       {this.kitchenId,
-        this.packageId,
-        this.packageName,
-        this.mealfor,
-        this.mealtype,
-        this.cuisinetype,
-        this.price,
-        this.packageDetail});
+      this.packageId,
+      this.packageName,
+      this.mealfor,
+      this.mealtype,
+      this.cuisinetype,
+      this.price,
+      this.packageDetail});
 
   Data.fromJson(Map<String, dynamic> json) {
     kitchenId = json['kitchen_id'];
@@ -78,16 +78,16 @@ class Data {
 class PackageDetail {
   String? weeklyPackageId;
   String? days;
-  String? daysName;
+  dynamic? daysName;
   String? itemName;
   String? customisedTime;
 
   PackageDetail(
       {this.weeklyPackageId,
-        this.days,
-        this.daysName,
-        this.itemName,
-        this.customisedTime});
+      this.days,
+      this.daysName,
+      this.itemName,
+      this.customisedTime});
 
   PackageDetail.fromJson(Map<String, dynamic> json) {
     weeklyPackageId = json['weekly_package_id'];

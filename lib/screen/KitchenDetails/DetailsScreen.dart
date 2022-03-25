@@ -51,8 +51,8 @@ class _DetailsScreenState extends State<DetailsScreen>
   String? open_status = "";
   String? total_review = "";
   var avg_review = "";
-  List<Offers>? offer = [];
-  List<Menu>? menu = [];
+  List<Offer>? offer = [];
+  List<KitchenDetailsData>? menu = [];
   TabController? _controller;
   Future? future;
   Future? futureCart;
@@ -72,10 +72,8 @@ class _DetailsScreenState extends State<DetailsScreen>
 
   @override
   Widget build(BuildContext context) {
-    print(widget.result.kitchenId);
     progressDialog = ProgressDialog(context);
-    // FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
-    // FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+
     return Scaffold(
       // body: NestedScrollView(
       //   headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -97,8 +95,11 @@ class _DetailsScreenState extends State<DetailsScreen>
           children: [
             Stack(
               children: [
-                Image.network(widget.result.image!,
-                    width: double.infinity, fit: BoxFit.cover),
+                Container(
+                  height: MediaQuery.of(context).size.height / 2.5,
+                  child: Image.network(widget.result.image!,
+                      width: double.infinity, fit: BoxFit.cover),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -165,8 +166,8 @@ class _DetailsScreenState extends State<DetailsScreen>
                     child: Container(
                       alignment: Alignment.bottomCenter,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
                               padding: EdgeInsets.only(bottom: 6),
@@ -218,7 +219,7 @@ class _DetailsScreenState extends State<DetailsScreen>
             Padding(
               padding: EdgeInsets.only(left: 16, top: 16),
               child: Text(
-                "Name Of Kitchen",
+                kitchenName!,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 15,
@@ -231,10 +232,10 @@ class _DetailsScreenState extends State<DetailsScreen>
                 Padding(
                   padding: EdgeInsets.only(left: 16, top: 16),
                   child: Text(
-                    kitchenName!,
+                    widget.result.cuisinetype!,
                     style: TextStyle(
                         color: Color(0xffA7A8BC),
-                        fontSize: 15,
+                        fontSize: 12,
                         fontFamily: AppConstant.fontBold),
                   ),
                 ),
@@ -326,14 +327,16 @@ class _DetailsScreenState extends State<DetailsScreen>
             ),
             Container(
                 height: 55,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return getOffer(offer![index]);
-                    },
-                    itemCount: offer!.length)),
+                child: (offer!.isEmpty)
+                    ? Container()
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return getOffer(offer![index]);
+                        },
+                        itemCount: offer!.length)),
             Padding(
               padding: EdgeInsets.only(left: 16, top: 16),
               child: Text(
@@ -653,88 +656,141 @@ class _DetailsScreenState extends State<DetailsScreen>
               child: TabBarView(
                 controller: _controller,
                 children: <Widget>[
-                  menu!.isEmpty
+                  menu![0].breakfast.menu.isEmpty
                       ? Container()
                       : ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
                           physics: BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return getBreakfast(menu![index]);
+                            return (isSelect == 3)
+                                ? TrialMenu(menu![0].breakfast.menu[index])
+                                : Package(menu![0].breakfast.menu[index]);
                           },
-                          itemCount: menu!.length,
+                          itemCount: menu![0].breakfast.menu.length,
                         ),
-                  menu!.isEmpty
+                  menu![0].lunch.menu.isEmpty
                       ? Container()
                       : ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
                           physics: BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return GetLunch((menu![index]));
+                            return (isSelect == 3)
+                                ? TrialMenu(menu![0].lunch.menu[index])
+                                : Package((menu![0].lunch.menu[index]));
                           },
-                          itemCount: menu!.length,
+                          itemCount: menu![0].lunch.menu.length,
                         ),
-                  menu!.isEmpty
+                  menu![0].dinner.menu.isEmpty
                       ? Container()
                       : ListView.builder(
                           shrinkWrap: true,
                           physics: BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return getDinner(menu![index]);
+                            return (isSelect == 3)
+                                ? TrialMenu(menu![0].dinner.menu[index])
+                                : Package(menu![0].dinner.menu[index]);
                           },
-                          itemCount: menu!.length,
+                          itemCount: menu![0].dinner.menu.length,
                         ),
                 ],
               ),
             ),
-
-            /*   Flexible(
-                child: Container(
-                  child: TabBarView(
-                    controller: _controller,
-                    children: <Widget>[
-
-                      Column(
-                        children: [
-                          Flexible(
-                            child: InkWell(
-                              onTap:(){
-
-                                Navigator.pushNamed(context, '/addpackage');
-                                },
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (context, index) {
-                                  return getLunch();
-                                },
-                                itemCount: 10,
-                              ),
-                            ),
-                          ),],
-                      ),
-
-                      ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return getBreakfast();
-                        },
-                        itemCount: 10,
-                      ),
-                    ],
-                  ),
-                ),
-              ),*/
           ],
         ),
       ),
     );
   }
 
-  Widget getOffer(Offers offer) {
+  Widget Package(Menu menu) {
+    mealFor = "lunch";
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: 10,
+            ),
+            Image.asset(
+              Res.ic_veg,
+              width: 16,
+              height: 16,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 16, top: 6),
+              child: Text(
+                menu.itemname,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: AppConstant.fontBold,
+                    fontSize: 16),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: Text(
+                AppConstant.rupee + menu.itemprice,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: AppConstant.fontRegular,
+                    fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 16, top: 6),
+          child: Text(
+            menu.cuisinetype,
+            style: TextStyle(
+                color: Colors.grey,
+                fontFamily: AppConstant.fontRegular,
+                fontSize: 12),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 16, top: 6),
+          child: Text(
+            menu.including != null ? menu.including : "",
+            style: TextStyle(
+                color: Colors.grey,
+                fontFamily: AppConstant.fontRegular,
+                fontSize: 12),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PackageDetailScreen(
+                        menu.itemid, menu.itemname, menu.bookType)));
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: 16, top: 6),
+                child: Text(
+                  "View Details",
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                      color: AppConstant.appColor,
+                      fontFamily: AppConstant.fontRegular,
+                      fontSize: 12),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget getOffer(Offer offer) {
     return Container(
       margin: EdgeInsets.only(left: 6, right: 6, top: 16),
       height: 40,
@@ -744,16 +800,14 @@ class _DetailsScreenState extends State<DetailsScreen>
           border: Border.all(color: AppConstant.appColor)),
       child: Center(
         child: Text(
-          offer.discount.toString() + "%off " + offer.offercode!,
+          offer.discount.toString() + "%off " + offer.offercode,
           style: TextStyle(fontSize: 13),
         ),
       ),
     );
   }
 
-  Widget getBreakfast(Menu menu) {
-    mealFor = "breakfast";
-    print(menu.count);
+  Widget TrialMenu(Menu menu) {
     return Padding(
       padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
       child: Column(
@@ -777,18 +831,18 @@ class _DetailsScreenState extends State<DetailsScreen>
                     Padding(
                         padding: EdgeInsets.only(left: 2),
                         child: Text(
-                          menu.itemname!,
+                          menu.itemname,
                           style: TextStyle(
                               color: Colors.black,
                               fontFamily: AppConstant.fontBold,
                               fontSize: 16),
                         )),
                     Text(
-                      menu.cuisinetype!,
+                      menu.cuisinetype,
                       style: TextStyle(color: Color(0xffA7A8BC)),
                     ),
                     Text(
-                      "₹" + menu.itemprice!,
+                      "₹" + menu.itemprice,
                       style: TextStyle(color: Color(0xff7EDABF)),
                     ),
                     RatingBarIndicator(
@@ -806,7 +860,7 @@ class _DetailsScreenState extends State<DetailsScreen>
               ),
               InkWell(
                 onTap: () {
-                  addToCart(menu.itemid!, menu.bookType);
+                  addToCart(menu.itemid, menu.bookType);
                 },
                 child: Container(
                   margin: EdgeInsets.only(right: 16),
@@ -817,7 +871,7 @@ class _DetailsScreenState extends State<DetailsScreen>
                   width: 70,
                   child: Center(
                     child: Text(
-                      "Add+",
+                      "Add +",
                       style:
                           TextStyle(color: AppConstant.appColor, fontSize: 13),
                     ),
@@ -958,7 +1012,7 @@ class _DetailsScreenState extends State<DetailsScreen>
     progressDialog.show();
     try {
       BeanVerifyOtp user = await Utils.getUser();
-
+      print(widget.result.kitchenId.toString() + 'adhsksah');
       FormData from = FormData.fromMap({
         "kitchenid": widget.result.kitchenId,
         "token": "123456789",
@@ -976,13 +1030,6 @@ class _DetailsScreenState extends State<DetailsScreen>
                 : isSelectFood == 2
                     ? "2"
                     : "",
-        "meal_for": mealFor == "breakfast"
-            ? "0"
-            : mealFor == "lunch"
-                ? "1"
-                : mealFor == "dinner"
-                    ? "2"
-                    : "0"
       });
       print("mealll" + mealFor);
       print("kkk" + widget.result.kitchenId!);
@@ -992,23 +1039,23 @@ class _DetailsScreenState extends State<DetailsScreen>
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
-        kitchenName = bean.data![0].kitchenname;
-        foodtype = bean.data![0].foodtype;
-        address = bean.data![0].address;
-        timing = bean.data![0].timing;
-        open_status = bean.data![0].openStatus;
-        total_review = bean.data![0].totalReview;
-        avg_review = bean.data![0].avgReview.toString();
-        offer = bean.data![0].offers;
-        print("offer" + bean.data![0].offers.toString());
+        kitchenName = bean.data[0].kitchenname;
+        foodtype = bean.data[0].foodtype;
+        address = bean.data[0].address;
+        timing = bean.data[0].timing;
+        open_status = bean.data[0].openStatus;
+        total_review = bean.data[0].totalReview;
+        avg_review = bean.data[0].avgReview.toString();
+        offer = bean.data[0].offers;
+        print("offer" + bean.data[0].offers.toString());
 
         if (menu != null) {
-          menu = bean.data![0].menu;
+          menu = bean.data;
         }
         setState(() {});
         return bean;
       } else {
-        Utils.showToast(bean.message!);
+        Utils.showToast(bean.message);
       }
 
       return null;
@@ -1153,179 +1200,5 @@ class _DetailsScreenState extends State<DetailsScreen>
       progressDialog.dismiss(context);
       print(exception);
     }
-  }
-
-  Widget GetLunch(Menu menu) {
-    mealFor = "lunch";
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 10,
-            ),
-            Image.asset(
-              Res.ic_veg,
-              width: 16,
-              height: 16,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16, top: 6),
-              child: Text(
-                menu.itemname!,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: AppConstant.fontBold,
-                    fontSize: 16),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 16),
-              child: Text(
-                AppConstant.rupee + menu.itemprice!,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: AppConstant.fontRegular,
-                    fontSize: 16),
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 16, top: 6),
-          child: Text(
-            menu.cuisinetype!,
-            style: TextStyle(
-                color: Colors.grey,
-                fontFamily: AppConstant.fontRegular,
-                fontSize: 12),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 16, top: 6),
-          child: Text(
-            menu.including != null ? menu.including! : "",
-            style: TextStyle(
-                color: Colors.grey,
-                fontFamily: AppConstant.fontRegular,
-                fontSize: 12),
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PackageDetailScreen(
-                        menu.itemid, menu.itemname, menu.bookType)));
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(right: 16, top: 6),
-                child: Text(
-                  "View Details",
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                      color: AppConstant.appColor,
-                      fontFamily: AppConstant.fontRegular,
-                      fontSize: 12),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget getDinner(Menu menu) {
-    mealFor = "dinner";
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 10,
-            ),
-            Image.asset(
-              Res.ic_veg,
-              width: 16,
-              height: 16,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 16, top: 6),
-              child: Text(
-                menu.itemname!,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: AppConstant.fontBold,
-                    fontSize: 16),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 16),
-              child: Text(
-                AppConstant.rupee + menu.itemprice!,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: AppConstant.fontRegular,
-                    fontSize: 16),
-              ),
-            )
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 16, top: 6),
-          child: Text(
-            menu.cuisinetype!,
-            style: TextStyle(
-                color: Colors.grey,
-                fontFamily: AppConstant.fontRegular,
-                fontSize: 12),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 16, top: 6),
-          child: Text(
-            menu.including != null ? menu.including! : "",
-            style: TextStyle(
-                color: Colors.grey,
-                fontFamily: AppConstant.fontRegular,
-                fontSize: 12),
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PackageDetailScreen(
-                        menu.itemid, menu.itemname, menu.bookType)));
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(right: 16, top: 6),
-                child: Text(
-                  "View Details",
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                      color: AppConstant.appColor,
-                      fontFamily: AppConstant.fontRegular,
-                      fontSize: 12),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 }

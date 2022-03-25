@@ -83,161 +83,63 @@ class _ProfileState extends State<Profile> {
     progressDialog = ProgressDialog(context);
 
     return Scaffold(
-        backgroundColor: Color(0xffF9F9F9),
-        drawer: MyDrawers(),
-        key: _scaffoldKey,
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        color: AppConstant.appColor,
-                        margin: EdgeInsets.only(top: 0),
-                        child: Row(
+      backgroundColor: Color(0xffF9F9F9),
+      drawer: MyDrawers(),
+      key: _scaffoldKey,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      color: AppConstant.appColor,
+                      margin: EdgeInsets.only(top: 0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 16,
+                          ),
+                          InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _scaffoldKey.currentState!.openDrawer();
+                                });
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 26),
+                                child: Image.asset(
+                                  Res.ic_menu,
+                                  width: 30,
+                                  height: 30,
+                                  color: Colors.white,
+                                ),
+                              )),
+                        ],
+                      ),
+                      height: 150,
+                    ),
+                    Card(
+                      margin: EdgeInsets.only(left: 16, right: 16, top: 120),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(13)),
+                        width: double.infinity,
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: 16,
-                            ),
-                            InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _scaffoldKey.currentState!.openDrawer();
-                                  });
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 26),
-                                  child: Image.asset(
-                                    Res.ic_menu,
-                                    width: 30,
-                                    height: 30,
-                                    color: Colors.white,
-                                  ),
-                                )),
-                          ],
-                        ),
-                        height: 150,
-                      ),
-                      Card(
-                        margin: EdgeInsets.only(left: 16, right: 16, top: 120),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(13)),
-                          width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 56, top: 16),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Image.asset(
-                                        Res.ic_email,
-                                        width: 16,
-                                        height: 16,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        email!,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily: AppConstant.fontBold,
-                                            fontSize: 15),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Center(
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 1, top: 16),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Image.asset(
-                                        Res.ic_phone,
-                                        width: 16,
-                                        height: 16,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        number!,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily: AppConstant.fontBold,
-                                            fontSize: 15),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 16, top: 16),
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                Wallet(wallet)));
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                        Res.ic_wallet,
-                                        width: 16,
-                                        height: 16,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        "My Wallet",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily: AppConstant.fontBold,
-                                            fontSize: 15),
-                                      ),
-                                      Expanded(
-                                        child: SizedBox(
-                                          width: 10,
-                                        ),
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.only(right: 10),
-                                          child: Text(
-                                            "₹" + wallet!,
-                                            style: TextStyle(
-                                                fontFamily:
-                                                    AppConstant.fontBold,
-                                                fontSize: 15,
-                                                color: Color(0xff7EDABF)),
-                                          ))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 16, top: 16),
+                            Center(
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 56, top: 16),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Image.asset(
-                                      Res.ic_location,
+                                      Res.ic_email,
                                       width: 16,
                                       height: 16,
                                     ),
@@ -245,225 +147,322 @@ class _ProfileState extends State<Profile> {
                                       width: 10,
                                     ),
                                     Text(
-                                      "Address list",
+                                      email!,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontFamily: AppConstant.fontBold,
+                                          fontSize: 15),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 1, top: 16),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.asset(
+                                      Res.ic_phone,
+                                      width: 16,
+                                      height: 16,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      number!,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontFamily: AppConstant.fontBold,
+                                          fontSize: 15),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 16, top: 16),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              Wallet(wallet)));
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.asset(
+                                      Res.ic_wallet,
+                                      width: 16,
+                                      height: 16,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "My Wallet",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontFamily: AppConstant.fontBold,
                                           fontSize: 15),
                                     ),
-                                    SizedBox(
-                                      width: 10,
+                                    Expanded(
+                                      child: SizedBox(
+                                        width: 10,
+                                      ),
                                     ),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 10),
+                                        child: Text(
+                                          "₹" + wallet!,
+                                          style: TextStyle(
+                                              fontFamily: AppConstant.fontBold,
+                                              fontSize: 15,
+                                              color: Color(0xff7EDABF)),
+                                        ))
                                   ],
                                 ),
                               ),
-                              Container(
-                                child: FutureBuilder<GetUserAddress?>(
-                                    future: future?.then(
-                                        (value) => value as GetUserAddress?),
-                                    builder: (context, projectSnap) {
-                                      print(projectSnap);
-                                      if (projectSnap.connectionState ==
-                                          ConnectionState.done) {
-                                        var result;
-                                        if (projectSnap.data != null) {
-                                          result = projectSnap.data!.data;
-                                          if (result != null) {
-                                            print(result.length);
-                                            return ListView.builder(
-                                              shrinkWrap: true,
-                                              scrollDirection: Axis.vertical,
-                                              physics: BouncingScrollPhysics(),
-                                              itemBuilder: (context, index) {
-                                                return getUserAddressList(
-                                                    result[index]);
-                                              },
-                                              itemCount: result.length,
-                                            );
-                                          }
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 16, top: 16),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Image.asset(
+                                    Res.ic_location,
+                                    width: 16,
+                                    height: 16,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Address list",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: AppConstant.fontBold,
+                                        fontSize: 15),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: FutureBuilder<GetUserAddress?>(
+                                  future: future?.then(
+                                      (value) => value as GetUserAddress?),
+                                  builder: (context, projectSnap) {
+                                    print(projectSnap);
+                                    if (projectSnap.connectionState ==
+                                        ConnectionState.done) {
+                                      var result;
+                                      if (projectSnap.data != null) {
+                                        result = projectSnap.data!.data;
+                                        if (result != null) {
+                                          print(result.length);
+                                          return ListView.builder(
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.vertical,
+                                            physics: BouncingScrollPhysics(),
+                                            itemBuilder: (context, index) {
+                                              return getUserAddressList(
+                                                  result[index]);
+                                            },
+                                            itemCount: result.length,
+                                          );
                                         }
                                       }
-                                      return Container(
-                                          child: Center(
-                                              child: Text("No Address Found")));
-                                    }),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 16, top: 16),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      Res.ic_income,
-                                      width: 16,
-                                      height: 16,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Manage Payment",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: AppConstant.fontRegular,
-                                          fontSize: 15),
-                                    ),
-                                    Expanded(
-                                      child: SizedBox(
-                                        width: 10,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 16, top: 16),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Image.asset(
-                                      Res.ic_help,
-                                      width: 16,
-                                      height: 16,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Help",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: AppConstant.fontRegular,
-                                          fontSize: 15),
-                                    ),
-                                    Expanded(
-                                      child: SizedBox(
-                                        width: 10,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 16, top: 16, bottom: 16),
-                                child: InkWell(
-                                  onTap: () {
-                                    logout(context);
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                        Res.ic_log,
-                                        width: 16,
-                                        height: 16,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        "Logout",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily: AppConstant.fontRegular,
-                                            fontSize: 15),
-                                      ),
-                                      Expanded(
-                                        child: SizedBox(
-                                          width: 10,
-                                        ),
-                                      ),
-                                    ],
+                                    }
+                                    return Container(
+                                        child: Center(
+                                            child: Text("No Address Found")));
+                                  }),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 16, top: 16),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Image.asset(
+                                    Res.ic_income,
+                                    width: 16,
+                                    height: 16,
                                   ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Manage Payment",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: AppConstant.fontRegular,
+                                        fontSize: 15),
+                                  ),
+                                  Expanded(
+                                    child: SizedBox(
+                                      width: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 16, top: 16),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Image.asset(
+                                    Res.ic_help,
+                                    width: 16,
+                                    height: 16,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Help",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: AppConstant.fontRegular,
+                                        fontSize: 15),
+                                  ),
+                                  Expanded(
+                                    child: SizedBox(
+                                      width: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 16, top: 16, bottom: 16),
+                              child: InkWell(
+                                onTap: () {
+                                  logout(context);
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.asset(
+                                      Res.ic_log,
+                                      width: 16,
+                                      height: 16,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Logout",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontFamily: AppConstant.fontRegular,
+                                          fontSize: 15),
+                                    ),
+                                    Expanded(
+                                      child: SizedBox(
+                                        width: 10,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              )
-                            ],
-                          ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                      Padding(
-                          padding: EdgeInsets.only(top: 80, left: 16),
-                          child: Image.asset(
-                            Res.ic_boy,
-                            width: 80,
-                            height: 80,
-                          )),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Padding(
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(top: 80, left: 16),
+                        child: Image.asset(
+                          Res.ic_boy,
+                          width: 80,
+                          height: 80,
+                        )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 16, top: 16),
+                      child: Text("Active Orders"),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FavOrderScreen()));
+                      },
+                      child: const Padding(
                         padding: EdgeInsets.only(left: 16, top: 16),
-                        child: Text("Active Orders"),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FavOrderScreen()));
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 16, top: 16),
-                          child: Text(
-                            "Favorite Orders",
-                            style: TextStyle(color: Color(0xffA7A8BC)),
-                          ),
+                        child: Text(
+                          "Favorite Orders",
+                          style: TextStyle(color: Color(0xffA7A8BC)),
                         ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 10,),
-                  Stack(
-                    children: [
-                      FutureBuilder<order.GetActiveOrder?>(
-                          future: _future
-                              ?.then((value) => value as order.GetActiveOrder?),
-                          builder: (context, projectSnap) {
-                            print(projectSnap);
-                            if (projectSnap.connectionState ==
-                                ConnectionState.done) {
-                              var result;
-                              if (projectSnap.data != null) {
-                                result = projectSnap.data!.data;
-                                if (result != null) {
-                                  print(result.length);
-                                  return ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.vertical,
-                                    physics: BouncingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      return getActveOrder(result[index]);
-                                    },
-                                    itemCount: result.length,
-                                  );
-                                }
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Stack(
+                  children: [
+                    FutureBuilder<order.GetActiveOrder?>(
+                        future: _future
+                            ?.then((value) => value as order.GetActiveOrder?),
+                        builder: (context, projectSnap) {
+                          print(projectSnap);
+                          if (projectSnap.connectionState ==
+                              ConnectionState.done) {
+                            var result;
+                            if (projectSnap.data != null) {
+                              result = projectSnap.data!.data;
+                              if (result != null) {
+                                print(result.length);
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  physics: BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return getActveOrder(result[index]);
+                                  },
+                                  itemCount: result.length,
+                                );
                               }
                             }
-                            return const Center(child: Text("No Address Found"));
-                          }),
-                      
-                    ],
-                  ),
-                ],
-              ),
+                          }
+                          return const Center(child: Text("No Address Found"));
+                        }),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
-
-    floatingActionButton: FloatingActionButton(
-      backgroundColor: Colors.transparent,
-      onPressed: (){
-        Navigator.pushNamed(context, '/customerfeedback');
-      },
-      child: Image.asset(
-        Res.ic_chat,
+          ),
+        ],
       ),
-    ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.transparent,
+        onPressed: () {
+          Navigator.pushNamed(context, '/customerfeedback');
+        },
+        child: Image.asset(
+          Res.ic_chat,
+        ),
+      ),
     );
   }
 
@@ -508,7 +507,7 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         Padding(
-                          padding:  const EdgeInsets.only(left: 16, top: 4),
+                          padding: const EdgeInsets.only(left: 16, top: 4),
                           child: Text(
                             result.orderfrom!,
                             textAlign: TextAlign.center,
@@ -518,7 +517,7 @@ class _ProfileState extends State<Profile> {
                                 fontFamily: AppConstant.fontBold),
                           ),
                         ),
-                      const  Padding(
+                        const Padding(
                           padding: EdgeInsets.only(left: 16, top: 10),
                           child: Text(
                             "Customized",
@@ -526,7 +525,7 @@ class _ProfileState extends State<Profile> {
                                 color: AppConstant.appColor, fontSize: 12),
                           ),
                         ),
-                       const Divider(
+                        const Divider(
                           color: Color(0xffA7A8BC),
                         )
                       ],
@@ -534,7 +533,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ],
               ),
-            const  Padding(
+              const Padding(
                 padding: EdgeInsets.only(left: 16),
                 child: Text(
                   "Today Lunch Menu",
@@ -555,7 +554,8 @@ class _ProfileState extends State<Profile> {
                       padding: const EdgeInsets.only(left: 10, top: 6),
                       child: Text(
                         result.orderItems!,
-                        style: const TextStyle(color: Colors.black, fontSize: 12),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 12),
                       ),
                     ),
                   ),
@@ -577,7 +577,7 @@ class _ProfileState extends State<Profile> {
                       style: const TextStyle(color: Colors.black, fontSize: 12),
                     ),
                   ),
-                 const Expanded(
+                  const Expanded(
                     child: SizedBox(
                       width: 0,
                     ),
@@ -616,7 +616,7 @@ class _ProfileState extends State<Profile> {
                   )
                 ],
               ),
-            const  Divider(
+              const Divider(
                 color: Color(0xffA7A8BC),
               ),
             ],
@@ -631,8 +631,7 @@ class _ProfileState extends State<Profile> {
       BeanVerifyOtp user = await Utils.getUser();
       FormData from =
           FormData.fromMap({"user_id": user.data!.id, "token": "123456789"});
-      GetProfile? bean =
-          await ApiProvider().getProfile(from) ;
+      GetProfile? bean = await ApiProvider().getProfile(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -668,23 +667,22 @@ class _ProfileState extends State<Profile> {
         "meal_type": user.data!.mealtype,
         "meal_for": "1"
       });
-      KitchenDetail? bean =
-          await ApiProvider().kitchenDetail(from) ;
+      KitchenDetail? bean = await ApiProvider().kitchenDetail(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
         setState(() {
-          kitchenName = bean.data![0].kitchenname;
-          foodtype = bean.data![0].foodtype;
-          address = bean.data![0].address;
-          timing = bean.data![0].timing;
-          open_status = bean.data![0].openStatus;
-          total_review = bean.data![0].totalReview;
-          avg_review = bean.data![0].avgReview.toString();
+          kitchenName = bean.data[0].kitchenname;
+          foodtype = bean.data[0].foodtype;
+          address = bean.data[0].address;
+          timing = bean.data[0].timing;
+          open_status = bean.data[0].openStatus;
+          total_review = bean.data[0].totalReview;
+          avg_review = bean.data[0].avgReview.toString();
         });
         return bean;
       } else {
-        Utils.showToast(bean.message!);
+        Utils.showToast(bean.message);
       }
 
       return null;
@@ -738,7 +736,7 @@ class _ProfileState extends State<Profile> {
             width: 16,
             height: 16,
           ),
-       const   SizedBox(
+          const SizedBox(
             width: 10,
           ),
           Flexible(
@@ -746,11 +744,11 @@ class _ProfileState extends State<Profile> {
               result.address.toString(),
               textAlign: TextAlign.center,
               maxLines: 1,
-              style:
-                const  TextStyle(fontFamily: AppConstant.fontRegular, fontSize: 15),
+              style: const TextStyle(
+                  fontFamily: AppConstant.fontRegular, fontSize: 15),
             ),
           ),
-        const  Expanded(
+          const Expanded(
             child: SizedBox(
               width: 10,
             ),
@@ -795,7 +793,7 @@ class _ProfileState extends State<Profile> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:const Text('Logout!'),
+          title: const Text('Logout!'),
           content: const Text('Are you sure want to logout'),
           actions: <Widget>[
             FlatButton(
@@ -846,8 +844,7 @@ class _ProfileState extends State<Profile> {
       });
       print("ordeidd" + orderid);
       print("hgh" + user.data!.id!);
-      BeanAddOrder? bean =
-          await ApiProvider().addFavOrder(from);
+      BeanAddOrder? bean = await ApiProvider().addFavOrder(from);
       progressDialog.dismiss(context);
       print(bean!.data);
 
@@ -881,8 +878,7 @@ class _ProfileState extends State<Profile> {
         "userid": user.data!.id,
         "orderid": orderid,
       });
-      BeanAddOrder? bean =
-          await ApiProvider().removeFavOrder(from) ;
+      BeanAddOrder? bean = await ApiProvider().removeFavOrder(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {

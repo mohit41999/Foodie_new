@@ -12,7 +12,7 @@ import 'package:food_app/model/GetCartCount.dart';
 import 'package:food_app/model/GetHomeData.dart' as home;
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
-import 'package:food_app/screen/DetailsScreen.dart';
+import 'package:food_app/screen/KitchenDetails/DetailsScreen.dart';
 import 'package:food_app/screen/FilterScreen.dart';
 import 'package:food_app/screen/HomeBaseScreen.dart';
 import 'package:food_app/screen/SearchHistoryScreen.dart';

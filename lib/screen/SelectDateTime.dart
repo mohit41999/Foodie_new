@@ -11,13 +11,17 @@ import 'package:food_app/screen/CustomizePackageScreen.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/Utils.dart';
 import 'package:food_app/utils/progress_dialog.dart';
+import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
+import 'package:scrollable_clean_calendar/utils/enums.dart';
 
 import '../res.dart';
+import 'package:scrollable_clean_calendar/scrollable_clean_calendar.dart';
 
 class SelectDateTime extends StatefulWidget {
   var packageId;
   var kitchenId;
-  SelectDateTime(this.packageId, this.kitchenId);
+  var bookType;
+  SelectDateTime(this.packageId, this.kitchenId, this.bookType);
 
   @override
   _SelectDateTimeState createState() => _SelectDateTimeState();
@@ -28,16 +32,18 @@ class _SelectDateTimeState extends State<SelectDateTime> {
   int? _radioValue = 0;
   var isSelected = -1;
   Future? future;
-  var first = "";
-  var endDate = "";
+  DateTime? first;
+  DateTime? endDate;
   var time = "";
   var endTime = "";
   List<String>? data;
 
   @override
   void initState() {
+    print(widget.packageId);
+    print(widget.bookType);
     Future.delayed(Duration.zero, () {
-      future = getDeliveryTime();
+      future = getDeliveryTime(widget.packageId);
     });
     super.initState();
   }
@@ -97,32 +103,30 @@ class _SelectDateTimeState extends State<SelectDateTime> {
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                // child: Container(
-                //   height: 220,
-                //   child: ScrollableCleanCalendar(
-                //     selectedDateColor: AppConstant.appColor,
-                //     rangeSelectedDateColor:
-                //         AppConstant.appColor.withOpacity(0.6),
-                //     monthLabelStyle:
-                //         TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
-                //     dayWeekLabelStyle: TextStyle(fontWeight: FontWeight.w400),
-                //     onRangeSelected: (firstDate, secondDate) {
+                child: Container(
+                    height: 250,
+                    child: ScrollableCleanCalendar(
+                      calendarController: CleanCalendarController(
+                        minDate: DateTime.now(),
+                        maxDate: DateTime(DateTime.now().year + 1),
+                        onRangeSelected: (firstDate, secondDate) {
+                          first = firstDate;
+                          endDate = secondDate!;
+                          print('onRangeSelected first $first');
+                          print('onRangeSelected second $endDate');
+                        },
+                        onDayTapped: (date) {},
 
-                //       first=firstDate.toString();
-                //       endDate=secondDate.toString();
-                //       print('onRangeSelected first $first');
-                //       print('onRangeSelected second $endDate');
-                //     },
-                //     onTapDate: (date) {
-                //       print('onTap $date');
-                //     },
-                //     minDate: DateTime.now(),
-                //     maxDate: DateTime.now().add(
-                //       Duration(days: 365),
-                //     ),
-                //     renderPostAndPreviousMonthDates: true,
-                //   ),
-                // ),
+                        onPreviousMinDateTapped: (date) {},
+                        onAfterMaxDateTapped: (date) {},
+                        weekdayStart: DateTime.monday,
+
+                        // initialDateSelected: DateTime(2022, 3, 15),
+                        // endDateSelected: DateTime(2022, 3, 20),
+                      ),
+                      layout: Layout.BEAUTY,
+                      calendarCrossAxisSpacing: 0,
+                    )),
               ),
               SizedBox(height: 15),
               Padding(
@@ -227,14 +231,23 @@ class _SelectDateTimeState extends State<SelectDateTime> {
                     child: Text('Done'),
                   ),
                   onPressed: () {
-                    if (first.isEmpty) {
+                    print(DateTime(first!.year, first!.month, first!.day + 30));
+                    if (first == null) {
                       Utils.showToast("Please select start end  date");
-                    } else if (endDate == null ||
-                        endDate.isEmpty ||
-                        endDate.length == 0) {
+                    } else if (endDate == null) {
                       Utils.showToast("Please select end date");
                     } else if (time.isEmpty) {
                       Utils.showToast("Please select Time ");
+                    } else if ((widget.bookType == 'weekly')
+                        ? DateTime(first!.year, first!.month, first!.day + 6) !=
+                            endDate
+                        : DateTime(
+                                first!.year, first!.month, first!.day + 30) !=
+                            endDate) {
+                      (widget.bookType == 'weekly')
+                          ? Utils.showToast("Please select upto 7 days only ")
+                          : Utils.showToast(
+                              "Valid date is select upto 30 days only ");
                     } else {
                       addCutomizePackageTime();
                     }
@@ -248,10 +261,10 @@ class _SelectDateTimeState extends State<SelectDateTime> {
     );
   }
 
-  Future<GetDeliveryTime?> getDeliveryTime() async {
+  Future<GetDeliveryTime?> getDeliveryTime(String packageId) async {
     try {
       FormData from =
-          FormData.fromMap({"token": "123456789", "package_id": "9"});
+          FormData.fromMap({"token": "123456789", "package_id": packageId});
 
       GetDeliveryTime? bean = await ApiProvider().getDeliveryTime(from);
       print(bean!.data);
@@ -322,8 +335,9 @@ class _SelectDateTimeState extends State<SelectDateTime> {
         "package_id": widget.packageId,
         "token": "123456789",
         "user_id": user.data!.id,
-        "delivery_startdate": first,
-        "delivery_enddate": endDate,
+        "delivery_startdate": '${first!.year}-${first!.month}-${first!.day}',
+        "delivery_enddate":
+            '${endDate!.year}-${endDate!.month}-${endDate!.day}',
         "delivery_time": time,
       });
       BeanAddCustomizeTime? bean =
@@ -337,8 +351,8 @@ class _SelectDateTimeState extends State<SelectDateTime> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      CustomizePackageScreen(widget.packageId)));
+                  builder: (context) => CustomizePackageScreen(
+                      widget.packageId, widget.kitchenId, widget.bookType)));
         });
         return bean;
       } else {

@@ -8,7 +8,7 @@ import 'package:food_app/screen/AddPackageScreen.dart';
 import 'package:food_app/screen/CustomerFeedbackScreen.dart';
 import 'package:food_app/screen/DashboardScreen.dart';
 import 'package:food_app/screen/Demo.dart';
-import 'package:food_app/screen/DetailsScreen.dart';
+import 'package:food_app/screen/KitchenDetails/DetailsScreen.dart';
 import 'package:food_app/screen/FeedbackScreen.dart';
 import 'package:food_app/screen/FilterScreen.dart';
 import 'package:food_app/screen/ForgotPasswordScreen.dart';
@@ -26,21 +26,22 @@ import 'package:food_app/screen/UPI.dart';
 import 'package:food_app/utils/Log.dart';
 import 'package:logging/logging.dart';
 
-
 void main() {
   _initLog();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
     await Firebase.initializeApp();
     runApp(App());
   });
 }
+
 void _initLog() {
   Log.init();
   Log.setLevel(Level.ALL);
 }
+
 class App extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => AppState();
@@ -70,15 +71,20 @@ class AppState extends State<App> {
         });
   }
 
-
-  Widget makeRoute({required BuildContext context,
-    required String? routeName,
-    Object? arguments}) {
-    final Widget child = _buildRoute(context: context, routeName: routeName, arguments: arguments);
+  Widget makeRoute(
+      {required BuildContext context,
+      required String? routeName,
+      Object? arguments}) {
+    final Widget child = _buildRoute(
+        context: context, routeName: routeName, arguments: arguments);
     return child;
   }
 
-  Widget _buildRoute({required BuildContext context, required String? routeName, Object? arguments,}) {
+  Widget _buildRoute({
+    required BuildContext context,
+    required String? routeName,
+    Object? arguments,
+  }) {
     switch (routeName) {
       case '/':
         return SplashScreen();
@@ -94,12 +100,12 @@ class AppState extends State<App> {
         return SearchLocationScreen();
       case '/searchhistory':
         return SearchHistoryScreen("");
-        case '/filter':
+      case '/filter':
         return FilterScreen();
       case '/addpackage':
         return AddPackageScreen();
       case '/payment':
-        return PaymentScreen("","","","","","","","","");
+        return PaymentScreen("", "", "", "", "", "", "", "", "");
       case '/forgotpassword':
         return ForgotPasswordScreen();
       case '/makepayment':
