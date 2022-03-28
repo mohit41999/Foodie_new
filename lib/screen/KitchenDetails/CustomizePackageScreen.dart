@@ -128,7 +128,7 @@ class PackageDetailScreenState extends State<CustomizePackageScreen> {
                   itemBuilder: (context, index) {
                     return getPackage(packageDetail![index]);
                   },
-                  itemCount: packageDetail!.length - 1,
+                  itemCount: packageDetail!.length,
                 ),
               Center(
                 child: Padding(

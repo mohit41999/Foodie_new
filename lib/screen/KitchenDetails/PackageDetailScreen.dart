@@ -51,8 +51,6 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
   @override
   Widget build(BuildContext context) {
     progressDialog = ProgressDialog(context);
-    // FlutterStatusbarcolor.setStatusBarColor(Colors.white);
-    // FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -206,7 +204,8 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
     }
   }
 
-  void addCustomizePackageItemApi(String menuItems) async {
+  void addCustomizePackageItemApi(
+      String menuItems, String weeklyPackageId) async {
     try {
       progressDialog = ProgressDialog(context);
       progressDialog.show();
@@ -215,7 +214,7 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
         "token": "123456789",
         "user_id": user.data!.id,
         "package_id": packageId,
-        "weekly_package_id": "1",
+        "weekly_package_id": weeklyPackageId,
         /*"menu_id":"124",
         "qty":"5",
         "itemprice":"30"*/
@@ -254,7 +253,11 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
             ),
             InkWell(
               onTap: () {
-                customizedApi(packageDetail.weeklyPackageId);
+                menuitembottommodel(context, packageDetail.menuItem)
+                    .then((value) {
+                  setState(() {});
+                });
+                // customizedApi(packageDetail.weeklyPackageId);
               },
               child: Padding(
                 padding: EdgeInsets.only(right: 16, top: 8),
@@ -266,18 +269,36 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
             ),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 16, top: 8),
-          child: Text(
-            packageDetail.itemName != null ? packageDetail.itemName! : "",
-            style: TextStyle(color: Colors.black, fontSize: 14),
+        Container(
+          height: 30,
+          padding: EdgeInsets.only(left: 10),
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return Center(
+                child: Text(packageDetail.menuItem[index].itemQty.toString() +
+                    ' ' +
+                    packageDetail.menuItem[index].itemName +
+                    '  '),
+              );
+            },
+            itemCount: packageDetail.menuItem.length,
           ),
-        ),
+        )
+        // Padding(
+        //   padding: EdgeInsets.only(left: 16, top: 8),
+        //   child: Text(
+        //     packageDetail.itemName != null ? packageDetail.itemName! : "",
+        //     style: TextStyle(color: Colors.black, fontSize: 14),
+        //   ),
+        // ),
       ],
     );
   }
 
-  void addCoustumizeSheet(BuildContext context, List<custom.Data>? data) {
+  void addCoustumizeSheet(
+      BuildContext context, List<custom.Data>? data, String weeklyPackageId) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           // <-- for border radius
@@ -343,7 +364,8 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
                       var encodedString = encodeMenuItemsToJsonString(data);
                       if (encodedString.isNotEmpty) {
                         print(encodedString);
-                        addCustomizePackageItemApi(encodedString);
+                        addCustomizePackageItemApi(
+                            encodedString, weeklyPackageId);
                       } else
                         Utils.showToast("Select menu to customize");
                     },
@@ -369,6 +391,227 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
         });
   }
 
+  Future menuitembottommodel(BuildContext context, List<MenuItem> data) async {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          // <-- for border radius
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15.0),
+            topRight: Radius.circular(15.0),
+          ),
+        ),
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setModelState) {
+            return Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "Select From Below Option",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: AppConstant.fontBold,
+                              fontSize: 18),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.only(right: 16),
+                            child: Image.asset(
+                              Res.ic_cross,
+                              width: 16,
+                              height: 16,
+                            )),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  data.isEmpty
+                      ? Center(
+                          child: Text("No  Detail"),
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                        activeColor: Color(0xff7EDABF),
+                                        onChanged: (value) {
+                                          setModelState(() {
+                                            data[index].isChecked = value;
+                                            if (!value!) {
+                                              data[index].qtytoincrease = 0;
+                                              data[index].itemQty--;
+                                            } else {
+                                              data[index].qtytoincrease = 1;
+                                              data[index].itemQty++;
+                                            }
+                                          });
+                                        },
+                                        value: data[index].isChecked),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 16),
+                                      child: Text(data[index].itemName),
+                                    ),
+                                    Expanded(
+                                      child: SizedBox(
+                                        width: 1,
+                                      ),
+                                    ),
+                                    data[index].qtytoincrease > 0
+                                        ? Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 16, right: 16),
+                                            child: Container(
+                                              height: 35,
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                color: AppConstant.appColor,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(30)),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setModelState(() {
+                                                        if (data[index]
+                                                                .qtytoincrease >
+                                                            1) {
+                                                          data[index]
+                                                              .qtytoincrease -= 1;
+                                                          data[index].itemQty--;
+                                                        } else {
+                                                          setModelState(() {
+                                                            data[index]
+                                                                    .isChecked =
+                                                                false;
+                                                            data[index]
+                                                                .qtytoincrease = 0;
+                                                            data[index]
+                                                                .itemQty--;
+                                                            print(data[index]
+                                                                .isChecked
+                                                                .toString());
+                                                          });
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      height: 35,
+                                                      width: 20,
+                                                      child: Text(
+                                                        "-",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 25),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                      data[index]
+                                                          .qtytoincrease
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 20)),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setModelState(() {
+                                                        data[index]
+                                                            .qtytoincrease += 1;
+                                                        data[index].itemQty++;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      height: 35,
+                                                      width: 20,
+                                                      child: Text("+",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 20)),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 16),
+                                      child: Text(AppConstant.rupee),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            itemCount: data.length,
+                          ),
+                        ),
+                  GestureDetector(
+                    onTap: () {
+                      // var encodedString = encodeMenuItemsToJsonString(data);
+                      // if (encodedString.isNotEmpty) {
+                      //   print(encodedString);
+                      //   addCustomizePackageItemApi(
+                      //       encodedString, weeklyPackageId);
+                      // } else
+                      //   Utils.showToast("Select menu to customize");
+                    },
+                    child: Container(
+                      height: 50,
+                      margin: EdgeInsets.only(
+                          bottom: 6, right: 16, left: 16, top: 26),
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "Done",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          });
+        }).then((value) {
+      setState(() {});
+    });
+  }
+
   customizedApi(String? weeklyPackageId) async {
     try {
       progressDialog = ProgressDialog(context);
@@ -386,7 +629,7 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
-        addCoustumizeSheet(context, bean.data);
+        addCoustumizeSheet(context, bean.data, weeklyPackageId!);
         setState(() {});
         return bean;
       } else {

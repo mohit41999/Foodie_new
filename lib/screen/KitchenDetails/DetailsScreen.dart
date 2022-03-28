@@ -14,7 +14,7 @@ import 'package:food_app/model/GetCartCount.dart';
 import 'package:food_app/model/GetHomeData.dart' as home;
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
-import 'package:food_app/screen/PackageDetailScreen.dart';
+import 'package:food_app/screen/KitchenDetails/PackageDetailScreen.dart';
 import 'package:food_app/screen/ShippingScreen.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/HttpException.dart';

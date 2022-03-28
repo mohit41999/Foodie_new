@@ -88,7 +88,8 @@ class ApiProvider {
 
   Future registerUser(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.register}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.register}", data: params);
       return BeanSignUp.fromJson(jsonDecode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -162,7 +163,8 @@ class ApiProvider {
 
   Future<BeanLogin?> loginUser(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.login}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.login}", data: params);
       return BeanLogin.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -178,7 +180,8 @@ class ApiProvider {
 
   Future<BeanVerifyOtp?> verifyOtp(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.verify_otp}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.verify_otp}", data: params);
       return BeanVerifyOtp.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -194,11 +197,12 @@ class ApiProvider {
 
   Future<BeanSearchData?> searchData(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.search}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.search}", data: params);
       return BeanSearchData.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
-     var map = _dioError.response!.data;
+      var map = _dioError.response!.data;
       if (_dioError.response!.statusCode == 500) {
         throwIfNoSuccess(map!['message']);
       } else {
@@ -210,8 +214,8 @@ class ApiProvider {
 
   Future<GetDeliveryTime?> getDeliveryTime(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_delivery_time}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_delivery_time}", data: params);
       return GetDeliveryTime.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -228,8 +232,9 @@ class ApiProvider {
   Future<BeanAddCustomizeTime?> addCustomizedPackageDateTime(
       FormData params) async {
     try {
-      Response response = await _dio
-          .post("$baseUrl/${EndPoints.add_customized_package_date_time}", data: params);
+      Response response = await _dio.post(
+          "$baseUrl/${EndPoints.add_customized_package_date_time}",
+          data: params);
       return BeanAddCustomizeTime.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -245,8 +250,8 @@ class ApiProvider {
 
   Future<GetDeliveryTime?> getCard(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_delivery_time}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_delivery_time}", data: params);
       return GetDeliveryTime.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -262,8 +267,8 @@ class ApiProvider {
 
   Future<BeanClearRecentSearch?> clearRecentSearch(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.clear_recent_search}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.clear_recent_search}", data: params);
       return BeanClearRecentSearch.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -279,8 +284,8 @@ class ApiProvider {
 
   Future<BeanFavKitchen?> favKitchen(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.add_favorite_kitchen}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.add_favorite_kitchen}", data: params);
       return BeanFavKitchen.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -315,8 +320,8 @@ class ApiProvider {
 
   Future<GetAddressList?> getAddress(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.search_location}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.search_location}", data: params);
       return GetAddressList.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       if (kDebugMode) {
@@ -334,8 +339,8 @@ class ApiProvider {
 
   Future<BeanDepositPayment?> depositPayment(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.deposit_payment}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.deposit_payment}", data: params);
       return BeanDepositPayment.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -387,8 +392,8 @@ class ApiProvider {
 
   Future<BeanAddCard?> beanAddcard(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.add_card_detail}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.add_card_detail}", data: params);
       return BeanAddCard.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -404,7 +409,8 @@ class ApiProvider {
 
   Future<BeanGetCard?> beanGetCard(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.get_cards}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.get_cards}", data: params);
       return BeanGetCard.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -454,7 +460,8 @@ class ApiProvider {
 
   Future<GetDashBoard?> getDashboard(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.dashboard}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.dashboard}", data: params);
       return GetDashBoard.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -506,8 +513,8 @@ class ApiProvider {
 
   Future<BeanBanner?> bannerData(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_today_deliver_order}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_today_deliver_order}", data: params);
       print("Mine: ${response.data}");
       return BeanBanner.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
@@ -524,7 +531,8 @@ class ApiProvider {
 
   Future<RemoveCart?> removeCart(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/remove_cart_item.php", data: params);
+      Response response =
+          await _dio.post("$baseUrl/remove_cart_item.php", data: params);
       print("Mine: ${response.data}");
       return RemoveCart.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
@@ -541,8 +549,8 @@ class ApiProvider {
 
   Future<GetCartDetail?> getCartDetail(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_cart_details}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_cart_details}", data: params);
 
       return GetCartDetail.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
@@ -559,8 +567,8 @@ class ApiProvider {
 
   Future<BeanStartDelivery?> startDelivery(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.track_delivery_map}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.track_delivery_map}", data: params);
       return BeanStartDelivery.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -576,8 +584,8 @@ class ApiProvider {
 
   Future<BeanPackageDetail?> packageDetail(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_package_detail}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_package_detail}", data: params);
       return BeanPackageDetail.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -593,8 +601,9 @@ class ApiProvider {
 
   Future<BeanCustomizedPackage?> customPackage(FormData params) async {
     try {
-      Response response = await _dio
-          .post("$baseUrl/${EndPoints.get_package_customizable_item}", data: params);
+      Response response = await _dio.post(
+          "$baseUrl/${EndPoints.get_package_customizable_item}",
+          data: params);
       return BeanCustomizedPackage.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -611,8 +620,9 @@ class ApiProvider {
   Future<BeanCustomizedPackageDetail?> customizedPackageDetail(
       FormData params) async {
     try {
-      Response response = await _dio
-          .post("$baseUrl/${EndPoints.get_customised_package_detail}", data: params);
+      Response response = await _dio.post(
+          "$baseUrl/${EndPoints.get_customised_package_detail}",
+          data: params);
       return BeanCustomizedPackageDetail.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -628,7 +638,8 @@ class ApiProvider {
 
   Future<BeanMakePayment?> makePayment(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.make_payment}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.make_payment}", data: params);
       return BeanMakePayment.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -645,8 +656,8 @@ class ApiProvider {
   Future<BeanActivePackageHistory?> activePackageHistory(
       FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.active_packages_history}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.active_packages_history}", data: params);
       return BeanActivePackageHistory.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -662,8 +673,8 @@ class ApiProvider {
 
   Future<GetCartCount?> getCartCount(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_cart_items_count}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_cart_items_count}", data: params);
       return GetCartCount.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -679,7 +690,8 @@ class ApiProvider {
 
   Future<BeanUpdateCart?> updateCart(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.edit_cart}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.edit_cart}", data: params);
       return BeanUpdateCart.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -695,7 +707,8 @@ class ApiProvider {
 
   Future<BeanAddCart?> addCart(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.add_to_cart}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.add_to_cart}", data: params);
       return BeanAddCart.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -711,8 +724,8 @@ class ApiProvider {
 
   Future<BeanApplyPromo?> applyPromo(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.apply_coupon_code}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.apply_coupon_code}", data: params);
       return BeanApplyPromo.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -728,8 +741,8 @@ class ApiProvider {
 
   Future<GetOrderHistory?> getOrderHistory(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_order_history}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_order_history}", data: params);
       print("GET>>>${response.data}");
       return GetOrderHistory.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
@@ -746,8 +759,9 @@ class ApiProvider {
 
   Future<GetOrderHistoryDetail?> getOrderHistoryDetail(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_order_history_details}", data: params);
+      Response response = await _dio.post(
+          "$baseUrl/${EndPoints.get_order_history_details}",
+          data: params);
       return GetOrderHistoryDetail.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -763,8 +777,8 @@ class ApiProvider {
 
   Future<GetUserAddress?> getUserAddress(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_address_list}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_address_list}", data: params);
       return GetUserAddress.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -780,8 +794,8 @@ class ApiProvider {
 
   Future<GetActiveOrder?> getActiveOrder(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_active_orders}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_active_orders}", data: params);
       return GetActiveOrder.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -797,8 +811,8 @@ class ApiProvider {
 
   Future<BeanAddOrder?> addFavOrder(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.add_favorite_order}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.add_favorite_order}", data: params);
       return BeanAddOrder.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -814,8 +828,8 @@ class ApiProvider {
 
   Future<BeanAddOrder?> removeFavOrder(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.remove_favorite_order}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.remove_favorite_order}", data: params);
       return BeanAddOrder.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -831,7 +845,8 @@ class ApiProvider {
 
   Future<BeanVerifyOtp?> socailLogin(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.social_login}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.social_login}", data: params);
       return BeanVerifyOtp.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -847,8 +862,8 @@ class ApiProvider {
 
   Future<BeanConfirmLocation?> confirmlocation(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.confirm_location}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.confirm_location}", data: params);
       return BeanConfirmLocation.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -864,8 +879,8 @@ class ApiProvider {
 
   Future getArchieveOffer(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_archive_offer}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_archive_offer}", data: params);
       return GetArchieveOffer.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -881,8 +896,8 @@ class ApiProvider {
 
   Future<GetReview?> getFeedback(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_received_reviews}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_received_reviews}", data: params);
       return GetReview.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -898,8 +913,9 @@ class ApiProvider {
 
   Future<GetOverAllReview?> getoverallreview(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_overall_received_reviews}", data: params);
+      Response response = await _dio.post(
+          "$baseUrl/${EndPoints.get_overall_received_reviews}",
+          data: params);
       return GetOverAllReview.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -915,7 +931,8 @@ class ApiProvider {
 
   Future getMenu(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.get_menu}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.get_menu}", data: params);
       return MenuBean.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -931,8 +948,8 @@ class ApiProvider {
 
   Future updateSetting(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.update_settings}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.update_settings}", data: params);
       return BeanUpdateSetting.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -948,8 +965,8 @@ class ApiProvider {
 
   Future updateMenuSetting(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.update_account_detail}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.update_account_detail}", data: params);
       return UpdateMenuDetail.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -982,7 +999,8 @@ class ApiProvider {
 
   Future getPackages(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.get_package}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.get_package}", data: params);
       return BeanGetPackages.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -998,7 +1016,8 @@ class ApiProvider {
 
   Future addPackage(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.add_package}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.add_package}", data: params);
       return BeanAddPackage.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -1014,8 +1033,8 @@ class ApiProvider {
 
   Future getAccountDetails(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.get_account_detail}", data: params);
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_account_detail}", data: params);
       return GetAccountDetails.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -1031,7 +1050,8 @@ class ApiProvider {
 
   Future addOffer(FormData params) async {
     try {
-      Response response = await _dio.post("$baseUrl/${EndPoints.add_offer}", data: params);
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.add_offer}", data: params);
       return AddOffer.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -1047,8 +1067,9 @@ class ApiProvider {
 
   Future addCustomizePackageItem(FormData params) async {
     try {
-      Response response =
-          await _dio.post("$baseUrl/${EndPoints.add_customized_package_item}", data: params);
+      Response response = await _dio.post(
+          "$baseUrl/${EndPoints.add_customized_package_item}",
+          data: params);
       return BaseBean.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");

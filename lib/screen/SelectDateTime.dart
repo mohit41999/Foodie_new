@@ -7,7 +7,7 @@ import 'package:food_app/model/BeanAddCustomizePackageTime.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
 import 'package:food_app/model/GetDeliveryTime.dart';
 import 'package:food_app/network/ApiProvider.dart';
-import 'package:food_app/screen/CustomizePackageScreen.dart';
+import 'package:food_app/screen/KitchenDetails/CustomizePackageScreen.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/Utils.dart';
 import 'package:food_app/utils/progress_dialog.dart';
