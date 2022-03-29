@@ -108,6 +108,10 @@
 //
 //     final beanPackageDetail = beanPackageDetailFromJson(jsonString);
 
+// To parse this JSON data, do
+//
+//     final beanPackageDetail = beanPackageDetailFromJson(jsonString);
+
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -124,26 +128,26 @@ class BeanPackageDetail {
     required this.data,
   });
 
-  final bool status;
-  final String message;
-  final Data data;
+  final bool? status;
+  final String? message;
+  final BeanPackageDetailData? data;
 
   factory BeanPackageDetail.fromJson(Map<String, dynamic> json) =>
       BeanPackageDetail(
         status: json["status"],
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        data: BeanPackageDetailData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data.toJson(),
+        "data": data!.toJson(),
       };
 }
 
-class Data {
-  Data({
+class BeanPackageDetailData {
+  BeanPackageDetailData({
     required this.kitchenId,
     required this.packageId,
     required this.packageName,
@@ -163,7 +167,8 @@ class Data {
   final String price;
   final List<PackageDetail> packageDetail;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory BeanPackageDetailData.fromJson(Map<String, dynamic> json) =>
+      BeanPackageDetailData(
         kitchenId: json["kitchen_id"],
         packageId: json["package_id"],
         packageName: json["package_name"],
@@ -197,10 +202,10 @@ class PackageDetail {
     required this.menuItem,
   });
 
-  final String weeklyPackageId;
-  final String days;
-  final String daysName;
-  final String itemName;
+  final String? weeklyPackageId;
+  final String? days;
+  final String? daysName;
+  final String? itemName;
   final List<MenuItem> menuItem;
 
   factory PackageDetail.fromJson(Map<String, dynamic> json) => PackageDetail(
@@ -223,26 +228,77 @@ class PackageDetail {
 
 class MenuItem {
   MenuItem({
+    required this.category,
+    required this.menuitems,
+  });
+
+  final String category;
+  final List<Menuitem> menuitems;
+
+  factory MenuItem.fromJson(Map<String, dynamic> json) => MenuItem(
+        category: json["category"],
+        menuitems: List<Menuitem>.from(
+            json["menuitems"].map((x) => Menuitem.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "category": category,
+        "menuitems": List<dynamic>.from(menuitems.map((x) => x.toJson())),
+      };
+}
+
+class Menuitem {
+  Menuitem({
     required this.itemId,
     required this.itemName,
     required this.itemQty,
+    required this.itemPrice,
   });
-
   final String itemId;
   bool? isChecked = false;
   final String itemName;
   int itemQty;
   int qtytoincrease = 0;
 
-  factory MenuItem.fromJson(Map<String, dynamic> json) => MenuItem(
+  final String itemPrice;
+
+  factory Menuitem.fromJson(Map<String, dynamic> json) => Menuitem(
         itemId: json["item_id"],
         itemName: json["item_name"],
         itemQty: int.parse(json["item_qty"]),
+        itemPrice: json["item_price"],
       );
 
   Map<String, dynamic> toJson() => {
         "item_id": itemId,
         "item_name": itemName,
         "item_qty": itemQty,
+        "item_price": itemPrice,
       };
 }
+
+// class MenuItem {
+//   MenuItem({
+//     required this.itemId,
+//     required this.itemName,
+//     required this.itemQty,
+//   });
+//
+//   final String itemId;
+//   bool? isChecked = false;
+//   final String itemName;
+//   int itemQty;
+//   int qtytoincrease = 0;
+//
+//   factory MenuItem.fromJson(Map<String, dynamic> json) => MenuItem(
+//         itemId: json["item_id"],
+//         itemName: json["item_name"],
+//         itemQty: int.parse(json["item_qty"]),
+//       );
+//
+//   Map<String, dynamic> toJson() => {
+//         "item_id": itemId,
+//         "item_name": itemName,
+//         "item_qty": itemQty,
+//       };
+// }

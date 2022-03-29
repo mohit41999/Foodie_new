@@ -275,8 +275,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         "token": "123456789",
         "userid": user.data!.id,
       });
-      card.BeanGetCard? bean =
-          await ApiProvider().beanGetCard(from) ;
+      card.BeanGetCard? bean = await ApiProvider().beanGetCard(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
@@ -346,27 +345,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
       BeanVerifyOtp user = await Utils.getUser();
       FormData from = FormData.fromMap({
         "token": "123456789",
-        "user_id": user.data!.id,
-        "kitchen_id": widget.kitchen_id,
-        "customer_name": user.data!.kitchenname,
-        "customer_mobileno": user.data!.mobilenumber,
-        "orderingforname": user.data!.kitchenname,
-        "orderingformobileno": user.data!.mobilenumber,
-        "deliveryaddress": widget.address,
-        "deliverylatitude": widget.deliveryLat,
-        "deliverylongitude": widget.deliveryLong,
-        "orderamount": widget.totalAmount,
-        "netamount": widget.totalAmount,
-        "taxamount": widget.tax_amount,
-        "deliverycharge": widget.delivery_charge,
+        "user_id": user.data!.id.toString(),
+        "kitchen_id": widget.kitchen_id.toString(),
+        "customer_name": user.data!.kitchenname.toString(),
+        "customer_mobileno": user.data!.mobilenumber.toString(),
+        "orderingforname": user.data!.kitchenname.toString(),
+        "orderingformobileno": user.data!.mobilenumber.toString(),
+        "deliveryaddress": widget.address.toString(),
+        "deliverylatitude": widget.deliveryLat.toString(),
+        "deliverylongitude": widget.deliveryLong.toString(),
+        "orderamount": widget.totalAmount.toString(),
+        "netamount": widget.totalAmount.toString(),
+        "taxamount": widget.tax_amount.toString(),
+        "deliverycharge": widget.delivery_charge.toString(),
         "couponcode": "",
         "couponamount": "",
-        "card_id": id,
+        "card_id": id.toString(),
       });
 
-      BeanMakePayment? bean =
-          await ApiProvider().makePayment(from);
-
+      BeanMakePayment? bean = await ApiProvider().makePayment(from);
+      print(
+        user.data!.id,
+      );
       print(id);
       print(widget.totalAmount);
       print(widget.tax_amount);
@@ -376,9 +376,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
       print(user.data!.kitchenname);
       print(
         widget.kitchen_id,
-      );
-      print(
-        user.data!.id,
       );
 
       progressDialog.dismiss(context);
@@ -391,7 +388,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
         setState(() {});
       } else {
-        Utils.showToast(bean.message!);
+        Utils.showToast(bean.message! + 'aaaa');
       }
     } on HttpException catch (exception) {
       progressDialog.dismiss(context);

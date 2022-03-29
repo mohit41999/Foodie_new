@@ -205,7 +205,7 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
   }
 
   void addCustomizePackageItemApi(
-      String menuItems, String weeklyPackageId) async {
+      String menuItems, String? weeklyPackageId) async {
     try {
       progressDialog = ProgressDialog(context);
       progressDialog.show();
@@ -216,7 +216,7 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
         "package_id": packageId,
         "weekly_package_id": weeklyPackageId,
         /*"menu_id":"124",
-        "qty":"5",
+        "qty":"5",Ca
         "itemprice":"30"*/
         "menu_items": menuItems
       });
@@ -253,7 +253,8 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
             ),
             InkWell(
               onTap: () {
-                menuitembottommodel(context, packageDetail.menuItem)
+                menuitembottommodel(context, packageDetail.menuItem,
+                        packageDetail.weeklyPackageId)
                     .then((value) {
                   setState(() {});
                 });
@@ -276,11 +277,22 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              return Center(
-                child: Text(packageDetail.menuItem[index].itemQty.toString() +
-                    ' ' +
-                    packageDetail.menuItem[index].itemName +
-                    '  '),
+              List<String> data = [];
+              packageDetail.menuItem[index].menuitems.forEach((element) {
+                data.add(
+                    element.itemQty.toString() + ' ' + element.itemName + '  ');
+              });
+
+              return Container(
+                height: 30,
+                child: ListView.builder(
+                  itemBuilder: (BuildContext, index) {
+                    return Text(data[index]);
+                  },
+                  shrinkWrap: true,
+                  itemCount: data.length,
+                  scrollDirection: Axis.horizontal,
+                ),
               );
             },
             itemCount: packageDetail.menuItem.length,
@@ -297,101 +309,102 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
     );
   }
 
-  void addCoustumizeSheet(
-      BuildContext context, List<custom.Data>? data, String weeklyPackageId) {
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          // <-- for border radius
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15.0),
-            topRight: Radius.circular(15.0),
-          ),
-        ),
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setModelState) {
-            return Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          "Select From Below Option",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: AppConstant.fontBold,
-                              fontSize: 18),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Padding(
-                            padding: EdgeInsets.only(right: 16),
-                            child: Image.asset(
-                              Res.ic_cross,
-                              width: 16,
-                              height: 16,
-                            )),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  data!.isEmpty
-                      ? Center(
-                          child: Text("No  Detail"),
-                        )
-                      : Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return getCategory(data[index], setModelState);
-                            },
-                            itemCount: data.length,
-                          ),
-                        ),
-                  GestureDetector(
-                    onTap: () {
-                      var encodedString = encodeMenuItemsToJsonString(data);
-                      if (encodedString.isNotEmpty) {
-                        print(encodedString);
-                        addCustomizePackageItemApi(
-                            encodedString, weeklyPackageId);
-                      } else
-                        Utils.showToast("Select menu to customize");
-                    },
-                    child: Container(
-                      height: 50,
-                      margin: EdgeInsets.only(
-                          bottom: 6, right: 16, left: 16, top: 26),
-                      decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Done",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          });
-        });
-  }
+  // void addCoustumizeSheet(
+  //     BuildContext context, List<custom.Data>? data, String weeklyPackageId) {
+  //   showModalBottomSheet(
+  //       shape: RoundedRectangleBorder(
+  //         // <-- for border radius
+  //         borderRadius: BorderRadius.only(
+  //           topLeft: Radius.circular(15.0),
+  //           topRight: Radius.circular(15.0),
+  //         ),
+  //       ),
+  //       context: context,
+  //       builder: (context) {
+  //         return StatefulBuilder(builder: (context, setModelState) {
+  //           return Container(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   children: [
+  //                     Padding(
+  //                       padding: EdgeInsets.all(10),
+  //                       child: Text(
+  //                         "Select From Below Option",
+  //                         style: TextStyle(
+  //                             color: Colors.black,
+  //                             fontFamily: AppConstant.fontBold,
+  //                             fontSize: 18),
+  //                       ),
+  //                     ),
+  //                     InkWell(
+  //                       onTap: () {
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: Padding(
+  //                           padding: EdgeInsets.only(right: 16),
+  //                           child: Image.asset(
+  //                             Res.ic_cross,
+  //                             width: 16,
+  //                             height: 16,
+  //                           )),
+  //                     )
+  //                   ],
+  //                 ),
+  //                 SizedBox(
+  //                   height: 10,
+  //                 ),
+  //                 data!.isEmpty
+  //                     ? Center(
+  //                         child: Text("No  Detail"),
+  //                       )
+  //                     : Expanded(
+  //                         child: ListView.builder(
+  //                           shrinkWrap: true,
+  //                           scrollDirection: Axis.vertical,
+  //                           physics: BouncingScrollPhysics(),
+  //                           itemBuilder: (context, index) {
+  //                             return getCategory(data[index], setModelState);
+  //                           },
+  //                           itemCount: data.length,
+  //                         ),
+  //                       ),
+  //                 GestureDetector(
+  //                   onTap: () {
+  //                     var encodedString = encodeMenuItemsToJsonString(data);
+  //                     if (encodedString.isNotEmpty) {
+  //                       print(encodedString);
+  //                       addCustomizePackageItemApi(
+  //                           encodedString, weeklyPackageId);
+  //                     } else
+  //                       Utils.showToast("Select menu to customize");
+  //                   },
+  //                   child: Container(
+  //                     height: 50,
+  //                     margin: EdgeInsets.only(
+  //                         bottom: 6, right: 16, left: 16, top: 26),
+  //                     decoration: BoxDecoration(
+  //                         color: Colors.black,
+  //                         borderRadius: BorderRadius.circular(10)),
+  //                     child: Center(
+  //                       child: Text(
+  //                         "Done",
+  //                         style: TextStyle(color: Colors.white, fontSize: 16),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //           );
+  //         });
+  //       });
+  // }
 
-  Future menuitembottommodel(BuildContext context, List<MenuItem> data) async {
+  Future menuitembottommodel(BuildContext context, List<MenuItem> data,
+      String? WeeklyPackageId) async {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           // <-- for border radius
@@ -447,146 +460,20 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
                             scrollDirection: Axis.vertical,
                             physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                        activeColor: Color(0xff7EDABF),
-                                        onChanged: (value) {
-                                          setModelState(() {
-                                            data[index].isChecked = value;
-                                            if (!value!) {
-                                              data[index].qtytoincrease = 0;
-                                              data[index].itemQty--;
-                                            } else {
-                                              data[index].qtytoincrease = 1;
-                                              data[index].itemQty++;
-                                            }
-                                          });
-                                        },
-                                        value: data[index].isChecked),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 16),
-                                      child: Text(data[index].itemName),
-                                    ),
-                                    Expanded(
-                                      child: SizedBox(
-                                        width: 1,
-                                      ),
-                                    ),
-                                    data[index].qtytoincrease > 0
-                                        ? Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 16, right: 16),
-                                            child: Container(
-                                              height: 35,
-                                              width: 80,
-                                              decoration: BoxDecoration(
-                                                color: AppConstant.appColor,
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(30)),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setModelState(() {
-                                                        if (data[index]
-                                                                .qtytoincrease >
-                                                            1) {
-                                                          data[index]
-                                                              .qtytoincrease -= 1;
-                                                          data[index].itemQty--;
-                                                        } else {
-                                                          setModelState(() {
-                                                            data[index]
-                                                                    .isChecked =
-                                                                false;
-                                                            data[index]
-                                                                .qtytoincrease = 0;
-                                                            data[index]
-                                                                .itemQty--;
-                                                            print(data[index]
-                                                                .isChecked
-                                                                .toString());
-                                                          });
-                                                        }
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      height: 35,
-                                                      width: 20,
-                                                      child: Text(
-                                                        "-",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 25),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                      data[index]
-                                                          .qtytoincrease
-                                                          .toString(),
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 20)),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setModelState(() {
-                                                        data[index]
-                                                            .qtytoincrease += 1;
-                                                        data[index].itemQty++;
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      height: 35,
-                                                      width: 20,
-                                                      child: Text("+",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 20)),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        : SizedBox(),
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 16),
-                                      child: Text(AppConstant.rupee),
-                                    ),
-                                  ],
-                                ),
-                              );
+                              return getCategory(data[index], setModelState);
                             },
                             itemCount: data.length,
                           ),
                         ),
                   GestureDetector(
                     onTap: () {
-                      // var encodedString = encodeMenuItemsToJsonString(data);
-                      // if (encodedString.isNotEmpty) {
-                      //   print(encodedString);
-                      //   addCustomizePackageItemApi(
-                      //       encodedString, weeklyPackageId);
-                      // } else
-                      //   Utils.showToast("Select menu to customize");
+                      var encodedString = encodeMenuItemsToJsonString(data);
+                      if (encodedString.isNotEmpty) {
+                        print(encodedString);
+                        addCustomizePackageItemApi(
+                            encodedString, WeeklyPackageId);
+                      } else
+                        Utils.showToast("Select menu to customize");
                     },
                     child: Container(
                       height: 50,
@@ -612,50 +499,50 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
     });
   }
 
-  customizedApi(String? weeklyPackageId) async {
-    try {
-      progressDialog = ProgressDialog(context);
-      progressDialog.show();
-      BeanVerifyOtp user = await Utils.getUser();
-      FormData from = FormData.fromMap({
-        "token": "123456789",
-        "user_id": user.data!.id,
-        // "user_id": "15",
-        "weekly_package_id": weeklyPackageId,
-        "package_id": packageId,
-      });
-      custom.BeanCustomizedPackage? bean =
-          await ApiProvider().customPackage(from);
-      print(bean!.data);
-      progressDialog.dismiss(context);
-      if (bean.status == true) {
-        addCoustumizeSheet(context, bean.data, weeklyPackageId!);
-        setState(() {});
-        return bean;
-      } else {
-        Utils.showToast(bean.message!);
-      }
+  // customizedApi(String? weeklyPackageId) async {
+  //   try {
+  //     progressDialog = ProgressDialog(context);
+  //     progressDialog.show();
+  //     BeanVerifyOtp user = await Utils.getUser();
+  //     FormData from = FormData.fromMap({
+  //       "token": "123456789",
+  //       "user_id": user.data!.id,
+  //       // "user_id": "15",
+  //       "weekly_package_id": weeklyPackageId,
+  //       "package_id": packageId,
+  //     });
+  //     custom.BeanCustomizedPackage? bean =
+  //         await ApiProvider().customPackage(from);
+  //     print(bean!.data);
+  //     progressDialog.dismiss(context);
+  //     if (bean.status == true) {
+  //       addCoustumizeSheet(context, bean.data, weeklyPackageId!);
+  //       setState(() {});
+  //       return bean;
+  //     } else {
+  //       Utils.showToast(bean.message!);
+  //     }
+  //
+  //     return null;
+  //   } on HttpException catch (exception) {
+  //     progressDialog.dismiss(context);
+  //     print(exception);
+  //   } catch (exception) {
+  //     progressDialog.dismiss(context);
+  //     print(exception);
+  //   }
+  // }
 
-      return null;
-    } on HttpException catch (exception) {
-      progressDialog.dismiss(context);
-      print(exception);
-    } catch (exception) {
-      progressDialog.dismiss(context);
-      print(exception);
-    }
-  }
-
-  String encodeMenuItemsToJsonString(List<custom.Data> data) {
+  String encodeMenuItemsToJsonString(List<MenuItem> data) {
     List<Map<String, String?>> listOfMenuItems = [];
     data.forEach((element) {
-      element.menuitems!.forEach((menu) {
-        if (menu.isCheckedDays!) {
+      element.menuitems.forEach((menu) {
+        if (menu.isChecked!) {
           var map = {
-            "menu_id": menu.menuId,
-            "itemname": menu.itemname,
-            "itemprice": menu.itemprice,
-            "quantity": menu.itemQty.toString(),
+            "menu_id": menu.itemId,
+            "itemname": menu.itemName,
+            "itemprice": menu.itemPrice,
+            "quantity": menu.qtytoincrease.toString(),
           };
           listOfMenuItems.add(map);
         }
@@ -665,107 +552,213 @@ class PackageDetailScreenState extends State<PackageDetailScreen> {
   }
 }
 
-getPackageitems(custom.Menuitems menuitem, setModelState) {
-  return Row(
-    children: [
-      Checkbox(
-        activeColor: Color(0xff7EDABF),
-        onChanged: (value) {
-          setModelState(() {
-            menuitem.isCheckedDays = value;
-            if (!value!) {
-              menuitem.itemQty = 0;
-            } else {
-              menuitem.itemQty = 1;
-            }
-          });
-        },
-        value: menuitem.isCheckedDays == null ? false : menuitem.isCheckedDays,
-      ),
-      Padding(
-        padding: EdgeInsets.only(left: 16),
-        child: Text(menuitem.itemname!),
-      ),
-      Expanded(
-        child: SizedBox(
-          width: 1,
+getPackageitems(Menuitem data, setModelState) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Row(
+      children: [
+        Checkbox(
+            activeColor: Color(0xff7EDABF),
+            onChanged: (value) {
+              setModelState(() {
+                data.isChecked = value;
+                if (value!) {
+                  data.qtytoincrease = 1;
+                  data.itemQty++;
+                } else {
+                  data.itemQty = data.itemQty - data.qtytoincrease;
+                  data.qtytoincrease = 0;
+                }
+              });
+            },
+            value: data.isChecked),
+        Padding(
+          padding: EdgeInsets.only(left: 16),
+          child: Text(data.itemName),
         ),
-      ),
-      menuitem.itemQty > 0
-          ? Padding(
-              padding: EdgeInsets.only(left: 16, right: 16),
-              child: Container(
-                height: 35,
-                width: 80,
-                decoration: BoxDecoration(
-                  color: AppConstant.appColor,
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        setModelState(() {
-                          if (menuitem.itemQty > 1) {
-                            menuitem.itemQty -= 1;
-                          }
-                        });
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 35,
-                        width: 20,
-                        child: Text(
-                          "-",
-                          style: TextStyle(color: Colors.white, fontSize: 25),
+        Expanded(
+          child: SizedBox(
+            width: 1,
+          ),
+        ),
+        data.qtytoincrease > 0
+            ? Padding(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Container(
+                  height: 35,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    color: AppConstant.appColor,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setModelState(() {
+                            if (data.qtytoincrease > 1) {
+                              data.qtytoincrease -= 1;
+                              data.itemQty--;
+                            } else {
+                              setModelState(() {
+                                data.isChecked = false;
+                                data.itemQty =
+                                    data.itemQty - data.qtytoincrease;
+                                data.qtytoincrease = 0;
+
+                                print(data.isChecked.toString());
+                              });
+                            }
+                          });
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 35,
+                          width: 20,
+                          child: Text(
+                            "-",
+                            style: TextStyle(color: Colors.white, fontSize: 25),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(menuitem.itemQty.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setModelState(() {
-                          menuitem.itemQty += 1;
-                        });
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 35,
-                        width: 20,
-                        child: Text("+",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
+                      SizedBox(
+                        width: 10,
                       ),
-                    ),
-                  ],
+                      Text(data.qtytoincrease.toString(),
+                          style: TextStyle(color: Colors.white, fontSize: 20)),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setModelState(() {
+                            data.qtytoincrease += 1;
+                            data.itemQty++;
+                          });
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 35,
+                          width: 20,
+                          child: Text("+",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20)),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          : SizedBox(),
-      Padding(
-        padding: EdgeInsets.only(right: 16),
-        child: Text(AppConstant.rupee + menuitem.itemprice!),
-      ),
-    ],
+              )
+            : SizedBox(),
+        Padding(
+          padding: EdgeInsets.only(right: 16),
+          child: Text(AppConstant.rupee),
+        ),
+      ],
+    ),
   );
+
+  //   Row(
+  //   children: [
+  //     Checkbox(
+  //       activeColor: Color(0xff7EDABF),
+  //       onChanged: (value) {
+  //         setModelState(() {
+  //           menuitem.isChecked = value;
+  //           if (!value!) {
+  //             menuitem.itemQty = 0;
+  //           } else {
+  //             menuitem.itemQty = 1;
+  //           }
+  //         });
+  //       },
+  //       value: menuitem.isChecked == null ? false : menuitem.isChecked,
+  //     ),
+  //     Padding(
+  //       padding: EdgeInsets.only(left: 16),
+  //       child: Text(menuitem.itemName),
+  //     ),
+  //     Expanded(
+  //       child: SizedBox(
+  //         width: 1,
+  //       ),
+  //     ),
+  //     menuitem.itemQty > 0
+  //         ? Padding(
+  //             padding: EdgeInsets.only(left: 16, right: 16),
+  //             child: Container(
+  //               height: 35,
+  //               width: 80,
+  //               decoration: BoxDecoration(
+  //                 color: AppConstant.appColor,
+  //                 borderRadius: BorderRadius.all(Radius.circular(30)),
+  //               ),
+  //               child: Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   InkWell(
+  //                     onTap: () {
+  //                       setModelState(() {
+  //                         if (menuitem.itemQty > 1) {
+  //                           menuitem.itemQty -= 1;
+  //                         }
+  //                       });
+  //                     },
+  //                     child: Container(
+  //                       alignment: Alignment.center,
+  //                       height: 35,
+  //                       width: 20,
+  //                       child: Text(
+  //                         "-",
+  //                         style: TextStyle(color: Colors.white, fontSize: 25),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   SizedBox(
+  //                     width: 10,
+  //                   ),
+  //                   Text(menuitem.itemQty.toString(),
+  //                       style: TextStyle(color: Colors.white, fontSize: 20)),
+  //                   SizedBox(
+  //                     width: 10,
+  //                   ),
+  //                   InkWell(
+  //                     onTap: () {
+  //                       setModelState(() {
+  //                         menuitem.itemQty += 1;
+  //                       });
+  //                     },
+  //                     child: Container(
+  //                       alignment: Alignment.center,
+  //                       height: 35,
+  //                       width: 20,
+  //                       child: Text("+",
+  //                           style:
+  //                               TextStyle(color: Colors.white, fontSize: 20)),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           )
+  //         : SizedBox(),
+  //     Padding(
+  //       padding: EdgeInsets.only(right: 16),
+  //       child: Text(AppConstant.rupee + menuitem.itemprice!),
+  //     ),
+  //   ],
+  // );
 }
 
-getCategory(custom.Data data, setModelState) {
+getCategory(MenuItem data, setModelState) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Padding(
         padding: EdgeInsets.only(left: 16),
         child: Text(
-          data.category!,
+          data.category,
           style: TextStyle(fontSize: 15, fontFamily: AppConstant.fontBold),
         ),
       ),
@@ -774,9 +767,9 @@ getCategory(custom.Data data, setModelState) {
         scrollDirection: Axis.vertical,
         physics: BouncingScrollPhysics(),
         itemBuilder: (context, index) {
-          return getPackageitems(data.menuitems![index], setModelState);
+          return getPackageitems(data.menuitems[index], setModelState);
         },
-        itemCount: data.menuitems!.length,
+        itemCount: data.menuitems.length,
       )
     ],
   );

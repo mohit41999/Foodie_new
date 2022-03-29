@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:food_app/model/BeanApplyPromo.dart';
 import 'package:food_app/model/BeanUpdateCart.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
@@ -16,6 +15,9 @@ import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/HttpException.dart';
 import 'package:food_app/utils/Utils.dart';
 import 'package:food_app/utils/progress_dialog.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 
 class ShippingScreen extends StatefulWidget {
   var address;
@@ -39,20 +41,90 @@ class _ShippingScreenState extends State<ShippingScreen> {
   String? tax_amount = "";
   late ProgressDialog progressDialog;
   String? delivery_charge = "";
+  String? CouponDiscount = "";
   var type = "";
   String? deliveryLat = "";
   String? deliveryLong = "";
   String? deliveryAddress = "";
+  Position? position;
 
   bool showDiscount = false;
-  var discount = "";
-  List<cart.CartItems>? data;
+  String? address;
+  Future<void> GetAddressFromLatLong(Position position) async {
+    deliveryAddress = "";
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    print(placemarks);
+    Placemark place = placemarks[0];
+    deliveryAddress =
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+  }
+
+  getCurrentLocation() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Utils.showToast('permission denied- please enable it from app settings');
+      // Permissions are denied forever, handle appropriately.
+
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    position = await Geolocator.getCurrentPosition();
+    GetAddressFromLatLong(position!);
+  }
+
+  getUserAddress() async {
+    print("get USer address api call");
+    //call this async method from whereever you need
+
+    LocationData? myLocation;
+    String error;
+
+    try {
+      await getCurrentLocation();
+      setState(() {});
+      //myLocation = await location.getLocation();
+    } on PlatformException catch (e) {
+      print(e);
+      if (e.code == 'PERMISSION_DENIED') {
+        error = 'please grant permission';
+        await getCurrentLocation();
+        print(error);
+      }
+      if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
+        error = 'permission denied- please enable it from app settings';
+        await getCurrentLocation();
+        print(error);
+      }
+      //myLocation = null;
+    }
+    var currentLocation = myLocation;
+    // final coordinates =
+    //     new Coordinates(myLocation?.latitude, myLocation?.longitude);
+  }
+
+  List<cart.CartItem>? data;
+  Future initialize() async {
+    await getUserAddress();
+  }
 
   @override
   void initState() {
     super.initState();
+
     Future.delayed(Duration.zero, () {
       future = getCartDetail();
+      initialize();
     });
   }
 
@@ -361,7 +433,7 @@ class _ShippingScreenState extends State<ShippingScreen> {
                                       Padding(
                                         padding: EdgeInsets.only(left: 16),
                                         child: Text(
-                                          "₹0",
+                                          "-₹ " + CouponDiscount!,
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontFamily:
@@ -374,37 +446,37 @@ class _ShippingScreenState extends State<ShippingScreen> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Visibility(
-                                    visible: showDiscount,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              "Discount",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontFamily:
-                                                      AppConstant.fontRegular,
-                                                  fontSize: 16),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 16),
-                                          child: Text(
-                                            AppConstant.rupee + discount,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontFamily:
-                                                    AppConstant.fontRegular,
-                                                fontSize: 16),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  // Visibility(
+                                  //   visible: showDiscount,
+                                  //   child: Row(
+                                  //     children: [
+                                  //       Expanded(
+                                  //         child: Padding(
+                                  //           padding: EdgeInsets.only(left: 10),
+                                  //           child: Text(
+                                  //             "Discount",
+                                  //             style: TextStyle(
+                                  //                 color: Colors.black,
+                                  //                 fontFamily:
+                                  //                     AppConstant.fontRegular,
+                                  //                 fontSize: 16),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //       Padding(
+                                  //         padding: EdgeInsets.only(left: 16),
+                                  //         child: Text(
+                                  //           AppConstant.rupee + discount,
+                                  //           style: TextStyle(
+                                  //               color: Colors.black,
+                                  //               fontFamily:
+                                  //                   AppConstant.fontRegular,
+                                  //               fontSize: 16),
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   SizedBox(
                                     height: 10,
                                   ),
@@ -494,8 +566,11 @@ class _ShippingScreenState extends State<ShippingScreen> {
                                                             .text
                                                             .toString(),
                                                         kitchen_id,
-                                                        deliveryLat,
-                                                        deliveryLong,
+                                                        position!
+                                                            .latitude
+                                                            .toString(),
+                                                        position!.longitude
+                                                            .toString(),
                                                         "shipping")));
                                       } else {
                                         Utils.showToast(
@@ -546,6 +621,7 @@ class _ShippingScreenState extends State<ShippingScreen> {
   Future<cart.GetCartDetail?> getCartDetail() async {
     try {
       BeanVerifyOtp user = await Utils.getUser();
+      print(user.data!.id);
       FormData from = FormData.fromMap({
         "token": "123456789",
         "user_id": user.data!.id,
@@ -556,14 +632,15 @@ class _ShippingScreenState extends State<ShippingScreen> {
       cart.GetCartDetail? bean = await ApiProvider().getCartDetail(from);
       print(bean!.data);
       if (bean.status == true) {
-        total_amount = bean.data!.totalAmount;
+        total_amount = bean.data!.subTotal;
         tax_amount = bean.data!.taxAmount;
         delivery_charge = bean.data!.deliveryCharge;
+        CouponDiscount = bean.data!.couponDiscount;
         data = bean.data!.cartItems;
         kitchen_id = data![0].kitchenId;
         deliveryLat = bean.data!.myLocation!.latitude;
         deliveryLong = bean.data!.myLocation!.longitude;
-        deliveryAddress = bean.data!.myLocation!.address;
+        // deliveryAddress = bean.data!.myLocation!.address;
 
         setState(() {});
         return bean;
@@ -579,7 +656,7 @@ class _ShippingScreenState extends State<ShippingScreen> {
     }
   }
 
-  Widget getServices(cart.CartItems result) {
+  Widget getServices(cart.CartItem result) {
     return Container(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -641,66 +718,68 @@ class _ShippingScreenState extends State<ShippingScreen> {
               ),
             ],
           )),
-          Container(
-              margin: EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                  color: AppConstant.appColor,
-                  borderRadius: BorderRadius.circular(100)),
-              height: 30,
-              width: 70,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 16,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      if (result.count >= 0) {
-                        setState(() {
-                          result.count--;
+          (result.mealtype == 'trial')
+              ? Container(
+                  margin: EdgeInsets.only(right: 16),
+                  decoration: BoxDecoration(
+                      color: AppConstant.appColor,
+                      borderRadius: BorderRadius.circular(100)),
+                  height: 30,
+                  width: 70,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 16,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          if (result.count >= 0) {
+                            setState(() {
+                              result.count--;
 
-                          type = "minus";
-                        });
+                              type = "minus";
+                            });
 
-                        if (result.count == 0) {
-                          removeItem(result.cartId);
-                        } else {
+                            if (result.count == 0) {
+                              removeItem(result.cartId);
+                            } else {
+                              updateCart(result.count, result.cartId!);
+                            }
+                          }
+                        },
+                        child: Text(
+                          "-",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        result.count.toString(),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          if (result.count >= 0) {
+                            setState(() {
+                              result.count++;
+                              type = "plus";
+                            });
+                          }
                           updateCart(result.count, result.cartId!);
-                        }
-                      }
-                    },
-                    child: Text(
-                      "-",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    result.count.toString(),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      if (result.count >= 0) {
-                        setState(() {
-                          result.count++;
-                          type = "plus";
-                        });
-                      }
-                      updateCart(result.count, result.cartId!);
-                    },
-                    child: Text(
-                      "+",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                ],
-              )),
+                        },
+                        child: Text(
+                          "+",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  ))
+              : SizedBox(),
         ],
       ),
     );
@@ -714,31 +793,41 @@ class _ShippingScreenState extends State<ShippingScreen> {
       FormData from = FormData.fromMap({
         "kitchen_id": widget.kitchenId,
         "token": "123456789",
-        "order_amount": total_amount,
+        "user_id": user.data!.id,
         "coupon_code": applyPromoController.text.toString()
       });
 
-      BeanApplyPromo? bean =
-          await ApiProvider().applyPromo(from) ;
+      BeanApplyPromo? bean = await ApiProvider().applyPromo(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
-        discount = bean.data!.discount.toString();
-
         setState(() {
           showDiscount = true;
+          future = getCartDetail();
         });
         return bean;
       } else {
         Utils.showToast(bean.message!);
+        setState(() {
+          showDiscount = true;
+          future = getCartDetail();
+        });
       }
 
       return null;
     } on HttpException catch (exception) {
       progressDialog.dismiss(context);
+      setState(() {
+        showDiscount = true;
+        future = getCartDetail();
+      });
       print(exception);
     } catch (exception) {
       progressDialog.dismiss(context);
+      setState(() {
+        showDiscount = true;
+        future = getCartDetail();
+      });
       print(exception);
     }
   }
@@ -764,8 +853,7 @@ class _ShippingScreenState extends State<ShippingScreen> {
         "quantity" + count.toString(),
       );
       print(type);
-      BeanUpdateCart? bean =
-          await ApiProvider().updateCart(from) ;
+      BeanUpdateCart? bean = await ApiProvider().updateCart(from);
       print(bean!.data);
       if (bean.status == true) {
         setState(() {
@@ -796,8 +884,7 @@ class _ShippingScreenState extends State<ShippingScreen> {
       });
       print(from);
       print(type);
-      RemoveCart? bean =
-          await ApiProvider().removeCart(from) ;
+      RemoveCart? bean = await ApiProvider().removeCart(from);
       progressDialog.dismiss(context);
       print(bean!.data);
       if (bean.status == true) {

@@ -80,7 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future initialize() async {
     await getUser();
     await getUserAddress();
-    await getHomeData();
+    // await getHomeData();
     await getBannerData();
     await getCartCount(context);
   }
@@ -971,7 +971,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
         return bean;
       } else {
-        Utils.showToast(bean.message!);
+        Utils.showToast(bean.message! + 'aklkl');
       }
 
       return null;
@@ -1119,10 +1119,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     address = "";
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
+
     print(placemarks);
     Placemark place = placemarks[0];
     address =
         '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    await getHomeData();
   }
 
   getCurrentLocation() async {
@@ -1131,11 +1133,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
+      Utils.showToast('permission denied- please enable it from app settings');
       // Permissions are denied forever, handle appropriately.
 
       return Future.error(
@@ -1160,10 +1164,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print(e);
       if (e.code == 'PERMISSION_DENIED') {
         error = 'please grant permission';
+        await getCurrentLocation();
         print(error);
       }
       if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
         error = 'permission denied- please enable it from app settings';
+        await getCurrentLocation();
         print(error);
       }
       //myLocation = null;
