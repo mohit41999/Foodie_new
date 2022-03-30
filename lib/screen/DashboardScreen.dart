@@ -951,8 +951,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 : widget.mealPlan == 3
                     ? "2"
                     : "",
-        "min_price": "",
-        "max_price": "",
+        "min_price": widget.min.toString(),
+        "max_price": widget.max.toString(),
         "rating": "",
         "customer_address": address
       });

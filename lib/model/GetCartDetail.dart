@@ -255,6 +255,7 @@ class CartItem {
     this.price,
     this.totalPrice,
     this.mealtype,
+    this.typeid,
     this.cuisinetype,
     this.deliveryDate,
     this.deliveryFromtime,
@@ -272,6 +273,7 @@ class CartItem {
   String? price;
   String? totalPrice;
   String? mealtype;
+  String? typeid;
   String? cuisinetype;
   String? deliveryDate;
   String? deliveryFromtime;
@@ -290,6 +292,7 @@ class CartItem {
         price: json["price"],
         totalPrice: json["total_price"],
         mealtype: json["mealtype"],
+        typeid: json["typeid"],
         cuisinetype: json["cuisinetype"],
         deliveryDate: json["delivery_date"],
         deliveryFromtime: json["delivery_fromtime"],
@@ -308,6 +311,7 @@ class CartItem {
         "price": price,
         "total_price": totalPrice,
         "mealtype": mealtype,
+        "typeid": typeid,
         "cuisinetype": cuisinetype,
         "delivery_date": deliveryDate,
         "delivery_fromtime": deliveryFromtime,

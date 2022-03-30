@@ -858,26 +858,82 @@ class _DetailsScreenState extends State<DetailsScreen>
                   ],
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  addToCart(menu.itemid, menu.bookType);
-                },
-                child: Container(
-                  margin: EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: AppConstant.appColor),
-                      borderRadius: BorderRadius.circular(100)),
-                  height: 30,
-                  width: 70,
-                  child: Center(
-                    child: Text(
-                      "Add +",
-                      style:
-                          TextStyle(color: AppConstant.appColor, fontSize: 13),
+              (menu.count == 0)
+                  ? InkWell(
+                      onTap: () {
+                        print('menu count' + menu.count.toString());
+                        addToCart(menu.itemid, menu.bookType, '1');
+                        setState(() {
+                          menu.count++;
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 16),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: AppConstant.appColor),
+                            borderRadius: BorderRadius.circular(100)),
+                        height: 30,
+                        width: 70,
+                        child: Center(
+                          child: Text(
+                            "Add +",
+                            style: TextStyle(
+                                color: AppConstant.appColor, fontSize: 13),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      margin: EdgeInsets.only(right: 16),
+                      decoration: BoxDecoration(
+                          color: AppConstant.appColor,
+                          border: Border.all(color: AppConstant.appColor),
+                          borderRadius: BorderRadius.circular(100)),
+                      height: 30,
+                      width: 70,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 16,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              if (menu.count != 0) {
+                                addToCart(menu.itemid, menu.bookType, '2');
+
+                                menu.count--;
+                              }
+                            },
+                            child: Text(
+                              "-",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            menu.count.toString(),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              addToCart(menu.itemid, menu.bookType, '1');
+                              menu.count++;
+                            },
+                            child: Text(
+                              "+",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
               // Container(
               //   margin: EdgeInsets.only(right: 16),
               //   decoration: BoxDecoration(
@@ -1162,7 +1218,7 @@ class _DetailsScreenState extends State<DetailsScreen>
     }
   }
 
-  addToCart(String itemid, String? bookType) async {
+  addToCart(String itemid, String? bookType, String quantitytype) async {
     print(itemid + 'papa');
     print(bookType! + 'lala');
     progressDialog = ProgressDialog(context);
@@ -1176,7 +1232,7 @@ class _DetailsScreenState extends State<DetailsScreen>
         "type_id": itemid,
         "mealplan": bookType,
         "quantity": "1",
-        "quantity_type": "1"
+        "quantity_type": quantitytype
       });
 
       print("itemId>>" + itemid);
@@ -1186,8 +1242,10 @@ class _DetailsScreenState extends State<DetailsScreen>
       if (bean.status == true) {
         progressDialog.dismiss(context);
         Utils.showToast(bean.message!);
-        getCartCount(context);
-
+        Future.delayed(Duration(seconds: 1), () {
+          // future = kithchenDetail(context);
+          getCartCount(context);
+        });
         return bean;
       } else {
         Utils.showToast(bean.message!);

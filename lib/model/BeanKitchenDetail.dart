@@ -134,6 +134,7 @@ class Menu {
   final String including;
   final String itemprice;
   final String image;
+  int count = 0;
 
   factory Menu.fromJson(Map<String, dynamic> json) => Menu(
         itemid: json["itemid"],

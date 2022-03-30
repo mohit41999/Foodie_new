@@ -643,50 +643,52 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
   }
 
   void authUser() async {
-    progressDialog = ProgressDialog(context, isDismissible: false);
-    progressDialog = ProgressDialog(context);
-    progressDialog.show();
+    // progressDialog = ProgressDialog(context, isDismissible: false);
+    // progressDialog = ProgressDialog(context);
+    // progressDialog.show();
     try {
-      // await Auth().signOutGoogle();
+      await Auth().handleSignIn(context);
       // await Auth().signInWithGoogle().then((user) {
       //   if (user != null) {
-      //     // socailLogin(user);
+      //     socailLogin(user);
       //     /*   _getUserData(user);*/
       //   } else
-      //     progressDialog.dismiss();context
+      //     progressDialog.dismiss(context);
       // });
     } catch (e) {
-      progressDialog.dismiss(context);
+      // progressDialog.dismiss(context);
     }
   }
 
-  // void socailLogin(FirebaseUser user) async {
-  //   progressDialog =ProgressDialog(context);
-  //       progressDialog.show();
-  //   try {
-  //     FormData data = FormData.fromMap({
-  //       "token": "123456789",
-  //       "email": user.email,
-  //       "name":user.displayName,
-  //     });
-  //     BeanVerifyOtp bean = await ApiProvider().socailLogin(data);
-  //     print(bean.data);
-  //     progressDialog.dismiss();
-  //     if (bean.status == true) {
-  //       PrefManager.putBool(AppConstant.session, true);
-  //       PrefManager.putString(AppConstant.user, jsonEncode(bean));
-  //       Utils.showToast(bean.message);
-  //       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeBaseScreen()), (route) => false);
-
-  //     } else {
-  //       Utils.showToast(bean.message);
-  //     }
-  //   } on HttpException catch (exception) {
-  //     progressDialog.dismiss();
-  //   } catch (exception) {
-  //     progressDialog.dismiss();
-  //   }
-  // }
+  void socailLogin(String email, String name) async {
+    progressDialog = ProgressDialog(context);
+    progressDialog.show();
+    try {
+      FormData data = FormData.fromMap({
+        "token": "123456789",
+        "email": email,
+        "name": name,
+      });
+      BeanVerifyOtp? bean = await ApiProvider().socailLogin(data);
+      print(bean!.data);
+      progressDialog.dismiss(context);
+      if (bean.status == true) {
+        PrefManager.putBool(AppConstant.session, true);
+        PrefManager.putString(AppConstant.user, jsonEncode(bean));
+        Utils.showToast(bean.message!);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeBaseScreen()),
+            (route) => false);
+      } else {
+        Utils.showToast(bean.message!);
+      }
+    } on HttpException catch (exception) {
+      progressDialog.dismiss(context);
+    } catch (exception) {
+      progressDialog.dismiss(context);
+    }
+  }
 
   loginWithFB() async {
     _logout();

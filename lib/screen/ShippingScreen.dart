@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:food_app/model/BeanAddCart.dart';
 import 'package:food_app/model/BeanApplyPromo.dart';
 import 'package:food_app/model/BeanUpdateCart.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
@@ -270,8 +271,16 @@ class _ShippingScreenState extends State<ShippingScreen> {
                                   }
                                 }
                               }
-                              return Container(
-                                  child: Center(child: Text("No Item Found")));
+                              if (projectSnap.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Container(
+                                    child: Center(
+                                        child: CircularProgressIndicator()));
+                              } else {
+                                return Container(
+                                    child:
+                                        Center(child: Text("No Item Found")));
+                              }
                             }),
                         SizedBox(
                           height: 16,
@@ -650,8 +659,14 @@ class _ShippingScreenState extends State<ShippingScreen> {
 
       return null;
     } on HttpException catch (exception) {
+      setState(() {
+        data = null;
+      });
       print(exception);
     } catch (exception) {
+      setState(() {
+        data = null;
+      });
       print(exception);
     }
   }
@@ -733,19 +748,7 @@ class _ShippingScreenState extends State<ShippingScreen> {
                       ),
                       InkWell(
                         onTap: () {
-                          if (result.count >= 0) {
-                            setState(() {
-                              result.count--;
-
-                              type = "minus";
-                            });
-
-                            if (result.count == 0) {
-                              removeItem(result.cartId);
-                            } else {
-                              updateCart(result.count, result.cartId!);
-                            }
-                          }
+                          addToCart(result.typeid!, '2');
                         },
                         child: Text(
                           "-",
@@ -756,7 +759,7 @@ class _ShippingScreenState extends State<ShippingScreen> {
                         width: 10,
                       ),
                       Text(
-                        result.count.toString(),
+                        result.quantity.toString(),
                         style: TextStyle(color: Colors.white),
                       ),
                       SizedBox(
@@ -764,13 +767,7 @@ class _ShippingScreenState extends State<ShippingScreen> {
                       ),
                       InkWell(
                         onTap: () {
-                          if (result.count >= 0) {
-                            setState(() {
-                              result.count++;
-                              type = "plus";
-                            });
-                          }
-                          updateCart(result.count, result.cartId!);
+                          addToCart(result.typeid!, '1');
                         },
                         child: Text(
                           "+",
@@ -779,7 +776,29 @@ class _ShippingScreenState extends State<ShippingScreen> {
                       ),
                     ],
                   ))
-              : SizedBox(),
+              : Container(
+                  margin: EdgeInsets.only(right: 16),
+                  decoration: BoxDecoration(
+                      color: AppConstant.appColor,
+                      borderRadius: BorderRadius.circular(100)),
+                  height: 30,
+                  width: 90,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          removeItem(result.cartId);
+                        },
+                        child: Center(
+                          child: Text(
+                            "Remove Item",
+                            style: TextStyle(color: Colors.white, fontSize: 11),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
         ],
       ),
     );
@@ -872,6 +891,48 @@ class _ShippingScreenState extends State<ShippingScreen> {
     }
   }
 
+  addToCart(String itemid, String quantity_type) async {
+    print(itemid + 'papa');
+    progressDialog = ProgressDialog(context);
+    progressDialog.show();
+    try {
+      BeanVerifyOtp user = await Utils.getUser();
+      FormData from = FormData.fromMap({
+        "user_id": user.data!.id,
+        "token": "123456789",
+        "kitchen_id": widget.kitchenId,
+        "type_id": itemid,
+        "mealplan": 'trial',
+        "quantity": "1",
+        "quantity_type": quantity_type
+      });
+
+      print("itemId>>" + itemid);
+      BeanAddCart? bean = await ApiProvider().addCart(from);
+      progressDialog.dismiss(context);
+      print(bean!.data);
+      if (bean.status == true) {
+        setState(() {
+          future = getCartDetail();
+        });
+
+        progressDialog.dismiss(context);
+        Utils.showToast(bean.message!);
+
+        return bean;
+      } else {
+        Utils.showToast(bean.message!);
+      }
+      return null;
+    } on HttpException catch (exception) {
+      print(exception);
+      progressDialog.dismiss(context);
+    } catch (exception) {
+      progressDialog.dismiss(context);
+      print(exception);
+    }
+  }
+
   removeItem(String? cartId) async {
     var progressDialog = ProgressDialog(context);
     try {
@@ -889,8 +950,10 @@ class _ShippingScreenState extends State<ShippingScreen> {
       print(bean!.data);
       if (bean.status == true) {
         progressDialog.dismiss(context);
-        Navigator.pop(context, true);
-        setState(() {});
+        // Navigator.pop(context, true);
+        setState(() {
+          future = getCartDetail();
+        });
 
         return bean;
       } else {

@@ -28,11 +28,32 @@ class OtpScreenState extends State<OtpScreen> {
   late ProgressDialog progressDialog;
 
   var code = "+91";
+  late Timer timer;
+  int timerMaxSeconds = 60;
+
   var otp = "";
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (timerMaxSeconds == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            timerMaxSeconds--;
+          });
+        }
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
+    startTimer();
   }
 
   TextEditingController? pinController = TextEditingController();
@@ -61,7 +82,7 @@ class OtpScreenState extends State<OtpScreen> {
               ),
               Padding(
                 padding: EdgeInsets.only(left: 26),
-                child: Text("Verification",
+                child: Text("Verificationn",
                     style: TextStyle(
                         color: Colors.black,
                         fontFamily: AppConstant.fontBold,
@@ -108,15 +129,33 @@ class OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               // ),
-              InkWell(
-                onTap: () {},
-                child: Center(
-                  child: Text("Resend Code",
-                      style: TextStyle(
-                          fontFamily: AppConstant.fontBold, fontSize: 14)),
-                  /*Text("Resend Code in 19 sec", style: TextStyle(color: Colors.black, fontFamily: AppConstant.fontBold, fontSize: 14),),*/
-                ),
-              ),
+
+              (timerMaxSeconds == 0)
+                  ? InkWell(
+                      onTap: () {
+                        setState(() {
+                          timerMaxSeconds = 60;
+                          startTimer();
+                        });
+                      },
+                      child: Center(
+                        child: Text("Resend Code",
+                            style: TextStyle(
+                                fontFamily: AppConstant.fontBold,
+                                fontSize: 14)),
+                        /*Text("Resend Code in 19 sec", style: TextStyle(color: Colors.black, fontFamily: AppConstant.fontBold, fontSize: 14),),*/
+                      ),
+                    )
+                  : Center(
+                      child: Text(
+                          "Resend Code in ${timerMaxSeconds.toString()}",
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontFamily: AppConstant.fontBold,
+                              fontSize: 14)),
+                      /*Text("Resend Code in 19 sec", style: TextStyle(color: Colors.black, fontFamily: AppConstant.fontBold, fontSize: 14),),*/
+                    ),
+
               SizedBox(
                 height: 100,
               ),
@@ -125,7 +164,7 @@ class OtpScreenState extends State<OtpScreen> {
                   if (pinController!.text == "") {
                     Utils.showToast("Please enter otp");
                   } else {
-                     verifyOTP(pinController!.text);
+                    verifyOTP(pinController!.text);
 
                     // bool result = await apiProvider.verifyOtpForLogin(
                     //     widget.number, "1234");
@@ -188,8 +227,7 @@ class OtpScreenState extends State<OtpScreen> {
         "token": "123456789",
         "otp": otp,
       });
-      BeanVerifyOtp? bean =
-          await ApiProvider().verifyOtp(data) ;
+      BeanVerifyOtp? bean = await ApiProvider().verifyOtp(data);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {
