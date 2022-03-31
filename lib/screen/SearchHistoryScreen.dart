@@ -10,10 +10,12 @@ import 'package:food_app/model/BeanSearchData.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
+import 'package:food_app/screen/KitchenDetails/DetailsScreen.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/HttpException.dart';
 import 'package:food_app/utils/Utils.dart';
 import 'package:food_app/utils/progress_dialog.dart';
+import 'package:food_app/model/GetHomeData.dart' as home;
 
 class SearchHistoryScreen extends StatefulWidget {
   var currenAddress;
@@ -239,112 +241,116 @@ class SearchHistoryScreenState extends State<SearchHistoryScreen> {
   }
 
   Widget getRecommended(KitchenRecommandation result) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(
-          children: [
-            SizedBox(
-              height: 16,
-            ),
-            Container(
-              height: 150,
-              margin: EdgeInsets.only(top: 16, left: 16, bottom: 16),
-              child: Image.network(result.image!, fit: BoxFit.cover),
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 26, top: 26),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(50)),
-              width: 100,
-              height: 30,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      result.averageRating.toString(),
-                      style: TextStyle(
-                          fontSize: 12, fontFamily: AppConstant.fontBold),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => DetailsScreen(home.Data(
+                    kitchenId: result.kitchenId,
+                    kitchenname: result.kitchenname,
+                    address: result.address,
+                    mealtype: result.mealtype,
+                    cuisinetype: result.cuisinetype,
+                    discount: result.discount,
+                    image: result.image,
+                    averageRating: result.averageRating,
+                    totalReview: result.totalReview,
+                    time: result.time,
+                    isFavourite: result.isFavourite))));
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                height: 150,
+                margin: EdgeInsets.only(top: 16, left: 16, bottom: 16),
+                child: Image.network(result.image!, fit: BoxFit.cover),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 26, top: 26),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(50)),
+                width: 100,
+                height: 30,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        result.averageRating.toString(),
+                        style: TextStyle(
+                            fontSize: 12, fontFamily: AppConstant.fontBold),
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    RatingBarIndicator(
+                      rating: 1,
+                      itemCount: 1,
+                      itemSize: 15.0,
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 6),
+                      child: Text(
+                        result.totalReview!,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: AppConstant.fontBold,
+                            color: Color(0xffA7A8BC)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 16, top: 1),
+            child: Text(
+              result.kitchenname!,
+              style: TextStyle(fontFamily: AppConstant.fontBold, fontSize: 16),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
                   SizedBox(
                     width: 6,
                   ),
-                  RatingBarIndicator(
-                    rating: 1,
-                    itemCount: 1,
-                    itemSize: 15.0,
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
+                  Image.asset(
+                    Res.ic_time,
+                    width: 16,
+                    height: 16,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 6),
-                    child: Text(
-                      result.totalReview!,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: AppConstant.fontBold,
-                          color: Color(0xffA7A8BC)),
-                    ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Text(
+                    result.time != null ? result.time! : "",
+                    style: TextStyle(
+                        fontFamily: AppConstant.fontRegular, fontSize: 12),
                   ),
                 ],
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 16, top: 1),
-          child: Text(
-            result.kitchenname!,
-            style: TextStyle(fontFamily: AppConstant.fontBold, fontSize: 16),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: 25,
-              margin: EdgeInsets.only(left: 16, top: 6),
-              decoration: BoxDecoration(
-                  color: Color(0xffEEEEEE),
-                  borderRadius: BorderRadius.circular(50)),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(6),
-                  child: Text(
-                    result.itemname != null ? result.itemname! : "",
-                    style: TextStyle(fontSize: 12, color: Color(0xffA7A8BC)),
-                  ),
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 6,
-                ),
-                Image.asset(
-                  Res.ic_time,
-                  width: 16,
-                  height: 16,
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                Text(
-                  result.time != null ? result.time! : "",
-                  style: TextStyle(
-                      fontFamily: AppConstant.fontRegular, fontSize: 12),
-                ),
-              ],
-            )
-          ],
-        )
-      ],
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 

@@ -335,7 +335,7 @@ class OrderDispatchedScreenState extends State<OrderDispatchedScreen> {
                             Padding(
                               padding: EdgeInsets.only(left: 16),
                               child: Text(
-                                "Today's Launch Menu",
+                                "Today's Lunch Menu",
                                 style: TextStyle(
                                     color: Color(0xffA7A8BC), fontSize: 12),
                               ),

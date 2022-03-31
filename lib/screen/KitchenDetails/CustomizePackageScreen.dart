@@ -10,6 +10,7 @@ import 'package:food_app/model/BeanPackageDetail.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
+import 'package:food_app/screen/HomeBaseScreen.dart';
 import 'package:food_app/screen/SelectDateTime.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/Utils.dart';
@@ -178,6 +179,10 @@ class PackageDetailScreenState extends State<CustomizePackageScreen> {
       if (bean.status == true) {
         progressDialog.dismiss(context);
         Utils.showToast(bean.message!);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeBaseScreen()),
+            (route) => false);
 
         return bean;
       } else {

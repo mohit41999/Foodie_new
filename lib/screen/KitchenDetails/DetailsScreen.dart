@@ -1083,14 +1083,11 @@ class _DetailsScreenState extends State<DetailsScreen>
             ? "0"
             : isSelectFood == 2
                 ? "1"
-                : isSelectFood == 2
+                : isSelectFood == 3
                     ? "2"
                     : "",
       });
-      print("mealll" + mealFor);
-      print("kkk" + widget.result.kitchenId!);
-      print("kitchenid>>" + isSelectFood.toString());
-      print("isSelect>" + isSelect.toString());
+
       KitchenDetail? bean = await ApiProvider().kitchenDetail(from);
       print(bean!.data);
       progressDialog.dismiss(context);

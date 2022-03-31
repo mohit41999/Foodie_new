@@ -7,7 +7,6 @@ import 'package:food_app/Menu/MenuITemSelectedScreen.dart';
 import 'package:food_app/screen/AddPackageScreen.dart';
 import 'package:food_app/screen/CustomerFeedbackScreen.dart';
 import 'package:food_app/screen/DashboardScreen.dart';
-import 'package:food_app/screen/Demo.dart';
 import 'package:food_app/screen/KitchenDetails/DetailsScreen.dart';
 import 'package:food_app/screen/FeedbackScreen.dart';
 import 'package:food_app/screen/FilterScreen.dart';

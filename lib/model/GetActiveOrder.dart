@@ -33,6 +33,8 @@ class Data {
   String? orderid;
   String? orderfrom;
   String? orderItems;
+  String? meal_type;
+  String? meal_plan;
   String? address;
 
   Data(
@@ -41,12 +43,16 @@ class Data {
       this.orderid,
       this.orderfrom,
       this.orderItems,
+      this.meal_plan,
+      this.meal_type,
       this.address});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     kitchenname = json['kitchenname'];
     orderid = json['orderid'];
+    meal_plan = json['meal_plan'];
+    meal_type = json['meal_type'];
     orderfrom = json['orderfrom'];
     orderItems = json['order_items'];
     address = json['address'];
@@ -57,6 +63,8 @@ class Data {
     data['id'] = this.id;
     data['kitchenname'] = this.kitchenname;
     data['orderid'] = this.orderid;
+    data['meal_plan'] = this.meal_plan;
+    data['meal_type'] = this.meal_type;
     data['orderfrom'] = this.orderfrom;
     data['order_items'] = this.orderItems;
     data['address'] = this.address;

@@ -14,6 +14,8 @@ import 'package:food_app/model/GetAddressList.dart';
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
 import 'package:food_app/screen/DashboardScreen.dart';
+import 'package:food_app/screen/HomeBaseScreen.dart';
+import 'package:food_app/screen/signupemail_screen.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/HttpException.dart';
 import 'package:food_app/utils/PrefManager.dart';
@@ -148,6 +150,36 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
               ),
               InkWell(
                 onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SignUpWithEmailScreen()));
+                },
+                child: Container(
+                  margin:
+                      EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+                  decoration: BoxDecoration(
+                      color: AppConstant.appColor,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text(
+                          "Don't have an account? Sign Up Here",
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    ),
+                  ),
+                  height: 50,
+                ),
+              ),
+              InkWell(
+                onTap: () {
                   if (email.text.isEmpty) {
                     Utils.showToast("Please Enter Email");
                   } else if (password.text.isEmpty) {
@@ -201,7 +233,11 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
         PrefManager.putString(AppConstant.user, jsonEncode(bean));
         Utils.showToast(bean.message!);
         userId = bean.data!.id;
-        future = getAddress(context, userId);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeBaseScreen()),
+            (route) => false);
+        // future = getAddress(context, userId);
         setState(() {});
         return bean;
       } else {

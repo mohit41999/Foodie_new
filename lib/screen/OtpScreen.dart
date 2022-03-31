@@ -82,7 +82,7 @@ class OtpScreenState extends State<OtpScreen> {
               ),
               Padding(
                 padding: EdgeInsets.only(left: 26),
-                child: Text("Verificationn",
+                child: Text("Verification",
                     style: TextStyle(
                         color: Colors.black,
                         fontFamily: AppConstant.fontBold,

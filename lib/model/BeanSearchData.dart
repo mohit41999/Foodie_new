@@ -11,7 +11,7 @@ class BeanSearchData {
     if (json['data'] != null) {
       data = [];
       json['data'].forEach((v) {
-        data!.add(   Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
@@ -35,14 +35,14 @@ class Data {
   Data({this.recentSearch, this.trending, this.kitchenRecommandation});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if (json['recent_search'] != null ) {
+    if (json['recent_search'] != null) {
       recentSearch = [];
       print("!@#   ${json['recent_search']}");
       try {
         json['recent_search'].forEach((v) {
           recentSearch!.add(RecentSearch.fromJson(v));
         });
-      }catch(e){
+      } catch (e) {
         print(e);
       }
     }
@@ -52,16 +52,15 @@ class Data {
         trending!.add(Trending.fromJson(v));
       });
     }
-    if (json['kitchen_recommandation'] != null ) {
+    if (json['kitchen_recommandation'] != null) {
       kitchenRecommandation = [];
-try {
-  json['kitchen_recommandation'].forEach((v) {
-    kitchenRecommandation!.add(new KitchenRecommandation.fromJson(v));
-  });
-}catch(e){
-
-  print(json['kitchen_recommandation']);
-}
+      try {
+        json['kitchen_recommandation'].forEach((v) {
+          kitchenRecommandation!.add(new KitchenRecommandation.fromJson(v));
+        });
+      } catch (e) {
+        print(json['kitchen_recommandation']);
+      }
     }
   }
 
@@ -117,47 +116,39 @@ class Trending {
 class KitchenRecommandation {
   String? kitchenId;
   String? kitchenname;
-  String? itemname;
+
   String? address;
-  String? mealfor;
   String? cuisinetype;
   String? mealtype;
-  String? mealplan;
-  String? price;
   String? discount;
   String? image;
   String? averageRating;
   String? totalReview;
   String? time;
+  String? isFavourite;
 
   KitchenRecommandation(
       {this.kitchenId,
       this.kitchenname,
-      this.itemname,
       this.address,
-      this.mealfor,
       this.cuisinetype,
       this.mealtype,
-      this.mealplan,
-      this.price,
       this.discount,
       this.image,
       this.averageRating,
       this.totalReview,
+      this.isFavourite,
       this.time});
 
   KitchenRecommandation.fromJson(Map<String, dynamic> json) {
     kitchenId = json['kitchen_id'];
     kitchenname = json['kitchenname'];
-    itemname = json['itemname'];
     address = json['address'];
-    mealfor = json['mealfor'];
     cuisinetype = json['cuisinetype'];
     mealtype = json['mealtype'];
-    mealplan = json['mealplan'];
-    price = json['price'];
     discount = json['discount'];
     image = json['image'];
+    isFavourite = json['is_favourite'];
     averageRating = json['average_rating'];
     totalReview = json['total_review'];
     time = json['time'];
@@ -167,15 +158,12 @@ class KitchenRecommandation {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['kitchen_id'] = this.kitchenId;
     data['kitchenname'] = this.kitchenname;
-    data['itemname'] = this.itemname;
     data['address'] = this.address;
-    data['mealfor'] = this.mealfor;
     data['cuisinetype'] = this.cuisinetype;
     data['mealtype'] = this.mealtype;
-    data['mealplan'] = this.mealplan;
-    data['price'] = this.price;
     data['discount'] = this.discount;
     data['image'] = this.image;
+    data['is_favourite'] = this.isFavourite;
     data['average_rating'] = this.averageRating;
     data['total_review'] = this.totalReview;
     data['time'] = this.time;

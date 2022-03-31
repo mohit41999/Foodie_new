@@ -7,6 +7,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_app/model/BeanBanner.dart';
 import 'package:food_app/model/BeanFavKitchen.dart';
 import 'package:food_app/model/BeanRemoveKitchen.dart';
+import 'package:food_app/model/BeanSearchData.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
 import 'package:food_app/model/GetCartCount.dart';
 import 'package:food_app/model/GetHomeData.dart' as home;
@@ -29,21 +30,23 @@ import 'LoginSignUpScreen.dart';
 import 'ShippingScreen.dart';
 
 class DashboardScreen extends StatefulWidget {
-  var mealfor;
-  var cuisine;
-  var mealtype;
-  var min;
-  var max;
-  var mealPlan;
+  String mealfor;
+  String cuisine;
+  String mealtype;
+  double min;
+  double max;
+  String mealPlan;
   final bool skip;
+  bool fromHome;
 
   DashboardScreen(
       {required this.mealfor,
-      this.cuisine = -1,
-      this.mealPlan = -1,
+      required this.fromHome,
+      this.cuisine = '',
+      this.mealPlan = '',
       required this.mealtype,
-      this.min = 0,
-      this.max = 0,
+      this.min = 0.0,
+      this.max = 0.0,
       this.skip = false});
 
   @override
@@ -55,9 +58,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   late BeanVerifyOtp userBean;
   String? name = "";
   String? menu = "";
-  var isSelect = 1;
   var currentAddress = "";
-  var isSelectFood = 1;
+
   Future? future;
   bool isLike = false;
   bool isDislike = true;
@@ -355,13 +357,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  widget.mealfor = 1;
-                                  isSelect = 1;
+                                  widget.mealfor = '0';
+
                                   getHomeData();
                                 });
                               },
                               child: Card(
-                                color: isSelect == 1
+                                color: widget.mealfor == '0'
                                     ? AppConstant.appColor
                                     : Colors.white,
                                 margin: const EdgeInsets.only(
@@ -395,7 +397,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       Text(
                                         "Breakfast",
                                         style: TextStyle(
-                                            color: isSelect == 1
+                                            color: widget.mealfor == '0'
                                                 ? Colors.white
                                                 : Colors.black,
                                             fontSize: 12,
@@ -412,13 +414,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  widget.mealfor = 2;
-                                  isSelect = 2;
+                                  widget.mealfor = '1';
+
                                   getHomeData();
                                 });
                               },
                               child: Card(
-                                color: isSelect == 2
+                                color: widget.mealfor == '1'
                                     ? AppConstant.appColor
                                     : Colors.white,
                                 margin: const EdgeInsets.only(
@@ -452,7 +454,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       Text(
                                         "Lunch",
                                         style: TextStyle(
-                                            color: isSelect == 2
+                                            color: widget.mealfor == '1'
                                                 ? Colors.white
                                                 : Colors.black,
                                             fontSize: 12,
@@ -469,13 +471,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  widget.mealfor = 3;
-                                  isSelect = 3;
+                                  widget.mealfor = '2';
+
                                   getHomeData();
                                 });
                               },
                               child: Card(
-                                color: isSelect == 3
+                                color: widget.mealfor == '2'
                                     ? AppConstant.appColor
                                     : Colors.white,
                                 margin: const EdgeInsets.only(
@@ -510,7 +512,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       Text(
                                         "Dinner",
                                         style: TextStyle(
-                                            color: isSelect == 3
+                                            color: widget.mealfor == '2'
                                                 ? Colors.white
                                                 : Colors.black,
                                             fontSize: 12,
@@ -535,14 +537,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  isSelectFood = 1;
-                                  widget.mealtype = 1;
+                                  widget.mealtype = '0';
 
                                   getHomeData();
                                 });
                               },
                               child: Card(
-                                color: isSelectFood == 1
+                                color: widget.mealtype == '0'
                                     ? const Color(0xff7EDABF)
                                     : Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -568,7 +569,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           child: Text(
                                             "Veg",
                                             style: TextStyle(
-                                                color: isSelectFood == 1
+                                                color: widget.mealtype == '0'
                                                     ? Colors.white
                                                     : Colors.black,
                                                 fontSize: 11),
@@ -583,13 +584,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  isSelectFood = 2;
-                                  widget.mealtype = 2;
+                                  widget.mealtype = '1';
                                   getHomeData();
                                 });
                               },
                               child: Card(
-                                color: isSelectFood == 2
+                                color: widget.mealtype == '1'
                                     ? Color(0xff7EDABF)
                                     : Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -614,7 +614,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           child: Text(
                                             "Non-veg",
                                             style: TextStyle(
-                                                color: isSelectFood == 2
+                                                color: widget.mealtype == '1'
                                                     ? Colors.white
                                                     : Colors.black,
                                                 fontSize: 11),
@@ -629,13 +629,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  isSelectFood = 3;
-                                  widget.mealtype = 3;
+                                  widget.mealtype = '2';
                                   getHomeData();
                                 });
                               },
                               child: Card(
-                                color: isSelectFood == 3
+                                color: widget.mealtype == '2'
                                     ? Color(0xff7EDABF)
                                     : Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -657,7 +656,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           child: Text(
                                             "Veg/Non-veg",
                                             style: TextStyle(
-                                                color: isSelectFood == 3
+                                                color: widget.mealtype == '2'
                                                     ? Colors.white
                                                     : Colors.black,
                                                 fontSize: 11),
@@ -923,34 +922,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         "token": "123456789",
         "customer_id": (widget.skip) ? '' : user.data!.id,
         "search_location_or_kitchen": "",
-        "mealfor": widget.mealfor == 1
-            ? "0"
-            : widget.mealfor == 2
-                ? "1"
-                : widget.mealfor == 3
-                    ? "2"
-                    : "",
-        "cuisinetype": widget.cuisine == 1
-            ? "0"
-            : widget.cuisine == 2
-                ? "1"
-                : widget.cuisine == 3
-                    ? "2"
-                    : "",
-        "mealtype": widget.mealtype == 1
-            ? "0"
-            : widget.mealtype == 2
-                ? "1"
-                : widget.mealtype == 3
-                    ? "2"
-                    : "0",
-        "mealplan": widget.mealPlan == 1
-            ? "0"
-            : widget.mealPlan == 2
-                ? "1"
-                : widget.mealPlan == 3
-                    ? "2"
-                    : "",
+        "mealfor": widget.mealfor,
+        "cuisinetype": widget.cuisine,
+        "mealtype": widget.mealtype,
+        "mealplan": widget.mealPlan == 1,
         "min_price": widget.min.toString(),
         "max_price": widget.max.toString(),
         "rating": "",
@@ -1046,73 +1021,73 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   getFilter() async {
-    var data = await Navigator.push(
-        context, MaterialPageRoute(builder: (_) => FilterScreen()));
-    if (data != null) {
-      getFilterData();
-    }
+    (widget.fromHome)
+        ? Navigator.push(
+            context, MaterialPageRoute(builder: (context) => FilterScreen()))
+        : Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => FilterScreen()));
   }
 
-  getFilterData() async {
-    progressDialog = ProgressDialog(context);
-    progressDialog.show();
-    try {
-      BeanVerifyOtp user = await Utils.getUser();
-      FormData from = FormData.fromMap({
-        "token": "123456789",
-        "customer_id": user.data!.id,
-        "search_location_or_kitchen": "",
-        "mealfor": widget.mealfor == 1
-            ? "0"
-            : widget.mealfor == 2
-                ? "1"
-                : widget.mealfor == 3
-                    ? "2"
-                    : "1",
-        "cuisinetype": widget.cuisine == 1
-            ? "0"
-            : widget.cuisine == 2
-                ? "1"
-                : widget.cuisine == 3
-                    ? "2"
-                    : "1",
-        "mealtype": "1",
-        "mealplan": widget.mealPlan == 1
-            ? "0"
-            : widget.mealPlan == 2
-                ? "1"
-                : widget.mealPlan == 3
-                    ? "2"
-                    : "1",
-        "min_price": 0.0,
-        "max_price": 100.0,
-        "rating": "0",
-        "customer_address": address
-      });
-      print("param" + from.toString());
-      print("c" + address!);
-      home.BeanHomeData? bean = await ApiProvider().getHomeData(from);
-      print(bean!.data);
-      progressDialog.dismiss(context);
-      if (bean.status == true) {
-        setState(() {
-          if (list != null) {
-            list = bean.data;
-          } else {}
-        });
-        return bean;
-      } else {
-        Utils.showToast(bean.message!);
-      }
-      return null;
-    } on HttpException catch (exception) {
-      progressDialog.dismiss(context);
-      print(exception);
-    } catch (exception) {
-      progressDialog.dismiss(context);
-      print(exception);
-    }
-  }
+  // getFilterData() async {
+  //   progressDialog = ProgressDialog(context);
+  //   progressDialog.show();
+  //   try {
+  //     BeanVerifyOtp user = await Utils.getUser();
+  //     FormData from = FormData.fromMap({
+  //       "token": "123456789",
+  //       "customer_id": user.data!.id,
+  //       "search_location_or_kitchen": "",
+  //       "mealfor": widget.mealfor == 1
+  //           ? "0"
+  //           : widget.mealfor == 2
+  //               ? "1"
+  //               : widget.mealfor == 3
+  //                   ? "2"
+  //                   : "1",
+  //       "cuisinetype": widget.cuisine == 1
+  //           ? "0"
+  //           : widget.cuisine == 2
+  //               ? "1"
+  //               : widget.cuisine == 3
+  //                   ? "2"
+  //                   : "1",
+  //       "mealtype": "1",
+  //       "mealplan": widget.mealPlan == 1
+  //           ? "0"
+  //           : widget.mealPlan == 2
+  //               ? "1"
+  //               : widget.mealPlan == 3
+  //                   ? "2"
+  //                   : "1",
+  //       "min_price": 0.0,
+  //       "max_price": 100.0,
+  //       "rating": "0",
+  //       "customer_address": address
+  //     });
+  //     print("param" + from.toString());
+  //     print("c" + address!);
+  //     home.BeanHomeData? bean = await ApiProvider().getHomeData(from);
+  //     print(bean!.data);
+  //     progressDialog.dismiss(context);
+  //     if (bean.status == true) {
+  //       setState(() {
+  //         if (list != null) {
+  //           list = bean.data;
+  //         } else {}
+  //       });
+  //       return bean;
+  //     } else {
+  //       Utils.showToast(bean.message!);
+  //     }
+  //     return null;
+  //   } on HttpException catch (exception) {
+  //     progressDialog.dismiss(context);
+  //     print(exception);
+  //   } catch (exception) {
+  //     progressDialog.dismiss(context);
+  //     print(exception);
+  //   }
+  // }
 
   String? address;
   Future<void> GetAddressFromLatLong(Position position) async {

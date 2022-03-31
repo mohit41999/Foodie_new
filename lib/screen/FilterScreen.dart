@@ -14,23 +14,15 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  var isSelect = -1;
-  var cuisine = -1;
-  var mealPlan = -1;
-  var min = 0;
-  var max = 100;
-  SfRangeValues _values = SfRangeValues(40.0, 80.0);
-  ValueNotifier<double> _rating = ValueNotifier(0.0);
-  double _initialRating = 2.0;
+  String mealFor = '';
+  String cuisine = '';
+  String mealType = '';
+  String mealplan = '';
+  double ratings = 2.5;
 
-  ValueNotifier selectMealType = ValueNotifier(0);
-
-  double _lowerValue = 50;
-  double _upperValue = 1000;
-
+  RangeValues currentRangeValues = const RangeValues(0, 1000);
   @override
   void initState() {
-    _rating.value = _initialRating;
     super.initState();
   }
 
@@ -74,7 +66,7 @@ class _FilterScreenState extends State<FilterScreen> {
               Padding(
                 padding: EdgeInsets.only(left: 16, top: 16),
                 child: Text(
-                  "Meal type",
+                  "Meal for",
                   style: TextStyle(
                       color: Colors.black, fontFamily: AppConstant.fontBold),
                 ),
@@ -85,13 +77,13 @@ class _FilterScreenState extends State<FilterScreen> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          isSelect = 1;
+                          mealFor = '0';
                         });
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                         decoration: BoxDecoration(
-                            color: isSelect == 1
+                            color: mealFor == '0'
                                 ? AppConstant.appColor
                                 : Color(0xffF3F6FA),
                             borderRadius: BorderRadius.circular(13)),
@@ -101,8 +93,9 @@ class _FilterScreenState extends State<FilterScreen> {
                           child: Text(
                             "Breakfast",
                             style: TextStyle(
-                                color:
-                                    isSelect == 1 ? Colors.white : Colors.black,
+                                color: mealFor == '0'
+                                    ? Colors.white
+                                    : Colors.black,
                                 fontSize: 15),
                           ),
                         ),
@@ -113,13 +106,13 @@ class _FilterScreenState extends State<FilterScreen> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          isSelect = 2;
+                          mealFor = '1';
                         });
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                         decoration: BoxDecoration(
-                            color: isSelect == 2
+                            color: mealFor == '1'
                                 ? AppConstant.appColor
                                 : Color(0xffF3F6FA),
                             borderRadius: BorderRadius.circular(13)),
@@ -129,8 +122,9 @@ class _FilterScreenState extends State<FilterScreen> {
                           child: Text(
                             "Lunch",
                             style: TextStyle(
-                                color:
-                                    isSelect == 2 ? Colors.white : Colors.black,
+                                color: mealFor == '1'
+                                    ? Colors.white
+                                    : Colors.black,
                                 fontSize: 15),
                           ),
                         ),
@@ -141,13 +135,13 @@ class _FilterScreenState extends State<FilterScreen> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          isSelect = 3;
+                          mealFor = '2';
                         });
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                         decoration: BoxDecoration(
-                            color: isSelect == 3
+                            color: mealFor == '2'
                                 ? AppConstant.appColor
                                 : Color(0xffF3F6FA),
                             borderRadius: BorderRadius.circular(13)),
@@ -157,8 +151,9 @@ class _FilterScreenState extends State<FilterScreen> {
                           child: Text(
                             "Dinner",
                             style: TextStyle(
-                                color:
-                                    isSelect == 3 ? Colors.white : Colors.black,
+                                color: mealFor == '2'
+                                    ? Colors.white
+                                    : Colors.black,
                                 fontSize: 15),
                           ),
                         ),
@@ -170,13 +165,21 @@ class _FilterScreenState extends State<FilterScreen> {
               SizedBox(
                 height: 26,
               ),
+              Padding(
+                padding: EdgeInsets.only(left: 16, top: 16),
+                child: Text(
+                  "Cuisine Type",
+                  style: TextStyle(
+                      color: Colors.black, fontFamily: AppConstant.fontBold),
+                ),
+              ),
               Row(
                 children: [
                   Expanded(
                     child: InkWell(
                         onTap: () {
                           setState(() {
-                            cuisine = 1;
+                            cuisine = '0';
                           });
                         },
                         child: Column(
@@ -196,7 +199,7 @@ class _FilterScreenState extends State<FilterScreen> {
                                 "North Indian Meals",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    color: cuisine == 1
+                                    color: cuisine == '0'
                                         ? AppConstant.appColor
                                         : Colors.black,
                                     fontSize: 12),
@@ -209,7 +212,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     child: InkWell(
                         onTap: () {
                           setState(() {
-                            cuisine = 2;
+                            cuisine = '1';
                           });
                         },
                         child: Column(
@@ -229,7 +232,7 @@ class _FilterScreenState extends State<FilterScreen> {
                                 "South Indian Meals",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    color: cuisine == 2
+                                    color: cuisine == '1'
                                         ? AppConstant.appColor
                                         : Colors.black,
                                     fontSize: 12),
@@ -242,7 +245,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     child: InkWell(
                         onTap: () {
                           setState(() {
-                            cuisine = 3;
+                            cuisine = '2';
                           });
                         },
                         child: Column(
@@ -261,7 +264,7 @@ class _FilterScreenState extends State<FilterScreen> {
                                 "Other Meals",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    color: cuisine == 3
+                                    color: cuisine == '2'
                                         ? AppConstant.appColor
                                         : Colors.black,
                                     fontSize: 14),
@@ -280,146 +283,146 @@ class _FilterScreenState extends State<FilterScreen> {
                       color: Colors.black, fontFamily: AppConstant.fontBold),
                 ),
               ),
-              ValueListenableBuilder(
-                  valueListenable: selectMealType,
-                  builder: (context, v, c) {
-                    return Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                              onTap: () {
-                                selectMealType.value = 1;
-                              },
-                              child: Container(
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            mealType = '0';
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                  color: mealType == '0'
+                                      ? Colors.orangeAccent
+                                      : Colors.transparent,
+                                  width: 3)),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    left: 16, right: 16, top: 16),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                        color: selectMealType.value == 1
-                                            ? Colors.orangeAccent
-                                            : Colors.transparent,
-                                        width: 3)),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 16, right: 16, top: 16),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0xffF3F6FA),
-                                      ),
-                                      width: 100,
-                                      height: 60,
-                                      child: Center(
-                                        child: Image.asset(
-                                          Res.ic_veg,
-                                          width: 25,
-                                          height: 25,
-                                        ),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 1, top: 6),
-                                      child: Text(
-                                        "Veg",
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 15),
-                                      ),
-                                    )
-                                  ],
+                                  shape: BoxShape.circle,
+                                  color: Color(0xffF3F6FA),
                                 ),
-                              )),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                              onTap: () {
-                                selectMealType.value = 2;
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                        color: selectMealType.value == 2
-                                            ? Colors.orangeAccent
-                                            : Colors.transparent,
-                                        width: 3)),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 16, right: 16, top: 16),
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xffF3F6FA),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      width: 100,
-                                      height: 60,
-                                      child: Center(
-                                        child: Image.asset(
-                                          Res.ic_chiken,
-                                          width: 25,
-                                          height: 25,
-                                        ),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 1, top: 6),
-                                      child: Text(
-                                        "Non-Veg",
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 15),
-                                      ),
-                                    )
-                                  ],
+                                width: 100,
+                                height: 60,
+                                child: Center(
+                                  child: Image.asset(
+                                    Res.ic_veg,
+                                    width: 25,
+                                    height: 25,
+                                  ),
                                 ),
-                              )),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                              onTap: () {
-                                selectMealType.value = 3;
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
-                                        color: selectMealType.value == 3
-                                            ? Colors.orangeAccent
-                                            : Colors.transparent,
-                                        width: 3)),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 16, right: 16, top: 16),
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xffF3F6FA),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      width: 100,
-                                      height: 60,
-                                      child: Center(
-                                        child: Image.asset(
-                                          Res.ic_vegnonveg,
-                                          width: 25,
-                                          height: 25,
-                                        ),
-                                      ),
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 1, top: 6),
-                                      child: Text(
-                                        "Veg-Non-Veg",
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 15),
-                                      ),
-                                    )
-                                  ],
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 1, top: 6),
+                                child: Text(
+                                  "Veg",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15),
                                 ),
-                              )),
-                        )
-                      ],
-                    );
-                  }),
+                              )
+                            ],
+                          ),
+                        )),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            mealType = '1';
+                          });
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                  color: mealType == '1'
+                                      ? Colors.orangeAccent
+                                      : Colors.transparent,
+                                  width: 3)),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    left: 16, right: 16, top: 16),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xffF3F6FA),
+                                  shape: BoxShape.circle,
+                                ),
+                                width: 100,
+                                height: 60,
+                                child: Center(
+                                  child: Image.asset(
+                                    Res.ic_chiken,
+                                    width: 25,
+                                    height: 25,
+                                  ),
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 1, top: 6),
+                                child: Text(
+                                  "Non-Veg",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15),
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                        onTap: () {
+                          mealType = '2';
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                  color: mealType == '2'
+                                      ? Colors.orangeAccent
+                                      : Colors.transparent,
+                                  width: 3)),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    left: 16, right: 16, top: 16),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xffF3F6FA),
+                                  shape: BoxShape.circle,
+                                ),
+                                width: 100,
+                                height: 60,
+                                child: Center(
+                                  child: Image.asset(
+                                    Res.ic_vegnonveg,
+                                    width: 25,
+                                    height: 25,
+                                  ),
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 1, top: 6),
+                                child: Text(
+                                  "Veg-Non-Veg",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15),
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                  )
+                ],
+              ),
               Padding(
                 padding: EdgeInsets.only(left: 16, top: 16),
                 child: Text(
@@ -434,13 +437,13 @@ class _FilterScreenState extends State<FilterScreen> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          mealPlan = 1;
+                          mealplan = '0';
                         });
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                         decoration: BoxDecoration(
-                            color: mealPlan == 1
+                            color: mealplan == '0'
                                 ? AppConstant.appColor
                                 : Color(0xffF3F6FA),
                             borderRadius: BorderRadius.circular(13)),
@@ -450,8 +453,9 @@ class _FilterScreenState extends State<FilterScreen> {
                           child: Text(
                             "Weekly",
                             style: TextStyle(
-                                color:
-                                    mealPlan == 1 ? Colors.white : Colors.black,
+                                color: mealplan == '0'
+                                    ? Colors.white
+                                    : Colors.black,
                                 fontSize: 15),
                           ),
                         ),
@@ -462,13 +466,13 @@ class _FilterScreenState extends State<FilterScreen> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          mealPlan = 2;
+                          mealplan = '1';
                         });
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                         decoration: BoxDecoration(
-                            color: mealPlan == 2
+                            color: mealplan == '1'
                                 ? AppConstant.appColor
                                 : Color(0xffF3F6FA),
                             borderRadius: BorderRadius.circular(13)),
@@ -478,8 +482,9 @@ class _FilterScreenState extends State<FilterScreen> {
                           child: Text(
                             "Month Plan",
                             style: TextStyle(
-                                color:
-                                    mealPlan == 2 ? Colors.white : Colors.black,
+                                color: mealplan == '1'
+                                    ? Colors.white
+                                    : Colors.black,
                                 fontSize: 15),
                           ),
                         ),
@@ -490,13 +495,13 @@ class _FilterScreenState extends State<FilterScreen> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          mealPlan = 3;
+                          mealplan == '2';
                         });
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                         decoration: BoxDecoration(
-                            color: mealPlan == 3
+                            color: mealplan == '2'
                                 ? AppConstant.appColor
                                 : Color(0xffF3F6FA),
                             borderRadius: BorderRadius.circular(13)),
@@ -506,8 +511,9 @@ class _FilterScreenState extends State<FilterScreen> {
                           child: Text(
                             "Trial Meal",
                             style: TextStyle(
-                                color:
-                                    mealPlan == 3 ? Colors.white : Colors.black,
+                                color: mealplan == '2'
+                                    ? Colors.white
+                                    : Colors.black,
                                 fontSize: 15),
                           ),
                         ),
@@ -524,70 +530,22 @@ class _FilterScreenState extends State<FilterScreen> {
                       color: Colors.black, fontFamily: AppConstant.fontBold),
                 ),
               ),
-              Container(
-                  margin: EdgeInsets.only(top: 50, left: 20, right: 20),
-                  alignment: Alignment.centerLeft,
-                  child: FlutterSlider(
-                    values: [1000, 15000],
-                    rangeSlider: true,
-
-//rtl: true,
-                    ignoreSteps: [
-                      FlutterSliderIgnoreSteps(from: 8000, to: 12000),
-                      FlutterSliderIgnoreSteps(from: 18000, to: 22000),
-                    ],
-                    max: 25000,
-                    min: 0,
-                    step: FlutterSliderStep(step: 100),
-
-                    jump: true,
-
-                    trackBar: FlutterSliderTrackBar(
-                      activeTrackBarHeight: 2,
-                      activeTrackBar: BoxDecoration(color: Colors.brown),
-                    ),
-                    tooltip: FlutterSliderTooltip(
-                      textStyle:
-                          TextStyle(fontSize: 17, color: Colors.lightBlue),
-                    ),
-                    handler: FlutterSliderHandler(
-                      decoration: BoxDecoration(),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.brown,
-                            borderRadius: BorderRadius.circular(25)),
-                        padding: EdgeInsets.all(10),
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(25)),
-                        ),
-                      ),
-                    ),
-                    rightHandler: FlutterSliderHandler(
-                      decoration: BoxDecoration(),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.brown,
-                            borderRadius: BorderRadius.circular(25)),
-                        padding: EdgeInsets.all(10),
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(25)),
-                        ),
-                      ),
-                    ),
-                    disabled: false,
-
-                    onDragging: (handlerIndex, lowerValue, upperValue) {
-                      _lowerValue = lowerValue;
-                      _upperValue = upperValue;
-                      setState(() {});
-                    },
-                  )),
+              RangeSlider(
+                activeColor: Colors.teal,
+                values: currentRangeValues,
+                min: 0,
+                max: 3000,
+                divisions: 3,
+                labels: RangeLabels(
+                  "₹" + currentRangeValues.start.round().toString(),
+                  "₹" + currentRangeValues.end.round().toString(),
+                ),
+                onChanged: (RangeValues values) {
+                  setState(() {
+                    currentRangeValues = values;
+                  });
+                },
+              ),
               Padding(
                 padding: EdgeInsets.only(left: 16, top: 16),
                 child: Text(
@@ -597,37 +555,53 @@ class _FilterScreenState extends State<FilterScreen> {
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.only(left: 16, top: 16),
-                  child: RatingBar.builder(
-                    itemSize: 40.0,
-                    initialRating: 0,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
-                    onRatingUpdate: (rating) {
-                      _rating.value = rating;
-                      _rating.notifyListeners();
-                    },
-                  )),
+                padding: EdgeInsets.only(left: 16, top: 16),
+                child:
+                    // RatingBar.builder(
+                    //   itemSize: 40.0,
+                    //   initialRating: 0,
+                    //   minRating: 1,
+                    //   direction: Axis.horizontal,
+                    //   allowHalfRating: true,
+                    //   itemCount: 5,
+                    //   itemPadding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    //   itemBuilder: (context, _) => const Icon(
+                    //     Icons.star,
+                    //     color: Colors.amber,
+                    //   ),
+                    //   onRatingUpdate: (rating) {
+                    //     _rating.value = rating;
+                    //     _rating.notifyListeners();
+                    //   },
+                    // )
+                    RatingBar.builder(
+                  initialRating: ratings,
+                  minRating: 1,
+                  itemSize: 40.0,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 15.0),
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: AppConstant.appColor,
+                  ),
+                  onRatingUpdate: (rating) {
+                    setState(() {
+                      ratings = rating;
+                    });
+                  },
+                ),
+              ),
               const SizedBox(
                 height: 10,
               ),
-              ValueListenableBuilder(
-                  valueListenable: _rating,
-                  builder: (context, v, c) {
-                    return Center(
-                      child: Text(
-                        'Rating: ${v}',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    );
-                  }),
+              Center(
+                child: Text(
+                  'Rating: ${ratings}',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
               InkWell(
                 onTap: () {
                   sendData();
@@ -653,17 +627,17 @@ class _FilterScreenState extends State<FilterScreen> {
   }
 
   void sendData() {
-    Navigator.pop(context, true);
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
           builder: (context) => DashboardScreen(
-                mealfor: isSelect,
+                mealfor: mealFor,
                 cuisine: cuisine,
-                mealPlan: mealPlan,
-                mealtype: 0,
-                min: min,
-                max: max,
+                mealPlan: mealplan,
+                mealtype: mealType,
+                min: currentRangeValues.start,
+                max: currentRangeValues.end,
+                fromHome: false,
               )),
     );
   }

@@ -533,10 +533,10 @@ class _ProfileState extends State<Profile> {
                   ),
                 ],
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 16),
                 child: Text(
-                  "Today Lunch Menu",
+                  "Today\'s ${result.meal_type} Menu",
                   style: TextStyle(color: Colors.black, fontSize: 12),
                 ),
               ),

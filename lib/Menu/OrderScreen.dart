@@ -27,7 +27,7 @@ class OrderScreen extends StatefulWidget {
 }
 
 class OrderScreenState extends State<OrderScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey =  GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var isSelected = 0;
   Future? future;
   Future? _future;
@@ -350,17 +350,11 @@ class OrderScreenState extends State<OrderScreen> {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 16),
-              child: data.image!.isEmpty
-                  ? Image.asset(
-                      Res.ic_poha,
-                      width: 50,
-                      height: 50,
-                    )
-                  : Image.network(
-                      AppConstant.menuUrl + data.image!,
-                      width: 50,
-                      height: 50,
-                    ),
+              child: Image.asset(
+                Res.ic_poha,
+                width: 50,
+                height: 50,
+              ),
             ),
             Expanded(
               child: Column(
@@ -414,7 +408,7 @@ class OrderScreenState extends State<OrderScreen> {
         "token": "123456789",
         "user_id": user.data!.id,
       });
-      print(from.fields );
+      print(from.fields);
       history.GetOrderHistory? bean = await ApiProvider().getOrderHistory(from);
       print(bean!.data);
       progressDialog.dismiss(context);
@@ -447,8 +441,7 @@ class OrderScreenState extends State<OrderScreen> {
       });
       print("param" + from.toString());
       GetOrderHistoryDetail? bean =
-          await ApiProvider().getOrderHistoryDetail(from)
-             ;
+          await ApiProvider().getOrderHistoryDetail(from);
       print(bean!.data);
       progressDialog.dismiss(context);
       if (bean.status == true) {

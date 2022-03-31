@@ -10,6 +10,7 @@ import 'package:food_app/model/BeanMakePayment.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
+import 'package:food_app/screen/HomeBaseScreen.dart';
 import 'package:food_app/screen/MakePaymentScreen.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/Utils.dart';
@@ -338,7 +339,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  makePayment() async {
+  Future<bool> makePayment() async {
     progressDialog = ProgressDialog(context);
     progressDialog.show();
     try {
@@ -382,20 +383,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
       if (bean!.status == true) {
         Utils.showToast(bean.message!);
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => WebViewContainer(bean.data!.url)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => WebViewContainer(bean.data!.url)))
+            .then((value) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeBaseScreen()),
+              (route) => false);
+        });
 
         setState(() {});
+        return true;
       } else {
         Utils.showToast(bean.message! + 'aaaa');
+        return false;
       }
     } on HttpException catch (exception) {
       progressDialog.dismiss(context);
+
       print(exception);
+      return false;
     } catch (exception) {
       progressDialog.dismiss(context);
       print(exception);
+      return false;
     }
   }
   //

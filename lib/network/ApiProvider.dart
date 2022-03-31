@@ -390,6 +390,24 @@ class ApiProvider {
     return null;
   }
 
+  Future signupWithEmail(FormData params) async {
+    print(params.fields);
+    try {
+      Response response = await _dio.post("$baseUrl/signup.php", data: params);
+      print(response.data);
+      return json.decode(response.data);
+    } catch (error, stacktrace) {
+      print("Exception occurred: $error stackTrace: $stacktrace");
+      Map<dynamic, dynamic>? map = _dioError.response!.data;
+      if (_dioError.response!.statusCode == 500) {
+        throwIfNoSuccess(map!['message']);
+      } else {
+        throwIfNoSuccess("Something gone wrong.");
+      }
+    }
+    return null;
+  }
+
   Future<BeanAddCard?> beanAddcard(FormData params) async {
     try {
       Response response = await _dio

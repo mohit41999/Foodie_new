@@ -104,16 +104,16 @@ class _SelectDateTimeState extends State<SelectDateTime> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                    height: 250,
+                    height: 300,
                     child: ScrollableCleanCalendar(
                       calendarController: CleanCalendarController(
                         minDate: DateTime.now(),
                         maxDate: DateTime(DateTime.now().year + 1),
+                        initialDateSelected: first,
+                        endDateSelected: endDate,
                         onRangeSelected: (firstDate, secondDate) {
                           first = firstDate;
                           endDate = secondDate!;
-                          print('onRangeSelected first $first');
-                          print('onRangeSelected second $endDate');
                         },
                         onDayTapped: (date) {},
 
@@ -125,6 +125,9 @@ class _SelectDateTimeState extends State<SelectDateTime> {
                         // endDateSelected: DateTime(2022, 3, 20),
                       ),
                       layout: Layout.BEAUTY,
+                      daySelectedBackgroundColorBetween:
+                          AppConstant.appColor.withOpacity(0.2),
+                      daySelectedBackgroundColor: AppConstant.appColor,
                       calendarCrossAxisSpacing: 0,
                     )),
               ),
@@ -147,26 +150,6 @@ class _SelectDateTimeState extends State<SelectDateTime> {
                         ],
                       ),
                     ),
-                    // Calendar(
-                    //   //startOnMonday: true,
-                    //   weekDays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
-                    //   // events: _events,
-                    //   onRangeSelected: (range) =>
-                    //       print('Range is ${range.from}, ${range.to}'),
-                    //   //onDateSelected: (date) => _handleNewDate(date),
-                    //   isExpandable: true,
-                    //   eventDoneColor: Colors.green,
-                    //   selectedColor: Colors.pink,
-                    //   todayColor: Colors.blue,
-                    //   eventColor: Colors.grey,
-                    //   // locale: 'de_DE',
-                    //   // todayButtonText: 'Heute',
-                    //   // expandableDateFormat: 'EEEE, dd. MMMM yyyy',
-                    //   dayOfWeekStyle: TextStyle(
-                    //       color: Colors.black,
-                    //       fontWeight: FontWeight.w800,
-                    //       fontSize: 11),
-                    // ),
                     SizedBox(width: 10),
                     Container(
                       child: Row(
