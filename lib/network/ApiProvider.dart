@@ -408,6 +408,25 @@ class ApiProvider {
     return null;
   }
 
+  Future<BeanVerifyOtp?> updateProfile(FormData params) async {
+    print(params.fields);
+    try {
+      Response response =
+          await _dio.post("$baseUrl/update_profile.php", data: params);
+      print(response.data);
+      return BeanVerifyOtp.fromJson(json.decode(response.data));
+    } catch (error, stacktrace) {
+      print("Exception occurred: $error stackTrace: $stacktrace");
+      Map<dynamic, dynamic>? map = _dioError.response!.data;
+      if (_dioError.response!.statusCode == 500) {
+        throwIfNoSuccess(map!['message']);
+      } else {
+        throwIfNoSuccess("Something gone wrong.");
+      }
+    }
+    return null;
+  }
+
   Future<BeanAddCard?> beanAddcard(FormData params) async {
     try {
       Response response = await _dio

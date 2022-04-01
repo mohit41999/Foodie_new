@@ -170,7 +170,7 @@ class MyDrawersState extends State<MyDrawers> {
                   Padding(
                       padding: const EdgeInsets.only(left: 20, top: 5),
                       child: Text(
-                        address!,
+                        address.toString(),
                         style: const TextStyle(
                             fontFamily: AppConstant.fontRegular,
                             fontSize: 14,

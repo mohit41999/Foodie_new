@@ -25,18 +25,21 @@ class BeanLogin {
 class Data {
   String? otpcode;
   String? mobilenumber;
+  String? isExistingUser;
 
-  Data({this.otpcode, this.mobilenumber});
+  Data({this.otpcode, this.mobilenumber, this.isExistingUser});
 
   Data.fromJson(Map<String, dynamic> json) {
     otpcode = json['otpcode'];
     mobilenumber = json['mobilenumber'];
+    isExistingUser = json['isExistingUser'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['otpcode'] = this.otpcode;
     data['mobilenumber'] = this.mobilenumber;
+    data['isExistingUser'] = this.isExistingUser;
     return data;
   }
 }

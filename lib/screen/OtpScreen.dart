@@ -9,6 +9,7 @@ import 'package:food_app/model/BeanVerifyOtp.dart';
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/network/EndPoints.dart';
 import 'package:food_app/screen/HomeBaseScreen.dart';
+import 'package:food_app/screen/update_profile.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/PrefManager.dart';
 import 'package:food_app/utils/Utils.dart';
@@ -17,8 +18,9 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatefulWidget {
   String number;
+  final String isExist;
 
-  OtpScreen(this.number);
+  OtpScreen(this.number, @required this.isExist);
 
   @override
   State<StatefulWidget> createState() => OtpScreenState();
@@ -61,6 +63,7 @@ class OtpScreenState extends State<OtpScreen> {
   @override
   void dispose() {
     pinController!.dispose();
+    timer.cancel();
     super.dispose();
   }
 
@@ -234,10 +237,20 @@ class OtpScreenState extends State<OtpScreen> {
         PrefManager.putBool(AppConstant.session, true);
         PrefManager.putString(AppConstant.user, jsonEncode(bean));
         Utils.showToast(bean.message!);
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomeBaseScreen()),
-            (route) => false);
+        (widget.isExist == '0')
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => UpdateProfile(
+                          mobile_number: widget.number,
+                          name: '',
+                          email: '',
+                          fromOtp: true,
+                        )))
+            : Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => HomeBaseScreen()),
+                (route) => false);
       } else {
         Utils.showToast(bean.message!);
       }

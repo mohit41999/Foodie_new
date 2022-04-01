@@ -17,6 +17,7 @@ import 'package:food_app/screen/ActivePackageHistoryScreen.dart';
 import 'package:food_app/screen/FavOrderScreen.dart';
 import 'package:food_app/screen/HomeBaseScreen.dart';
 import 'package:food_app/screen/LoginSignUpScreen.dart';
+import 'package:food_app/screen/update_profile.dart';
 import 'package:food_app/screen/wallet.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/HttpException.dart';
@@ -132,54 +133,73 @@ class _ProfileState extends State<Profile> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 56, top: 16),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image.asset(
-                                      Res.ic_email,
-                                      width: 16,
-                                      height: 16,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UpdateProfile(
+                                            mobile_number: number!,
+                                            email: email!,
+                                            name: username!)));
+                              },
+                              child: Column(
+                                children: [
+                                  Center(
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 56, top: 16),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            Res.ic_email,
+                                            width: 16,
+                                            height: 16,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            email!,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily:
+                                                    AppConstant.fontBold,
+                                                fontSize: 15),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                    SizedBox(
-                                      width: 10,
+                                  ),
+                                  Center(
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 1, top: 16),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            Res.ic_phone,
+                                            width: 16,
+                                            height: 16,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            number!,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily:
+                                                    AppConstant.fontBold,
+                                                fontSize: 15),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                    Text(
-                                      email!,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: AppConstant.fontBold,
-                                          fontSize: 15),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 1, top: 16),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image.asset(
-                                      Res.ic_phone,
-                                      width: 16,
-                                      height: 16,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      number!,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontFamily: AppConstant.fontBold,
-                                          fontSize: 15),
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                             Padding(

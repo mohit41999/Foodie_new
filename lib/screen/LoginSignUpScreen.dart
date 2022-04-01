@@ -446,8 +446,11 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
         PrefManager.putString(AppConstant.user, jsonEncode(bean));
         Utils.showToast(bean.message!);
 
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => OtpScreen(number.text)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    OtpScreen(number.text, bean.data!.isExistingUser!)));
       } else {
         Utils.showToast(bean.message!);
       }
