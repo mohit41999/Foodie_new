@@ -88,7 +88,9 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
 
     super.initState();
     Future.delayed(Duration.zero, () {
-      future = getAddress(context, randomNumber);
+      future = getAddress(context, randomNumber).then((value) {
+        // showDetailsVerifyDialog();
+      });
     });
   }
 
@@ -561,7 +563,7 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                         future:
                             future?.then((value) => value as GetAddressList?),
                         builder: (context, projectSnap) {
-                          print(projectSnap);
+                          print(projectSnap.data.toString() + 'abcdefgh');
                           if (projectSnap.connectionState ==
                               ConnectionState.done) {
                             var result;
@@ -574,8 +576,8 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                                   scrollDirection: Axis.vertical,
                                   physics: BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
-                                    return Container();
-                                    // return getAddressList(result[index]);
+                                    // return Container();
+                                    return getAddressList(result[index]);
                                   },
                                   itemCount: result.length,
                                 );
@@ -659,7 +661,7 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
       //     progressDialog.dismiss(context);
       // });
     } catch (e) {
-      // progressDialog.dismiss(context);
+      progressDialog.dismiss(context);
     }
   }
 
@@ -889,10 +891,13 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
       BuildContext context, int randomNumber) async {
     progressDialog = ProgressDialog(context);
     progressDialog.show();
+
     try {
+      var userBean = await Utils.getUser();
+
       FormData from =
-          FormData.fromMap({"userid": randomNumber, "token": "123456789"});
-      print("dsd" + randomNumber.toString());
+          FormData.fromMap({"userid": userBean.data!.id, "token": "123456789"});
+
       GetAddressList? bean = await ApiProvider().getAddress(from);
       print(bean!.data);
       progressDialog.dismiss(context);

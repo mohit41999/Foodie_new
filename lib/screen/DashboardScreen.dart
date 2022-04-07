@@ -73,10 +73,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String? kitchenID = "";
   var isFav = false;
   Future getUser() async {
-    userBean = await Utils.getUser();
-    name = userBean.data!.kitchenname;
-    menu = userBean.data!.kitchenname;
-    setState(() {});
+    try {
+      userBean = await Utils.getUser();
+      name = userBean.data!.kitchenname;
+      menu = userBean.data!.kitchenname;
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future initialize() async {
