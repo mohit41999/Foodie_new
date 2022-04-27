@@ -332,7 +332,6 @@ class _DetailsScreenState extends State<DetailsScreen>
                     : ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return getOffer(offer![index]);
                         },
