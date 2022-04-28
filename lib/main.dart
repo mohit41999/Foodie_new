@@ -98,7 +98,7 @@ class AppState extends State<App> {
       case '/search':
         return SearchLocationScreen();
       case '/searchhistory':
-        return SearchHistoryScreen("");
+        return SearchHistoryScreen("", false);
       case '/filter':
         return FilterScreen();
       case '/addpackage':

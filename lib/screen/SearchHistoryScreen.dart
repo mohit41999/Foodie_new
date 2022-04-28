@@ -8,6 +8,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_app/model/BeanClearRecentsearch.dart';
 import 'package:food_app/model/BeanSearchData.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
+import 'package:food_app/model/search_kitchen_package_model.dart';
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
 import 'package:food_app/screen/KitchenDetails/DetailsScreen.dart';
@@ -19,7 +20,8 @@ import 'package:food_app/model/GetHomeData.dart' as home;
 
 class SearchHistoryScreen extends StatefulWidget {
   var currenAddress;
-  SearchHistoryScreen(this.currenAddress);
+  final bool skip;
+  SearchHistoryScreen(this.currenAddress, this.skip);
 
   @override
   SearchHistoryScreenState createState() => SearchHistoryScreenState();
@@ -27,6 +29,9 @@ class SearchHistoryScreen extends StatefulWidget {
 
 class SearchHistoryScreenState extends State<SearchHistoryScreen> {
   late ProgressDialog progressDialog;
+  late SearchKitchenPackageModel kitchenPackageData;
+  List<SearchKitchenPackageModelDatum>? list = [];
+
   bool searchlistVisible = true;
   Future<BeanSearchData?>? future;
   TextEditingController searchcontroller = new TextEditingController();
@@ -37,6 +42,7 @@ class SearchHistoryScreenState extends State<SearchHistoryScreen> {
     super.initState();
     Future.delayed(Duration.zero, () {
       future = getSearchData();
+      getKitchenPackages();
     });
   }
 
@@ -94,6 +100,7 @@ class SearchHistoryScreenState extends State<SearchHistoryScreen> {
                                   future = getSearchData();
                                 });
                               }
+                              getKitchenPackages();
                             }),
                       ),
                     ],
@@ -234,10 +241,166 @@ class SearchHistoryScreenState extends State<SearchHistoryScreen> {
                           }
                           return Container(child: Center(child: Container()));
                         })),
+                ListView.builder(
+                  itemBuilder: (context, index) {
+                    var result = list![index];
+                    return getFoods(result, index);
+                  },
+                  itemCount: list!.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                ),
               ],
             ),
           ),
         ));
+  }
+
+  Widget getFoods(SearchKitchenPackageModelDatum result, int index) {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: EdgeInsets.only(bottom: 16),
+      child: InkWell(
+        onTap: () async {
+          // bool isLogined = await PrefManager.getBool(AppConstant.session);
+          // if (isLogined) {
+          //   var data = await Navigator.push(context,
+          //       MaterialPageRoute(builder: (_) => DetailsScreen(result)));
+          //   if (data != null) {
+          //     // getCartCount(context);
+          //     // getHomeData();
+          //   }
+          // } else {
+          //   Navigator.pushAndRemoveUntil(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => LoginSignUpScreen()),
+          //       ModalRoute.withName("/loginSignUp"));
+          // }
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 15),
+                  height: h * 0.5,
+                  width: w,
+                  child: Image.network(result.image!, fit: BoxFit.cover),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 16, top: 36),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50)),
+                        width: 100,
+                        height: 40,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text(
+                                result.averageRating!,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: AppConstant.fontBold),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            RatingBarIndicator(
+                              rating: 1,
+                              itemCount: 1,
+                              itemSize: 15.0,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 6),
+                              child: Text(
+                                result.totalReview!,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: AppConstant.fontBold,
+                                    color: Color(0xffA7A8BC)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    result.isFavourite == "0"
+                        ? InkWell(
+                            onTap: () async {
+                              // addFavKitchen(result.kitchenId!);
+                            },
+                            child: Padding(
+                                padding: EdgeInsets.only(top: 16, right: 6),
+                                child: Container(
+                                  alignment: Alignment.bottomRight,
+                                  height: 60,
+                                  width: 60,
+                                  child: Image.asset(Res.ic_like,
+                                      fit: BoxFit.cover),
+                                )))
+                        : InkWell(
+                            onTap: () async {
+                              // removeFav(result.kitchenId!);
+                            },
+                            child: Padding(
+                                padding: EdgeInsets.only(top: 16, right: 16),
+                                child: Container(
+                                  alignment: Alignment.bottomRight,
+                                  height: 20,
+                                  width: 20,
+                                  child: Image.asset(Res.ic_hearfille,
+                                      fit: BoxFit.cover),
+                                ))),
+                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 16, top: 8),
+              child: Text(
+                result.kitchenname!,
+                style:
+                    TextStyle(fontFamily: AppConstant.fontBold, fontSize: 18),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Container(
+                //   height: 30,
+                //   margin: EdgeInsets.only(left: 16, top: 6),
+                //   decoration: BoxDecoration(
+                //       color: Color(0xffEEEEEE),
+                //       borderRadius: BorderRadius.circular(50)),
+                //   child: Center(
+                //     child: Padding(
+                //       padding: EdgeInsets.all(8),
+                //       child: Text(
+                //         result.kitchenname,
+                //         style: TextStyle(fontSize: 12, color: Color(0xffA7A8BC)),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget getRecommended(KitchenRecommandation result) {
@@ -382,6 +545,46 @@ class SearchHistoryScreenState extends State<SearchHistoryScreen> {
     } on HttpException catch (exception) {
       print(exception);
     } catch (exception) {
+      print(exception);
+    }
+  }
+
+  Future<SearchKitchenPackageModel?> getKitchenPackages() async {
+    try {
+      late BeanVerifyOtp user;
+      if (widget.skip) {
+      } else {
+        user = await Utils.getUser();
+      }
+
+      FormData from = FormData.fromMap({
+        "token": "123456789",
+        "user_id": (widget.skip) ? '' : user.data!.id,
+        'search_query': searchcontroller.text
+      });
+      print("param" + from.toString());
+
+      SearchKitchenPackageModel? bean =
+          await ApiProvider().getKitchenPackage(from);
+      print(bean!.data);
+
+      if (bean.status == true) {
+        setState(() {
+          if (list != null) {
+            list = bean.data;
+          } else {}
+        });
+        return bean;
+      } else {
+        Utils.showToast(bean.message! + 'aklkl');
+      }
+
+      return null;
+    } on HttpException catch (exception) {
+      progressDialog.dismiss(context);
+      print(exception);
+    } catch (exception) {
+      progressDialog.dismiss(context);
       print(exception);
     }
   }

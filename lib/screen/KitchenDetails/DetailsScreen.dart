@@ -229,14 +229,16 @@ class _DetailsScreenState extends State<DetailsScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 16, top: 16),
-                  child: Text(
-                    widget.result.cuisinetype!,
-                    style: TextStyle(
-                        color: Color(0xffA7A8BC),
-                        fontSize: 12,
-                        fontFamily: AppConstant.fontBold),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16, top: 16),
+                    child: Text(
+                      widget.result.cuisinetype!,
+                      style: TextStyle(
+                          color: Color(0xffA7A8BC),
+                          fontSize: 12,
+                          fontFamily: AppConstant.fontBold),
+                    ),
                   ),
                 ),
                 Container(

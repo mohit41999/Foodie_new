@@ -54,6 +54,7 @@ import 'package:food_app/model/GetReview.dart';
 import 'package:food_app/model/GetUserAddress.dart';
 import 'package:food_app/model/RemoveCart.dart';
 import 'package:food_app/model/UpdateMenuDetails.dart';
+import 'package:food_app/model/search_kitchen_package_model.dart';
 import 'package:food_app/network/EndPoints.dart';
 import 'package:http/http.dart' as http;
 
@@ -518,6 +519,24 @@ class ApiProvider {
           await _dio.post("$baseUrl/${EndPoints.search_kitchen}", data: params);
       print("Mine: ${response.data}");
       return BeanHomeData.fromJson(json.decode(response.data));
+    } catch (error, stacktrace) {
+      print("Exception occurred: $error stackTrace: $stacktrace");
+      Map<dynamic, dynamic>? map = _dioError.response!.data;
+      if (_dioError.response!.statusCode == 500) {
+        throwIfNoSuccess(map!['message']);
+      } else {
+        throwIfNoSuccess("Something gone wrong.");
+      }
+    }
+    return null;
+  }
+
+  Future<SearchKitchenPackageModel?> getKitchenPackage(FormData params) async {
+    try {
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.search_kitchen_packages}", data: params);
+      print("Mine: ${response.data}");
+      return SearchKitchenPackageModel.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
       Map<dynamic, dynamic>? map = _dioError.response!.data;

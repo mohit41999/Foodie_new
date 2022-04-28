@@ -35,8 +35,6 @@ class HomeBaseScreenState extends State<HomeBaseScreen> {
     _children = [
       DashboardScreen(
         fromHome: true,
-        mealfor: '0',
-        mealtype: '0',
         skip: isSkip,
       ),
       OrderScreen(),

@@ -40,11 +40,11 @@ class DashboardScreen extends StatefulWidget {
   bool fromHome;
 
   DashboardScreen(
-      {required this.mealfor,
+      {this.mealfor = '',
       required this.fromHome,
       this.cuisine = '',
       this.mealPlan = '',
-      required this.mealtype,
+      this.mealtype = '',
       this.min = 0.0,
       this.max = 0.0,
       this.skip = false});
@@ -212,8 +212,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        SearchHistoryScreen(address)));
+                                    builder: (context) => SearchHistoryScreen(
+                                        address, widget.skip)));
                           },
                           child: Container(
                             height: 50,

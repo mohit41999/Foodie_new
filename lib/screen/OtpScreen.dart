@@ -237,20 +237,24 @@ class OtpScreenState extends State<OtpScreen> {
         PrefManager.putBool(AppConstant.session, true);
         PrefManager.putString(AppConstant.user, jsonEncode(bean));
         Utils.showToast(bean.message!);
-        (widget.isExist == '0')
-            ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => UpdateProfile(
-                          mobile_number: widget.number,
-                          name: '',
-                          email: '',
-                          fromOtp: true,
-                        )))
-            : Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => HomeBaseScreen()),
-                (route) => false);
+        if (widget.isExist == '0') {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => UpdateProfile(
+                        mobile_number: widget.number,
+                        name: '',
+                        email: '',
+                        fromOtp: true,
+                      )));
+          timer.cancel();
+        } else {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeBaseScreen()),
+              (route) => false);
+          timer.cancel();
+        }
       } else {
         Utils.showToast(bean.message!);
       }
