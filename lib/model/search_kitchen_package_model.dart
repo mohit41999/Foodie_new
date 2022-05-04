@@ -51,16 +51,16 @@ class SearchKitchenPackageModelDatum {
     required this.isFavourite,
   });
 
-  final String kitchenId;
-  final String kitchenname;
-  final String address;
-  final String mealtype;
-  final String cuisinetype;
-  final String discount;
-  final String image;
-  final String averageRating;
-  final String totalReview;
-  final String isFavourite;
+  final String? kitchenId;
+  final String? kitchenname;
+  final String? address;
+  final String? mealtype;
+  final String? cuisinetype;
+  final String? discount;
+  final String? image;
+  final String? averageRating;
+  final String? totalReview;
+  final String? isFavourite;
 
   factory SearchKitchenPackageModelDatum.fromJson(Map<String, dynamic> json) =>
       SearchKitchenPackageModelDatum(
