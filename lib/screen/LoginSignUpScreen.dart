@@ -790,9 +790,10 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => OrderDispatchedScreen(
-                    currentPostion!.latitude,
-                    currentPostion!.longitude,
-                    selectedPlace.formattedAddress)));
+                    // currentPostion!.latitude,
+                    // currentPostion!.longitude,
+                    // selectedPlace.formattedAddress
+                    )));
       } else {
         Utils.showToast(bean.message!);
       }

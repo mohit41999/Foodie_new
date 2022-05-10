@@ -576,7 +576,7 @@ class SearchHistoryScreenState extends State<SearchHistoryScreen> {
         });
         return bean;
       } else {
-        Utils.showToast(bean.message! + 'aklkl');
+        Utils.showToast(bean.message + 'aklkl');
       }
 
       return null;

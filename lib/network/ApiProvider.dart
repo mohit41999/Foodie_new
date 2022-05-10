@@ -513,6 +513,23 @@ class ApiProvider {
     return null;
   }
 
+  Future<BeanStartDelivery?> updateOrderTrack(FormData params) async {
+    try {
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.track_delivery_map}", data: params);
+      return BeanStartDelivery.fromJson(json.decode(response.data));
+    } catch (error, stacktrace) {
+      print("Exception occurred: $error stackTrace: $stacktrace");
+      Map<dynamic, dynamic>? map = _dioError.response!.data;
+      if (_dioError.response!.statusCode == 500) {
+        throwIfNoSuccess(map!['message']);
+      } else {
+        throwIfNoSuccess("Something gone wrong.");
+      }
+    }
+    return null;
+  }
+
   Future<BeanHomeData?> getHomeData(FormData params) async {
     try {
       Response response =

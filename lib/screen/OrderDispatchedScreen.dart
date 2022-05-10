@@ -19,11 +19,7 @@ import 'package:food_app/utils/progress_dialog.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class OrderDispatchedScreen extends StatefulWidget {
-  var lattitude;
-  var longtitude;
-  var formattedAddress;
-
-  OrderDispatchedScreen(this.lattitude, this.longtitude, this.formattedAddress);
+  OrderDispatchedScreen();
 
   @override
   OrderDispatchedScreenState createState() => OrderDispatchedScreenState();
@@ -168,7 +164,10 @@ class OrderDispatchedScreenState extends State<OrderDispatchedScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => StartDeliveryScreen(orderId)));
+                          builder: (context) => StartDeliveryScreen(
+                              "A 302, Thaltej, Ahmedabad, 380054, India",
+                              "185",
+                              '931')));
                 },
                 child: Container(
                     color: Colors.white,

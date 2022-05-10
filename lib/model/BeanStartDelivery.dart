@@ -1,7 +1,7 @@
 class BeanStartDelivery {
   bool? status;
   String? message;
-  List<Data>? data;
+  List<BeanStartDeliveryData>? data;
 
   BeanStartDelivery({this.status, this.message, this.data});
 
@@ -9,9 +9,9 @@ class BeanStartDelivery {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <BeanStartDeliveryData>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new BeanStartDeliveryData.fromJson(v));
       });
     }
   }
@@ -27,35 +27,43 @@ class BeanStartDelivery {
   }
 }
 
-class Data {
-  String? kitchenlatitude;
-  String? kitchenlongitude;
-  String? deliverylatitude;
-  String? deliverylongitude;
-  String? deliveryaddress;
+class BeanStartDeliveryData {
+  BeanStartDeliveryData({
+    required this.kitchenLatitude,
+    required this.kitchenLongitude,
+    required this.riderLatitude,
+    required this.riderLongitude,
+    required this.deliverylatitude,
+    required this.deliverylongitude,
+    required this.deliveryaddress,
+  });
 
-  Data(
-      {this.kitchenlatitude,
-        this.kitchenlongitude,
-        this.deliverylatitude,
-        this.deliverylongitude,
-        this.deliveryaddress});
+  final String kitchenLatitude;
+  final String kitchenLongitude;
+  final String riderLatitude;
+  final String riderLongitude;
+  final String deliverylatitude;
+  final String deliverylongitude;
+  final String deliveryaddress;
 
-  Data.fromJson(Map<String, dynamic> json) {
-    kitchenlatitude = json['kitchenlatitude'];
-    kitchenlongitude = json['kitchenlongitude'];
-    deliverylatitude = json['deliverylatitude'];
-    deliverylongitude = json['deliverylongitude'];
-    deliveryaddress = json['deliveryaddress'];
-  }
+  factory BeanStartDeliveryData.fromJson(Map<String, dynamic> json) =>
+      BeanStartDeliveryData(
+        kitchenLatitude: json["kitchen_latitude"],
+        kitchenLongitude: json["kitchen_longitude"],
+        riderLatitude: json["rider_latitude"],
+        riderLongitude: json["rider_longitude"],
+        deliverylatitude: json["deliverylatitude"],
+        deliverylongitude: json["deliverylongitude"],
+        deliveryaddress: json["deliveryaddress"],
+      );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['kitchenlatitude'] = this.kitchenlatitude;
-    data['kitchenlongitude'] = this.kitchenlongitude;
-    data['deliverylatitude'] = this.deliverylatitude;
-    data['deliverylongitude'] = this.deliverylongitude;
-    data['deliveryaddress'] = this.deliveryaddress;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "kitchen_latitude": kitchenLatitude,
+        "kitchen_longitude": kitchenLongitude,
+        "rider_latitude": riderLatitude,
+        "rider_longitude": riderLongitude,
+        "deliverylatitude": deliverylatitude,
+        "deliverylongitude": deliverylongitude,
+        "deliveryaddress": deliveryaddress,
+      };
 }

@@ -16,6 +16,7 @@ import 'package:food_app/res.dart';
 import 'package:food_app/screen/KitchenDetails/DetailsScreen.dart';
 import 'package:food_app/screen/FilterScreen.dart';
 import 'package:food_app/screen/HomeBaseScreen.dart';
+import 'package:food_app/screen/OrderDispatchedScreen.dart';
 import 'package:food_app/screen/SearchHistoryScreen.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/HttpException.dart';
@@ -269,76 +270,86 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     const SizedBox(
                       height: 16,
                     ),
-                    Stack(
-                      children: [
-                        Image.asset(
-                          Res.ic_banner_home,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              height: 65,
-                            ),
-                            Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 16, top: 16),
-                                child: Text(
-                                  itemName!.isNotEmpty ? itemName! : "",
-                                  style: const TextStyle(
-                                      color: Colors.red, fontSize: 16),
-                                )),
-                            Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 16, top: 6),
-                                child: Text(
-                                  kitchenName!.isNotEmpty
-                                      ? "Kitchen Name: " + kitchenName!
-                                      : "",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14),
-                                )),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OrderDispatchedScreen()));
+                      },
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            Res.ic_banner_home,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 65,
+                              ),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 16, top: 16),
+                                  child: Text(
+                                    itemName!.isNotEmpty ? itemName! : "",
+                                    style: const TextStyle(
+                                        color: Colors.red, fontSize: 16),
+                                  )),
+                              Padding(
                                   padding:
                                       const EdgeInsets.only(left: 16, top: 6),
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: delivery_fromtime!.isNotEmpty
-                                          ? 'Arriving at: '
-                                          : "",
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: delivery_fromtime,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.red)),
-                                      ],
+                                  child: Text(
+                                    kitchenName!.isNotEmpty
+                                        ? "Kitchen Name: " + kitchenName!
+                                        : "",
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 14),
+                                  )),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(left: 16, top: 6),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: delivery_fromtime!.isNotEmpty
+                                            ? 'Arriving at: '
+                                            : "",
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: delivery_fromtime,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red)),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
-                                Padding(
-                                    padding: const EdgeInsets.only(right: 16),
-                                    child: Text(
-                                      delivery_date!.isNotEmpty
-                                          ? "Date: " + delivery_date!
-                                          : "",
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 14),
-                                    ))
-                              ],
-                            )
-                          ],
-                        )
-                      ],
+                                  const SizedBox(
+                                    width: 16,
+                                  ),
+                                  Padding(
+                                      padding: const EdgeInsets.only(right: 16),
+                                      child: Text(
+                                        delivery_date!.isNotEmpty
+                                            ? "Date: " + delivery_date!
+                                            : "",
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 14),
+                                      ))
+                                ],
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                     const Padding(
                       padding: EdgeInsets.only(left: 16, top: 16),
