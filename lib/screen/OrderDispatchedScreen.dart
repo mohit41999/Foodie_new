@@ -19,7 +19,15 @@ import 'package:food_app/utils/progress_dialog.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class OrderDispatchedScreen extends StatefulWidget {
-  OrderDispatchedScreen();
+  OrderDispatchedScreen(
+      {required this.orderid,
+      required this.orderitems_id,
+      required this.deliveryAddress,
+      required this.kitchenid});
+  final String deliveryAddress;
+  final String orderid;
+  final String kitchenid;
+  final String orderitems_id;
 
   @override
   OrderDispatchedScreenState createState() => OrderDispatchedScreenState();
@@ -165,9 +173,9 @@ class OrderDispatchedScreenState extends State<OrderDispatchedScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => StartDeliveryScreen(
-                              "A 302, Thaltej, Ahmedabad, 380054, India",
-                              "185",
-                              '931')));
+                              widget.deliveryAddress,
+                              widget.orderid,
+                              widget.orderitems_id)));
                 },
                 child: Container(
                     color: Colors.white,
@@ -269,6 +277,7 @@ class OrderDispatchedScreenState extends State<OrderDispatchedScreen> {
               InkWell(
                 onTap: () {
                   Navigator.pushNamed(context, '/homebase');
+                  print('asdadsadsa');
                 },
                 child: Container(
                     color: Colors.white,
@@ -565,11 +574,8 @@ class OrderDispatchedScreenState extends State<OrderDispatchedScreen> {
     try {
       BeanVerifyOtp user = await Utils.getUser();
       FormData from = FormData.fromMap({
-        "kitchenid": user.data!.kitchenid,
+        "kitchenid": widget.kitchenid,
         "token": "123456789",
-        "meal_plan": "weekly",
-        "meal_type": user.data!.mealtype,
-        "meal_for": "1"
       });
       KitchenDetail? bean = await ApiProvider().kitchenDetail(from);
       print(bean!.data);

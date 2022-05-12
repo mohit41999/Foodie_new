@@ -14,6 +14,7 @@ import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
 import 'package:food_app/screen/HomeBaseScreen.dart';
 import 'package:food_app/screen/LoginSignUpScreen.dart';
+import 'package:food_app/screen/OrderDispatchedScreen.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/HttpException.dart';
 import 'package:food_app/utils/PrefManager.dart';
@@ -252,6 +253,10 @@ class OrderScreenState extends State<OrderScreen> {
                   ),
                 ),
               ],
+            ),
+            Divider(
+              color: Colors.black,
+              height: 0,
             )
           ],
         ));
@@ -259,6 +264,7 @@ class OrderScreenState extends State<OrderScreen> {
 
   void bottomsheet(BuildContext context, List<GetOrderHistory.Data>? data) {
     showModalBottomSheet(
+        isScrollControlled: true,
         shape: RoundedRectangleBorder(
           // <-- for border radius
           borderRadius: BorderRadius.only(
@@ -269,74 +275,81 @@ class OrderScreenState extends State<OrderScreen> {
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, setModelState) {
-            return Wrap(
-              children: [
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            return Container(
+              height: MediaQuery.of(context).size.height / 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              "History of order no",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: AppConstant.fontBold,
-                                  fontSize: 18),
-                            ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(right: 16),
-                              child: Image.asset(
-                                Res.ic_cross,
-                                width: 16,
-                                height: 16,
-                              ))
-                        ],
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "History of order no",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: AppConstant.fontBold,
+                              fontSize: 18),
+                        ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      data!.isEmpty
-                          ? Center(
-                              child: Text("No History Detail"),
-                            )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              physics: BouncingScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return getHistory(data[index]);
-                              },
-                              itemCount: data.length,
-                            )
-                      /*FutureBuilder<GetOrderHistory>(
-                          future: future,
-                          builder: (context, projectSnap) {
-                            print(projectSnap);
-                            if (projectSnap.connectionState ==
-                                ConnectionState.done) {
-                              var result;
-                              if (projectSnap.data != null) {
-                                result = projectSnap.data.data;
-                                if (result != null) {
-                                  print(result.length);
-                                  return
-                                }
-                              }
-                            }
-                            return Container(
-                                child: Center(
-                                    child: Text("No History Available")
-                                ));
-                          })*/
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.only(right: 16),
+                            child: Image.asset(
+                              Res.ic_cross,
+                              width: 16,
+                              height: 16,
+                            )),
+                      )
                     ],
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 10,
+                  ),
+                  data!.isEmpty
+                      ? Center(
+                          child: Text("No History Detail"),
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return getHistory(data[index]);
+                            },
+                            itemCount: data.length,
+                          ),
+                        ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  /*FutureBuilder<GetOrderHistory>(
+                      future: future,
+                      builder: (context, projectSnap) {
+                        print(projectSnap);
+                        if (projectSnap.connectionState ==
+                            ConnectionState.done) {
+                          var result;
+                          if (projectSnap.data != null) {
+                            result = projectSnap.data.data;
+                            if (result != null) {
+                              print(result.length);
+                              return
+                            }
+                          }
+                        }
+                        return Container(
+                            child: Center(
+                                child: Text("No History Available")
+                            ));
+                      })*/
+                ],
+              ),
             );
           });
         });
@@ -350,11 +363,20 @@ class OrderScreenState extends State<OrderScreen> {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 16),
-              child: Image.asset(
+              child:
+                  // (data.image.toString() == 'null' ||
+                  //         data.image.toString() == '')
+                  //     ?
+                  Image.asset(
                 Res.ic_poha,
                 width: 50,
                 height: 50,
               ),
+              // : Image.network(
+              //       data.image!,
+              //       width: 50,
+              //       height: 50,
+              //     ) ,
             ),
             Expanded(
               child: Column(
@@ -383,14 +405,49 @@ class OrderScreenState extends State<OrderScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 16, top: 16, right: 16),
-              child: Text(
-                data.status.toString(),
-                style: TextStyle(
-                    color: AppConstant.lightGreen,
-                    fontSize: 14,
-                    fontFamily: AppConstant.fontRegular),
+            GestureDetector(
+              onTap: () {
+                if (data.status == 'Start delivery') {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => OrderDispatchedScreen(
+                                orderid: data.order_id!,
+                                orderitems_id: data.orderitems_id!,
+                                deliveryAddress: data.delivery_address ?? '',
+                                kitchenid: data.kitchen_id!,
+                              )));
+                }
+              },
+              child: Padding(
+                padding: EdgeInsets.only(left: 16, top: 16, right: 16),
+                child: Column(
+                  children: [
+                    Text(
+                      data.status.toString(),
+                      style: TextStyle(
+                          color: AppConstant.lightGreen,
+                          fontSize: 14,
+                          fontFamily: AppConstant.fontRegular),
+                    ),
+                    (data.status == 'Start delivery')
+                        ? Row(
+                            children: [
+                              Icon(
+                                Icons.info,
+                                color: Colors.red,
+                                size: 15,
+                              ),
+                              Text('Track your order',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 10,
+                                      fontFamily: AppConstant.fontRegular)),
+                            ],
+                          )
+                        : SizedBox(),
+                  ],
+                ),
               ),
             )
           ],

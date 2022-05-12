@@ -772,9 +772,13 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => OrderDispatchedScreen(
-                    // currentPostion!.latitude,
-                    // currentPostion,
-                    // selectedPlace.formattedAddress
+                      // currentPostion!.latitude,
+                      // currentPostion,
+                      // selectedPlace.formattedAddress
+                      orderitems_id: '',
+                      orderid: '',
+                      deliveryAddress: '',
+                      kitchenid: '',
                     )));
       } else {
         Utils.showToast(bean.message!);

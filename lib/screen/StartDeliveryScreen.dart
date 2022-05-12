@@ -1159,6 +1159,7 @@ class StartDeliveryScreenState extends State<StartDeliveryScreen> {
       if (bean.status == true) {
         data = bean.data!;
         setState(() {
+          widget.deliveryAddress = bean.data![0].deliveryaddress;
 /*          kitchenlat=double.parse(bean.data[0].kitchenlatitude);
           kitchenlong=double.parse(bean.data[0].kitchenlongitude);
           deliverylatitude=double.parse(bean.data[0].deliverylatitude);
@@ -1167,8 +1168,8 @@ class StartDeliveryScreenState extends State<StartDeliveryScreen> {
           SOURCE_LOCATION = LatLng(double.parse(bean.data![0].riderLatitude),
               double.parse(bean.data![0].riderLongitude));
 
-          DEST_LOCATION = LatLng(double.parse(bean.data![0].kitchenLatitude),
-              double.parse(bean.data![0].kitchenLongitude));
+          DEST_LOCATION = LatLng(double.parse(bean.data![0].deliverylatitude),
+              double.parse(bean.data![0].deliverylongitude));
         });
         return bean;
       } else {
