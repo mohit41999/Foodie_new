@@ -1,10 +1,16 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/model/GetAddressList.dart';
+import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
+import 'package:food_app/screen/location_setting.dart';
 import 'package:food_app/utils/Constents.dart';
+import 'package:food_app/utils/HttpException.dart';
 import 'package:food_app/utils/PrefManager.dart';
+import 'package:food_app/utils/Utils.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -25,7 +31,16 @@ class SplashScreenState extends State<SplashScreen>
   void navigationPage() async {
     bool isLogined = await PrefManager.getBool(AppConstant.session);
     if (isLogined) {
-      Navigator.pushReplacementNamed(context, '/homebase');
+      var response = await getAddress();
+      if (response == null) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => LocationSettingScreen()));
+      } else if (response.data!.length == 0) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => LocationSettingScreen()));
+      } else {
+        Navigator.pushReplacementNamed(context, '/homebase');
+      }
     } else {
       Navigator.pushReplacementNamed(context, '/loginSignUp');
     }
@@ -75,5 +90,31 @@ class SplashScreenState extends State<SplashScreen>
             height: animation.value * 160,
           ),*/
         ));
+  }
+
+  Future<GetAddressList?> getAddress() async {
+    var userBean = await Utils.getUser();
+    try {
+      FormData from = FormData.fromMap(
+          {"user_id": userBean.data!.id, "token": "123456789"});
+
+      GetAddressList? bean = await ApiProvider().getAddress(from);
+      print(bean!.data);
+
+      if (bean.status == true) {
+        setState(() {});
+        return bean;
+      } else {
+        Utils.showToast(bean.message!);
+      }
+
+      return null;
+    } on HttpException catch (exception) {
+      setState(() {});
+      print(exception);
+    } catch (exception) {
+      setState(() {});
+      print(exception);
+    }
   }
 }

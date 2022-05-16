@@ -915,7 +915,7 @@ class StartDeliveryScreenState extends State<StartDeliveryScreen> {
   LatLng DEST_LOCATION = LatLng(0.0, 0.0);
   LatLng KITC_LOCATION = LatLng(0.0, 0.0);
 
-  late List<BeanStartDeliveryData> data;
+  List<BeanStartDeliveryData> data = [];
 
 /*  LatLng DEST_LOCATION = LatLng(42.6871386, -71.2143403);*/
 
@@ -1219,7 +1219,7 @@ class StartDeliveryScreenState extends State<StartDeliveryScreen> {
   // }
 
   googleMap() {
-    if (data != null) {
+    if (data.isNotEmpty) {
       setState(() {});
       return GoogleMap(
           myLocationEnabled: false,

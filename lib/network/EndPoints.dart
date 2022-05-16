@@ -8,6 +8,7 @@ class EndPoints {
   static const login = 'login_with_mobile.php';
   static const social_login = 'social_login.php';
   static const confirm_location = 'confirm_location.php';
+  static const edit_address = 'edit_address.php';
   static const get_archive_offer = 'get_archive_offer.php';
   static const get_live_offer = 'get_live_offer.php';
   static const add_offer = 'add_offer.php';
@@ -27,6 +28,8 @@ class EndPoints {
   static const removeKitchen = 'remove_favorite_kitchen.php';
   static const get_address_list = 'get_address_list.php';
   static const get_active_orders = 'get_active_orders.php';
+  static const set_default_address = 'set_default_address.php';
+  static const delete_address = 'delete_address.php';
 
   static const add_favorite_order = 'add_favorite_order.php';
   static const remove_favorite_order = 'remove_favorite_order.php';
@@ -38,6 +41,7 @@ class EndPoints {
   static const get_cards = 'get_cards.php';
   static const KitchenDetail = 'kitchen_detail.php';
   static const search_kitchen = 'search_kitchen.php';
+  static const get_default_address = 'get_default_address.php';
   static const search_kitchen_packages = 'search_kitchen_packages.php';
 
   static const get_today_deliver_order = 'get_today_deliver_order.php';

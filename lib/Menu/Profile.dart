@@ -17,6 +17,7 @@ import 'package:food_app/screen/ActivePackageHistoryScreen.dart';
 import 'package:food_app/screen/FavOrderScreen.dart';
 import 'package:food_app/screen/HomeBaseScreen.dart';
 import 'package:food_app/screen/LoginSignUpScreen.dart';
+import 'package:food_app/screen/location_setting.dart';
 import 'package:food_app/screen/update_profile.dart';
 import 'package:food_app/screen/wallet.dart';
 import 'package:food_app/utils/Constents.dart';
@@ -263,12 +264,27 @@ class _ProfileState extends State<Profile> {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text(
-                                    "Address list",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontFamily: AppConstant.fontBold,
-                                        fontSize: 15),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      LocationSettingScreen()))
+                                          .then((value) {
+                                        setState(() {
+                                          future =
+                                              getAddressUserAddress(context);
+                                        });
+                                      });
+                                    },
+                                    child: Text(
+                                      "Address list",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontFamily: AppConstant.fontBold,
+                                          fontSize: 15),
+                                    ),
                                   ),
                                   SizedBox(
                                     width: 10,
@@ -276,36 +292,50 @@ class _ProfileState extends State<Profile> {
                                 ],
                               ),
                             ),
-                            Container(
-                              child: FutureBuilder<GetUserAddress?>(
-                                  future: future?.then(
-                                      (value) => value as GetUserAddress?),
-                                  builder: (context, projectSnap) {
-                                    print(projectSnap);
-                                    if (projectSnap.connectionState ==
-                                        ConnectionState.done) {
-                                      var result;
-                                      if (projectSnap.data != null) {
-                                        result = projectSnap.data!.data;
-                                        if (result != null) {
-                                          print(result.length);
-                                          return ListView.builder(
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.vertical,
-                                            physics: BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) {
-                                              return getUserAddressList(
-                                                  result[index]);
-                                            },
-                                            itemCount: result.length,
-                                          );
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LocationSettingScreen()))
+                                    .then((value) {
+                                  setState(() {
+                                    future = getAddressUserAddress(context);
+                                  });
+                                });
+                              },
+                              child: Container(
+                                child: FutureBuilder<GetUserAddress?>(
+                                    future: future?.then(
+                                        (value) => value as GetUserAddress?),
+                                    builder: (context, projectSnap) {
+                                      print(projectSnap);
+                                      if (projectSnap.connectionState ==
+                                          ConnectionState.done) {
+                                        var result;
+                                        if (projectSnap.data != null) {
+                                          result = projectSnap.data!.data;
+                                          if (result != null) {
+                                            print(result.length);
+                                            return ListView.builder(
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.vertical,
+                                              physics: BouncingScrollPhysics(),
+                                              itemBuilder: (context, index) {
+                                                return getUserAddressList(
+                                                    result[index]);
+                                              },
+                                              itemCount: result.length,
+                                            );
+                                          }
                                         }
                                       }
-                                    }
-                                    return Container(
-                                        child: Center(
-                                            child: Text("No Address Found")));
-                                  }),
+                                      return Container(
+                                          child: Center(
+                                              child: Text("No Address Found")));
+                                    }),
+                              ),
                             ),
                             Padding(
                               padding: EdgeInsets.only(left: 16, top: 16),
@@ -465,7 +495,7 @@ class _ProfileState extends State<Profile> {
                               }
                             }
                           }
-                          return const Center(child: Text("No Address Found"));
+                          return const Center(child: Text("No Orders Found"));
                         }),
                   ],
                 ),

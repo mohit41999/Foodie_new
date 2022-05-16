@@ -15,6 +15,7 @@ import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
 import 'package:food_app/screen/DashboardScreen.dart';
 import 'package:food_app/screen/HomeBaseScreen.dart';
+import 'package:food_app/screen/location_setting.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/HttpException.dart';
 import 'package:food_app/utils/PrefManager.dart';
@@ -188,10 +189,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
         setState(() {});
         (widget.fromOtp)
-            ? Navigator.pushAndRemoveUntil(
+            ? Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomeBaseScreen()),
-                (route) => false)
+                MaterialPageRoute(
+                    builder: (context) => LocationSettingScreen()))
             : {};
         return bean;
       } else {

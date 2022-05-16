@@ -81,14 +81,11 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
   @override
   void initState() {
     _getLocation();
-    Random random = new Random();
-    int randomNumber = random.nextInt(100);
-
-    print("ddfddf" + randomNumber.toString());
-
     super.initState();
     Future.delayed(Duration.zero, () {
-      future = getAddress(context, randomNumber).then((value) {
+      future = getAddress(
+        context,
+      ).then((value) {
         // showDetailsVerifyDialog();
       });
     });
@@ -396,7 +393,7 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
                           GestureDetector(
                             onTap: () {
                               Navigator.pop(context);
-                              bottomsheetLocation();
+                              // bottomsheetLocation();
                             },
                             child: Center(
                               child: Row(
@@ -463,189 +460,189 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
     }
   }
 
-  void bottomsheetLocation() {
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          // <-- for border radius
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15.0),
-            topRight: Radius.circular(15.0),
-          ),
-        ),
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setModelState) {
-            return Wrap(
-              children: <Widget>[
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 20, left: 10),
-                          child: Text(
-                            "Search Location",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: AppConstant.fontBold,
-                                fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 16, right: 16, top: 16),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: AppConstant.appColor)),
-                      height: 50,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              decoration: InputDecoration.collapsed(
-                                  hintText: '   Search for your location'),
-                            ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(right: 16),
-                              child: Image.asset(
-                                Res.ic_search,
-                                width: 16,
-                                height: 16,
-                              ))
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 16),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Image.asset(
-                            Res.ic_loca,
-                            width: 16,
-                            height: 16,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            "Turn on Device Location",
-                            style: TextStyle(
-                                color: Color(0xffA2A2A2),
-                                fontSize: 13,
-                                decoration: TextDecoration.none,
-                                fontFamily: AppConstant.fontRegular),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 10),
-                      child: Text(
-                        "Near By Location",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: AppConstant.fontBold,
-                            fontSize: 16),
-                      ),
-                    ),
-                    FutureBuilder<GetAddressList?>(
-                        future:
-                            future?.then((value) => value as GetAddressList?),
-                        builder: (context, projectSnap) {
-                          print(projectSnap.data.toString() + 'abcdefgh');
-                          if (projectSnap.connectionState ==
-                              ConnectionState.done) {
-                            var result;
-                            if (projectSnap.data != null) {
-                              result = projectSnap.data!.data![0].nearbyKitchen;
-                              if (result != null) {
-                                print(result.length);
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  physics: BouncingScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    // return Container();
-                                    return getAddressList(result[index]);
-                                  },
-                                  itemCount: result.length,
-                                );
-                              }
-                            }
-                          }
-                          return Container(
-                              child:
-                                  Center(child: CircularProgressIndicator()));
-                        }),
-                    // selectedPlace == null
-                    //     ? Container()
-                    //     : Padding(
-                    //         child: Text(selectedPlace!.formattedAddress ?? ""),
-                    //         padding: EdgeInsets.only(left: 16),
-                    //       ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20, left: 10),
-                      child: Text(
-                        "Recent Location",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: AppConstant.fontBold,
-                            fontSize: 16),
-                      ),
-                    ),
-                    FutureBuilder<GetAddressList?>(
-                        future:
-                            future?.then((value) => value as GetAddressList?),
-                        builder: (context, projectSnap) {
-                          print(projectSnap);
-                          if (projectSnap.connectionState ==
-                              ConnectionState.done) {
-                            var result;
-                            if (projectSnap.data != null) {
-                              result = projectSnap.data!.data![0].recent;
-                              if (result != null) {
-                                print(result.length);
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  physics: BouncingScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return Container();
-                                    // return getRecent(result[index]);
-                                  },
-                                  itemCount: result.length,
-                                );
-                              }
-                            }
-                          }
-                          return Container(
-                              child:
-                                  Center(child: CircularProgressIndicator()));
-                        }),
-                    // selectedPlace == null
-                    //     ? Container()
-                    //     : Padding(
-                    //         child: Text(selectedPlace!.formattedAddress ?? ""),
-                    //         padding: EdgeInsets.only(left: 16),
-                    //       ),
-                  ],
-                )
-              ],
-            );
-          });
-        });
-  }
+  // void bottomsheetLocation() {
+  //   showModalBottomSheet(
+  //       shape: RoundedRectangleBorder(
+  //         // <-- for border radius
+  //         borderRadius: BorderRadius.only(
+  //           topLeft: Radius.circular(15.0),
+  //           topRight: Radius.circular(15.0),
+  //         ),
+  //       ),
+  //       context: context,
+  //       isScrollControlled: true,
+  //       builder: (context) {
+  //         return StatefulBuilder(builder: (context, setModelState) {
+  //           return Wrap(
+  //             children: <Widget>[
+  //               Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   SizedBox(
+  //                     width: 16,
+  //                   ),
+  //                   Row(
+  //                     children: [
+  //                       Padding(
+  //                         padding: EdgeInsets.only(top: 20, left: 10),
+  //                         child: Text(
+  //                           "Search Location",
+  //                           style: TextStyle(
+  //                               color: Colors.black,
+  //                               fontFamily: AppConstant.fontBold,
+  //                               fontSize: 16),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                   Container(
+  //                     margin: EdgeInsets.only(left: 16, right: 16, top: 16),
+  //                     decoration: BoxDecoration(
+  //                         border: Border.all(color: AppConstant.appColor)),
+  //                     height: 50,
+  //                     child: Row(
+  //                       children: [
+  //                         Expanded(
+  //                           child: TextField(
+  //                             decoration: InputDecoration.collapsed(
+  //                                 hintText: '   Search for your location'),
+  //                           ),
+  //                         ),
+  //                         Padding(
+  //                             padding: EdgeInsets.only(right: 16),
+  //                             child: Image.asset(
+  //                               Res.ic_search,
+  //                               width: 16,
+  //                               height: 16,
+  //                             ))
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   Padding(
+  //                     padding: EdgeInsets.only(top: 16),
+  //                     child: Row(
+  //                       mainAxisSize: MainAxisSize.min,
+  //                       children: [
+  //                         SizedBox(
+  //                           width: 16,
+  //                         ),
+  //                         Image.asset(
+  //                           Res.ic_loca,
+  //                           width: 16,
+  //                           height: 16,
+  //                         ),
+  //                         SizedBox(
+  //                           width: 16,
+  //                         ),
+  //                         Text(
+  //                           "Turn on Device Location",
+  //                           style: TextStyle(
+  //                               color: Color(0xffA2A2A2),
+  //                               fontSize: 13,
+  //                               decoration: TextDecoration.none,
+  //                               fontFamily: AppConstant.fontRegular),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   Padding(
+  //                     padding: EdgeInsets.only(top: 20, left: 10),
+  //                     child: Text(
+  //                       "Near By Location",
+  //                       style: TextStyle(
+  //                           color: Colors.black,
+  //                           fontFamily: AppConstant.fontBold,
+  //                           fontSize: 16),
+  //                     ),
+  //                   ),
+  //                   FutureBuilder<GetAddressList?>(
+  //                       future:
+  //                           future?.then((value) => value as GetAddressList?),
+  //                       builder: (context, projectSnap) {
+  //                         print(projectSnap.data.toString() + 'abcdefgh');
+  //                         if (projectSnap.connectionState ==
+  //                             ConnectionState.done) {
+  //                           var result;
+  //                           if (projectSnap.data != null) {
+  //                             result = projectSnap.data!.data![0].nearbyKitchen;
+  //                             if (result != null) {
+  //                               print(result.length);
+  //                               return ListView.builder(
+  //                                 shrinkWrap: true,
+  //                                 scrollDirection: Axis.vertical,
+  //                                 physics: BouncingScrollPhysics(),
+  //                                 itemBuilder: (context, index) {
+  //                                   // return Container();
+  //                                   return getAddressList(result[index]);
+  //                                 },
+  //                                 itemCount: result.length,
+  //                               );
+  //                             }
+  //                           }
+  //                         }
+  //                         return Container(
+  //                             child:
+  //                                 Center(child: CircularProgressIndicator()));
+  //                       }),
+  //                   // selectedPlace == null
+  //                   //     ? Container()
+  //                   //     : Padding(
+  //                   //         child: Text(selectedPlace!.formattedAddress ?? ""),
+  //                   //         padding: EdgeInsets.only(left: 16),
+  //                   //       ),
+  //                   Padding(
+  //                     padding: EdgeInsets.only(top: 20, left: 10),
+  //                     child: Text(
+  //                       "Recent Location",
+  //                       style: TextStyle(
+  //                           color: Colors.black,
+  //                           fontFamily: AppConstant.fontBold,
+  //                           fontSize: 16),
+  //                     ),
+  //                   ),
+  //                   FutureBuilder<GetAddressList?>(
+  //                       future:
+  //                           future?.then((value) => value as GetAddressList?),
+  //                       builder: (context, projectSnap) {
+  //                         print(projectSnap);
+  //                         if (projectSnap.connectionState ==
+  //                             ConnectionState.done) {
+  //                           var result;
+  //                           if (projectSnap.data != null) {
+  //                             result = projectSnap.data!.data![0];
+  //                             if (result != null) {
+  //                               print(result.length);
+  //                               return ListView.builder(
+  //                                 shrinkWrap: true,
+  //                                 scrollDirection: Axis.vertical,
+  //                                 physics: BouncingScrollPhysics(),
+  //                                 itemBuilder: (context, index) {
+  //                                   return Container();
+  //                                   // return getRecent(result[index]);
+  //                                 },
+  //                                 itemCount: result.length,
+  //                               );
+  //                             }
+  //                           }
+  //                         }
+  //                         return Container(
+  //                             child:
+  //                                 Center(child: CircularProgressIndicator()));
+  //                       }),
+  //                   // selectedPlace == null
+  //                   //     ? Container()
+  //                   //     : Padding(
+  //                   //         child: Text(selectedPlace!.formattedAddress ?? ""),
+  //                   //         padding: EdgeInsets.only(left: 16),
+  //                   //       ),
+  //                 ],
+  //               )
+  //             ],
+  //           );
+  //         });
+  //       });
+  // }
 
   void authUser() async {
     // progressDialog = ProgressDialog(context, isDismissible: false);
@@ -808,92 +805,93 @@ class _LoginSignUpScreenState extends State<LoginSignUpScreen> {
     }
   }
 
-  getAddressList(NearbyKitchen result) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return PlacePicker(
-                    apiKey: "AIzaSyBn9ZKmXc-MN12Fap0nUQotO6RKtYJEh8o",
-                    initialPosition: currentPostion!,
-                    useCurrentLocation: true,
-                    selectInitialPosition: true,
-                    usePlaceDetailSearch: true,
-                    onPlacePicked: (result) {
-                      selectedPlace = result;
-
-                      confirmLocation(selectedPlace!);
-
-                      setState(() {});
-                    },
-                    forceSearchOnZoomChanged: true,
-                    automaticallyImplyAppBarLeading: false,
-                    autocompleteLanguage: "ko",
-                    region: 'au',
-                    selectedPlaceWidgetBuilder:
-                        (_, selectedPlace, state, isSearchBarFocused) {
-                      print(
-                          "state: $state, isSearchBarFocused: $isSearchBarFocused");
-                      return isSearchBarFocused
-                          ? Container()
-                          : FloatingCard(
-                              bottomPosition:
-                                  0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
-                              leftPosition: 0.0,
-                              rightPosition: 0.0,
-                              width: 500,
-                              borderRadius: BorderRadius.circular(12.0),
-                              child: state == SearchingState.Searching
-                                  ? Center(child: CircularProgressIndicator())
-                                  : RaisedButton(
-                                      child: Text("Pick Here"),
-                                      onPressed: () {
-                                        // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
-                                        //            this will override default 'Select here' Button.
-                                        print(
-                                            "do something with [selectedPlace] data");
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                            );
-                    },
-                    pinBuilder: (context, state) {
-                      if (state == PinState.Idle) {
-                        return Icon(Icons.favorite_border);
-                      } else {
-                        return Icon(Icons.favorite);
-                      }
-                    },
-                  );
-                },
-              ),
-            );
-          },
-          child: Padding(
-              padding: EdgeInsets.only(left: 16, bottom: 6, top: 6),
-              child: Text(
-                result.kitchenname!,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              )),
-        ),
-        Padding(
-            padding: EdgeInsets.only(left: 16, bottom: 6, top: 6),
-            child: Text(
-              result.deliveryaddress!,
-              style: TextStyle(color: Colors.black, fontSize: 16),
-            )),
-      ],
-    );
-  }
+  // getAddressList(NearbyKitchen result) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       InkWell(
+  //         onTap: () {
+  //           Navigator.pop(context);
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //               builder: (context) {
+  //                 return PlacePicker(
+  //                   apiKey: "AIzaSyCBZ1E4AGu6xP_VV4GWr_qjnOte9sFmh0A",
+  //                   initialPosition: currentPostion!,
+  //                   useCurrentLocation: true,
+  //                   selectInitialPosition: true,
+  //                   usePlaceDetailSearch: true,
+  //                   onPlacePicked: (result) {
+  //                     selectedPlace = result;
+  //
+  //                     confirmLocation(selectedPlace!);
+  //
+  //                     setState(() {});
+  //                   },
+  //                   forceSearchOnZoomChanged: true,
+  //                   automaticallyImplyAppBarLeading: false,
+  //                   autocompleteLanguage: "ko",
+  //                   region: 'au',
+  //                   selectedPlaceWidgetBuilder:
+  //                       (_, selectedPlace, state, isSearchBarFocused) {
+  //                     print(
+  //                         "state: $state, isSearchBarFocused: $isSearchBarFocused");
+  //                     return isSearchBarFocused
+  //                         ? Container()
+  //                         : FloatingCard(
+  //                             bottomPosition:
+  //                                 0.0, // MediaQuery.of(context) will cause rebuild. See MediaQuery document for the information.
+  //                             leftPosition: 0.0,
+  //                             rightPosition: 0.0,
+  //                             width: 500,
+  //                             borderRadius: BorderRadius.circular(12.0),
+  //                             child: state == SearchingState.Searching
+  //                                 ? Center(child: CircularProgressIndicator())
+  //                                 : RaisedButton(
+  //                                     child: Text("Pick Here"),
+  //                                     onPressed: () {
+  //                                       // IMPORTANT: You MUST manage selectedPlace data yourself as using this build will not invoke onPlacePicker as
+  //                                       //            this will override default 'Select here' Button.
+  //                                       print(
+  //                                           "do something with [selectedPlace] data");
+  //                                       Navigator.of(context).pop();
+  //                                     },
+  //                                   ),
+  //                           );
+  //                   },
+  //                   pinBuilder: (context, state) {
+  //                     if (state == PinState.Idle) {
+  //                       return Icon(Icons.favorite_border);
+  //                     } else {
+  //                       return Icon(Icons.favorite);
+  //                     }
+  //                   },
+  //                 );
+  //               },
+  //             ),
+  //           );
+  //         },
+  //         child: Padding(
+  //             padding: EdgeInsets.only(left: 16, bottom: 6, top: 6),
+  //             child: Text(
+  //               result.kitchenname!,
+  //               style: TextStyle(color: Colors.black, fontSize: 16),
+  //             )),
+  //       ),
+  //       Padding(
+  //           padding: EdgeInsets.only(left: 16, bottom: 6, top: 6),
+  //           child: Text(
+  //             result.deliveryaddress!,
+  //             style: TextStyle(color: Colors.black, fontSize: 16),
+  //           )),
+  //     ],
+  //   );
+  // }
 
   Future<GetAddressList?> getAddress(
-      BuildContext context, int randomNumber) async {
+    BuildContext context,
+  ) async {
     progressDialog = ProgressDialog(context);
     progressDialog.show();
 

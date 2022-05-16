@@ -11,6 +11,7 @@ import 'package:food_app/model/BeanSearchData.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
 import 'package:food_app/model/GetCartCount.dart';
 import 'package:food_app/model/GetHomeData.dart' as home;
+import 'package:food_app/model/defaultAddress.dart';
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
 import 'package:food_app/screen/KitchenDetails/DetailsScreen.dart';
@@ -37,6 +38,7 @@ class DashboardScreen extends StatefulWidget {
   double min;
   double max;
   String mealPlan;
+
   final bool skip;
   bool fromHome;
 
@@ -57,17 +59,17 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   late BeanVerifyOtp userBean;
-  String? name = "";
-  String? menu = "";
-  var currentAddress = "";
 
-  Future? future;
-  bool isLike = false;
-  bool isDislike = true;
   List<home.Data>? list = [];
   late ProgressDialog progressDialog;
   String? itemName = "";
   String? delivery_date = "";
+  String? address;
+  String? addressLatitude;
+  String? addressLongitude;
+  String? defaultaddress;
+  String? defaultLatitute;
+  String? defaultLongitude;
   String? delivery_fromtime = "";
   var cartCount = "";
   String? kitchenName = "";
@@ -76,8 +78,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future getUser() async {
     try {
       userBean = await Utils.getUser();
-      name = userBean.data!.kitchenname;
-      menu = userBean.data!.kitchenname;
       setState(() {});
     } catch (e) {
       print(e);
@@ -86,7 +86,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future initialize() async {
     await getUser();
+
     await getUserAddress();
+    await getDefaultAddress();
+
     // await getHomeData();
     await getBannerData();
     await getCartCount(context);
@@ -201,7 +204,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           Flexible(
                               child: Text(
-                            address ?? '',
+                            defaultaddress ?? '',
                           ))
                         ],
                       ),
@@ -302,8 +305,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       color: Colors.black, fontSize: 14),
                                 )),
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
                                   padding:
@@ -313,8 +315,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       text: delivery_fromtime!.isNotEmpty
                                           ? 'Arriving at: '
                                           : "",
-                                      style:
-                                          DefaultTextStyle.of(context).style,
+                                      style: DefaultTextStyle.of(context).style,
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: delivery_fromtime,
@@ -936,7 +937,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         "min_price": widget.min.toString(),
         "max_price": widget.max.toString(),
         "rating": "",
-        "customer_address": address
+        "customer_address": (widget.skip) ? address : defaultaddress
       });
       print("param" + from.toString());
 
@@ -1096,7 +1097,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   //   }
   // }
 
-  String? address;
   Future<void> GetAddressFromLatLong(Position position) async {
     address = "";
     List<Placemark> placemarks =
@@ -1106,6 +1106,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Placemark place = placemarks[0];
     address =
         '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    print('addressssssssssss\n==============\n' + address.toString());
+
     await getHomeData();
   }
 
@@ -1177,6 +1179,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
           delivery_date = bean.data!.meal!.deliveryDate;
           delivery_fromtime = bean.data!.meal!.deliveryFromtime;
           kitchenName = bean.data!.kitchenName;
+        });
+        return bean;
+      } else {
+        Utils.showToast(bean.message!);
+      }
+    } on HttpException catch (exception) {
+      print(exception);
+    } catch (exception) {
+      print(exception);
+    }
+  }
+
+  Future<DefaultAddress?> getDefaultAddress() async {
+    try {
+      BeanVerifyOtp user = await Utils.getUser();
+      FormData from = FormData.fromMap({
+        "user_id": user.data!.id,
+        "token": "123456789",
+      });
+      print("param" + user.data!.id.toString());
+      DefaultAddress? bean = await ApiProvider().getDefaultAddress(from);
+      print(bean!.data);
+      if (bean.status == true) {
+        setState(() {
+          defaultaddress = bean.data![0].address;
+          defaultLatitute = bean.data![0].latitude;
+          defaultLongitude = bean.data![0].longitude;
         });
         return bean;
       } else {

@@ -1,16 +1,16 @@
 // To parse this JSON data, do
 //
-//     final getAddressList = getAddressListFromJson(jsonString);
+//     final defaultAddress = defaultAddressFromJson(jsonString);
 
 import 'dart:convert';
 
-GetAddressList getAddressListFromJson(String str) =>
-    GetAddressList.fromJson(json.decode(str));
+DefaultAddress defaultAddressFromJson(String str) =>
+    DefaultAddress.fromJson(json.decode(str));
 
-String getAddressListToJson(GetAddressList data) => json.encode(data.toJson());
+String defaultAddressToJson(DefaultAddress data) => json.encode(data.toJson());
 
-class GetAddressList {
-  GetAddressList({
+class DefaultAddress {
+  DefaultAddress({
     this.status,
     this.message,
     this.data,
@@ -18,13 +18,12 @@ class GetAddressList {
 
   bool? status;
   String? message;
-  List<GetAddressListData>? data;
+  List<Datum>? data;
 
-  factory GetAddressList.fromJson(Map<String, dynamic> json) => GetAddressList(
+  factory DefaultAddress.fromJson(Map<String, dynamic> json) => DefaultAddress(
         status: json["status"],
         message: json["message"],
-        data: List<GetAddressListData>.from(
-            json["data"].map((x) => GetAddressListData.fromJson(x))),
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -34,8 +33,8 @@ class GetAddressList {
       };
 }
 
-class GetAddressListData {
-  GetAddressListData({
+class Datum {
+  Datum({
     this.id,
     this.address,
     this.latitude,
@@ -49,8 +48,7 @@ class GetAddressListData {
   String? longitude;
   String? isDefault;
 
-  factory GetAddressListData.fromJson(Map<String, dynamic> json) =>
-      GetAddressListData(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
         address: json["address"],
         latitude: json["latitude"],

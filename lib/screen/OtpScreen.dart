@@ -6,9 +6,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
+import 'package:food_app/model/GetAddressList.dart';
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/network/EndPoints.dart';
 import 'package:food_app/screen/HomeBaseScreen.dart';
+import 'package:food_app/screen/location_setting.dart';
 import 'package:food_app/screen/update_profile.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/PrefManager.dart';
@@ -18,6 +20,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatefulWidget {
   String number;
+
   final String isExist;
 
   OtpScreen(this.number, @required this.isExist);
@@ -28,9 +31,11 @@ class OtpScreen extends StatefulWidget {
 
 class OtpScreenState extends State<OtpScreen> {
   late ProgressDialog progressDialog;
+  List<GetAddressListData> addressList = [];
 
   var code = "+91";
   late Timer timer;
+
   int timerMaxSeconds = 60;
 
   var otp = "";
@@ -237,7 +242,10 @@ class OtpScreenState extends State<OtpScreen> {
         PrefManager.putBool(AppConstant.session, true);
         PrefManager.putString(AppConstant.user, jsonEncode(bean));
         Utils.showToast(bean.message!);
+        await getAddress();
         if (widget.isExist == '0') {
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => LocationSettingScreen()));
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -249,19 +257,56 @@ class OtpScreenState extends State<OtpScreen> {
                       )));
           timer.cancel();
         } else {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => HomeBaseScreen()),
-              (route) => false);
+          (addressList.length == 0)
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => LocationSettingScreen()))
+              : Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeBaseScreen()),
+                  (route) => false);
           timer.cancel();
         }
       } else {
         Utils.showToast(bean.message!);
       }
     } on HttpException catch (exception) {
+      print(exception);
       progressDialog.dismiss(context);
     } catch (exception) {
+      print(exception);
       progressDialog.dismiss(context);
+    }
+  }
+
+  Future<GetAddressList?> getAddress() async {
+    try {
+      var userBean = await Utils.getUser();
+
+      FormData from = FormData.fromMap(
+          {"user_id": userBean.data!.id, "token": "123456789"});
+
+      GetAddressList? bean = await ApiProvider().getAddress(from);
+      print(bean!.data);
+
+      if (bean.status == true) {
+        setState(() {
+          addressList = bean.data!;
+        });
+        return bean;
+      } else {
+        addressList = [];
+        Utils.showToast(bean.message!);
+      }
+
+      return null;
+    } on HttpException catch (exception) {
+      setState(() {});
+      print(exception);
+    } catch (exception) {
+      setState(() {});
+      print(exception);
     }
   }
 }

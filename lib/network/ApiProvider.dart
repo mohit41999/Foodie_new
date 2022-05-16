@@ -54,6 +54,7 @@ import 'package:food_app/model/GetReview.dart';
 import 'package:food_app/model/GetUserAddress.dart';
 import 'package:food_app/model/RemoveCart.dart';
 import 'package:food_app/model/UpdateMenuDetails.dart';
+import 'package:food_app/model/defaultAddress.dart';
 import 'package:food_app/model/search_kitchen_package_model.dart';
 import 'package:food_app/network/EndPoints.dart';
 import 'package:http/http.dart' as http;
@@ -322,8 +323,46 @@ class ApiProvider {
   Future<GetAddressList?> getAddress(FormData params) async {
     try {
       Response response = await _dio
-          .post("$baseUrl/${EndPoints.search_location}", data: params);
+          .post("$baseUrl/${EndPoints.get_address_list}", data: params);
       return GetAddressList.fromJson(json.decode(response.data));
+    } catch (error, stacktrace) {
+      if (kDebugMode) {
+        print("Exception occurred: $error stackTrace: $stacktrace");
+      }
+      Map<dynamic, dynamic>? map = _dioError.response!.data;
+      if (_dioError.response!.statusCode == 500) {
+        throwIfNoSuccess(map!['message']);
+      } else {
+        throwIfNoSuccess("Something gone wrong.");
+      }
+    }
+    return null;
+  }
+
+  Future setDefaultAddress(FormData params) async {
+    try {
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.set_default_address}", data: params);
+      return json.decode(response.data);
+    } catch (error, stacktrace) {
+      if (kDebugMode) {
+        print("Exception occurred: $error stackTrace: $stacktrace");
+      }
+      Map<dynamic, dynamic>? map = _dioError.response!.data;
+      if (_dioError.response!.statusCode == 500) {
+        throwIfNoSuccess(map!['message']);
+      } else {
+        throwIfNoSuccess("Something gone wrong.");
+      }
+    }
+    return null;
+  }
+
+  Future DeleteAddress(FormData params) async {
+    try {
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.delete_address}", data: params);
+      return json.decode(response.data);
     } catch (error, stacktrace) {
       if (kDebugMode) {
         print("Exception occurred: $error stackTrace: $stacktrace");
@@ -534,7 +573,7 @@ class ApiProvider {
     try {
       Response response =
           await _dio.post("$baseUrl/${EndPoints.search_kitchen}", data: params);
-      print("Mine: ${response.data}");
+      print("Mineeee: ${response.data}");
       return BeanHomeData.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
@@ -590,6 +629,24 @@ class ApiProvider {
           .post("$baseUrl/${EndPoints.get_today_deliver_order}", data: params);
       print("Mine: ${response.data}");
       return BeanBanner.fromJson(json.decode(response.data));
+    } catch (error, stacktrace) {
+      print("Exception occurred: $error stackTrace: $stacktrace");
+      Map<dynamic, dynamic>? map = _dioError.response!.data;
+      if (_dioError.response!.statusCode == 500) {
+        throwIfNoSuccess(map!['message']);
+      } else {
+        throwIfNoSuccess("Something gone wrong.");
+      }
+    }
+    return null;
+  }
+
+  Future<DefaultAddress?> getDefaultAddress(FormData params) async {
+    try {
+      Response response = await _dio
+          .post("$baseUrl/${EndPoints.get_default_address}", data: params);
+      print("Mine: ${response.data}");
+      return DefaultAddress.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
       Map<dynamic, dynamic>? map = _dioError.response!.data;
@@ -937,6 +994,23 @@ class ApiProvider {
     try {
       Response response = await _dio
           .post("$baseUrl/${EndPoints.confirm_location}", data: params);
+      return BeanConfirmLocation.fromJson(json.decode(response.data));
+    } catch (error, stacktrace) {
+      print("Exception occurred: $error stackTrace: $stacktrace");
+      Map<dynamic, dynamic>? map = _dioError.response!.data;
+      if (_dioError.response!.statusCode == 500) {
+        throwIfNoSuccess(map!['message']);
+      } else {
+        throwIfNoSuccess("Something gone wrong.");
+      }
+    }
+    return null;
+  }
+
+  Future<BeanConfirmLocation?> editLocation(FormData params) async {
+    try {
+      Response response =
+          await _dio.post("$baseUrl/${EndPoints.edit_address}", data: params);
       return BeanConfirmLocation.fromJson(json.decode(response.data));
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");

@@ -4,8 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
+import 'package:food_app/model/GetAddressList.dart';
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/screen/HomeBaseScreen.dart';
+import 'package:food_app/screen/location_setting.dart';
 import 'package:food_app/utils/Constents.dart';
 import 'package:food_app/utils/HttpException.dart';
 import 'package:food_app/utils/PrefManager.dart';
@@ -60,10 +62,21 @@ class Auth {
         PrefManager.putBool(AppConstant.session, true);
         PrefManager.putString(AppConstant.user, jsonEncode(bean));
         Utils.showToast(bean.message!);
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomeBaseScreen()),
-            (route) => false);
+
+        var response = await getAddress();
+
+        if (response == null) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => LocationSettingScreen()));
+        } else if (response.data!.length == 0) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => LocationSettingScreen()));
+        } else {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeBaseScreen()),
+              (route) => false);
+        }
       } else {
         Utils.showToast(bean.message!);
       }
@@ -72,6 +85,24 @@ class Auth {
     } catch (exception) {
       progressDialog.dismiss(context);
     }
+  }
+
+  Future<GetAddressList?> getAddress() async {
+    var userBean = await Utils.getUser();
+
+    FormData from =
+        FormData.fromMap({"user_id": userBean.data!.id, "token": "123456789"});
+
+    GetAddressList? bean = await ApiProvider().getAddress(from);
+    print(bean!.data);
+
+    if (bean.status == true) {
+      return bean;
+    } else {
+      Utils.showToast(bean.message!);
+    }
+
+    return null;
   }
 
   // final FirebaseAuth _auth = FirebaseAuth.instance;
