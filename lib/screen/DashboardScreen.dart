@@ -86,9 +86,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future initialize() async {
     await getUser();
-
-    await getUserAddress();
     await getDefaultAddress();
+    await getUserAddress();
 
     // await getHomeData();
     await getBannerData();

@@ -110,10 +110,10 @@ class SplashScreenState extends State<SplashScreen>
 
       return null;
     } on HttpException catch (exception) {
-      setState(() {});
+      Navigator.pushReplacementNamed(context, '/homebase');
       print(exception);
     } catch (exception) {
-      setState(() {});
+      Navigator.pushReplacementNamed(context, '/homebase');
       print(exception);
     }
   }
