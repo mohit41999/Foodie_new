@@ -64,12 +64,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   late ProgressDialog progressDialog;
   String? itemName = "";
   String? delivery_date = "";
-  String? address;
-  String? addressLatitude;
-  String? addressLongitude;
-  String? defaultaddress;
-  String? defaultLatitute;
-  String? defaultLongitude;
+  String? address = '';
+  String? addressLatitude = '';
+  String? addressLongitude = '';
+
   String? delivery_fromtime = "";
   var cartCount = "";
   String? kitchenName = "";
@@ -86,8 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future initialize() async {
     await getUser();
-    await getDefaultAddress();
-    await getUserAddress();
+    (widget.skip) ? await getUserAddress() : await getDefaultAddress();
 
     // await getHomeData();
     await getBannerData();
@@ -203,7 +200,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           Flexible(
                               child: Text(
-                            defaultaddress ?? '',
+                            address!,
                           ))
                         ],
                       ),
@@ -936,7 +933,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         "min_price": widget.min.toString(),
         "max_price": widget.max.toString(),
         "rating": "",
-        "customer_address": (widget.skip) ? address : defaultaddress
+        'customer_latitude': addressLatitude,
+        'customer_longitude': addressLongitude
       });
       print("param" + from.toString());
 
@@ -1106,7 +1104,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     address =
         '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     print('addressssssssssss\n==============\n' + address.toString());
-
+    addressLatitude = position.latitude.toString();
+    addressLongitude = position.longitude.toString();
     await getHomeData();
   }
 
@@ -1202,10 +1201,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print(bean!.data);
       if (bean.status == true) {
         setState(() {
-          defaultaddress = bean.data![0].address;
-          defaultLatitute = bean.data![0].latitude;
-          defaultLongitude = bean.data![0].longitude;
+          address = bean.data![0].address;
+          addressLatitude = bean.data![0].latitude;
+          addressLongitude = bean.data![0].longitude;
         });
+        await getHomeData();
         return bean;
       } else {
         Utils.showToast(bean.message!);
