@@ -43,8 +43,8 @@ class _LocationSettingScreenState extends State<LocationSettingScreen> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
-      getAddress();
       _getLocation();
+      getAddress();
     });
   }
 

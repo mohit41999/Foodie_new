@@ -9,6 +9,7 @@ import 'package:food_app/model/BeanUpdateCart.dart';
 import 'package:food_app/model/BeanVerifyOtp.dart';
 import 'package:food_app/model/GetCartDetail.dart' as cart;
 import 'package:food_app/model/RemoveCart.dart';
+import 'package:food_app/model/defaultAddress.dart';
 import 'package:food_app/network/ApiProvider.dart';
 import 'package:food_app/res.dart';
 import 'package:food_app/screen/PaymentScreen.dart';
@@ -50,73 +51,38 @@ class _ShippingScreenState extends State<ShippingScreen> {
   Position? position;
 
   bool showDiscount = false;
-  String? address;
-  Future<void> GetAddressFromLatLong(Position position) async {
-    deliveryAddress = "";
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
 
-    print(placemarks);
-    Placemark place = placemarks[0];
-    deliveryAddress =
-        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-  }
-
-  getCurrentLocation() async {
-    LocationPermission permission;
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      Utils.showToast('permission denied- please enable it from app settings');
-      // Permissions are denied forever, handle appropriately.
-
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    position = await Geolocator.getCurrentPosition();
-    GetAddressFromLatLong(position!);
-  }
-
-  getUserAddress() async {
-    print("get USer address api call");
-    //call this async method from whereever you need
-
-    LocationData? myLocation;
-    String error;
-
+  Future<DefaultAddress?> getDefaultAddress() async {
     try {
-      await getCurrentLocation();
-      setState(() {});
-      //myLocation = await location.getLocation();
-    } on PlatformException catch (e) {
-      print(e);
-      if (e.code == 'PERMISSION_DENIED') {
-        error = 'please grant permission';
-        await getCurrentLocation();
-        print(error);
+      BeanVerifyOtp user = await Utils.getUser();
+      FormData from = FormData.fromMap({
+        "user_id": user.data!.id,
+        "token": "123456789",
+      });
+      print("param" + user.data!.id.toString());
+      DefaultAddress? bean = await ApiProvider().getDefaultAddress(from);
+      print(bean!.data);
+      if (bean.status == true) {
+        setState(() {
+          deliveryAddress = bean.data![0].address;
+          deliveryLat = bean.data![0].latitude;
+          deliveryLong = bean.data![0].longitude;
+        });
+
+        return bean;
+      } else {
+        Utils.showToast(bean.message!);
       }
-      if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-        error = 'permission denied- please enable it from app settings';
-        await getCurrentLocation();
-        print(error);
-      }
-      //myLocation = null;
+    } on HttpException catch (exception) {
+      print(exception);
+    } catch (exception) {
+      print(exception);
     }
-    var currentLocation = myLocation;
-    // final coordinates =
-    //     new Coordinates(myLocation?.latitude, myLocation?.longitude);
   }
 
   List<cart.CartItem>? data;
   Future initialize() async {
-    await getUserAddress();
+    await getDefaultAddress();
   }
 
   @override
@@ -575,11 +541,8 @@ class _ShippingScreenState extends State<ShippingScreen> {
                                                             .text
                                                             .toString(),
                                                         kitchen_id,
-                                                        position!
-                                                            .latitude
-                                                            .toString(),
-                                                        position!.longitude
-                                                            .toString(),
+                                                        deliveryLat.toString(),
+                                                        deliveryLong.toString(),
                                                         "shipping")));
                                       } else {
                                         Utils.showToast(
@@ -649,7 +612,7 @@ class _ShippingScreenState extends State<ShippingScreen> {
         kitchen_id = data![0].kitchenId;
         deliveryLat = bean.data!.myLocation!.latitude;
         deliveryLong = bean.data!.myLocation!.longitude;
-        // deliveryAddress = bean.data!.myLocation!.address;
+        deliveryAddress = bean.data!.myLocation!.address;
 
         setState(() {});
         return bean;
